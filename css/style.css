@@ -1,0 +1,743 @@
+/* ============================================================================
+   COS110 OOP STUDY WEBSITE - MAIN STYLESHEET
+   ============================================================================ */
+
+:root {
+    --primary: #667eea;
+    --primary-dark: #764ba2;
+    --secondary: #27ae60;
+    --danger: #e74c3c;
+    --warning: #f39c12;
+    --info: #3498db;
+    --text-dark: #2c3e50;
+    --text-light: #666;
+    --bg-light: #f5f5f5;
+    --border: #e0e0e0;
+    --code-bg: #1e1e1e;
+    --code-text: #d4d4d4;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: var(--bg-light);
+    color: var(--text-dark);
+    line-height: 1.6;
+}
+
+/* ============================================================================
+   NAVBAR
+   ============================================================================ */
+
+.navbar {
+    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+    color: white;
+    padding: 15px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+}
+
+.navbar-brand {
+    font-weight: bold;
+    font-size: 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+    color: white;
+}
+
+.navbar-search {
+    flex: 1;
+    max-width: 350px;
+    margin: 0 20px;
+}
+
+.navbar-search input {
+    width: 100%;
+    padding: 8px 15px;
+    border: none;
+    border-radius: 20px;
+    background: rgba(255,255,255,0.95);
+    font-size: 14px;
+}
+
+.navbar-search input:focus {
+    outline: none;
+    box-shadow: 0 0 10px rgba(255,255,255,0.5);
+}
+
+.navbar-menu {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+}
+
+.menu-toggle {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 24px;
+    cursor: pointer;
+    transition: transform 0.3s;
+}
+
+.menu-toggle:hover {
+    transform: scale(1.1);
+}
+
+/* ============================================================================
+   MAIN LAYOUT
+   ============================================================================ */
+
+.container {
+    display: grid;
+    grid-template-columns: 250px 1fr;
+    gap: 20px;
+    padding: 20px;
+    max-width: 1600px;
+    margin: 0 auto;
+}
+
+/* ============================================================================
+   SIDEBAR
+   ============================================================================ */
+
+.sidebar {
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    max-height: calc(100vh - 100px);
+    overflow-y: auto;
+    position: sticky;
+    top: 80px;
+}
+
+.sidebar-title {
+    font-size: 12px;
+    font-weight: bold;
+    color: var(--primary);
+    margin: 15px 0 10px 0;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.sidebar-item {
+    padding: 8px 12px;
+    margin: 5px 0;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.3s;
+    font-size: 14px;
+    border-left: 3px solid transparent;
+    text-decoration: none;
+    display: block;
+    color: var(--text-dark);
+}
+
+.sidebar-item:hover {
+    background: #f0f7ff;
+    border-left-color: var(--primary);
+    padding-left: 15px;
+}
+
+.sidebar-item.active {
+    background: #e8f4f8;
+    color: var(--primary);
+    font-weight: bold;
+    border-left-color: var(--primary);
+}
+
+/* ============================================================================
+   MAIN CONTENT
+   ============================================================================ */
+
+.main-content {
+    background: white;
+    padding: 40px;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.breadcrumb {
+    font-size: 12px;
+    color: #999;
+    margin-bottom: 20px;
+}
+
+.breadcrumb a {
+    color: var(--primary);
+    text-decoration: none;
+}
+
+h1 {
+    font-size: 32px;
+    color: var(--text-dark);
+    margin-bottom: 10px;
+    border-bottom: 3px solid var(--primary);
+    padding-bottom: 15px;
+}
+
+.section {
+    margin: 40px 0;
+}
+
+.section-title {
+    font-size: 20px;
+    font-weight: bold;
+    color: var(--text-dark);
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+/* ============================================================================
+   EXPLANATION SECTION
+   ============================================================================ */
+
+.explanation {
+    background: #f9f9f9;
+    padding: 20px;
+    border-left: 4px solid var(--primary);
+    border-radius: 4px;
+    margin-bottom: 20px;
+    line-height: 1.8;
+}
+
+.explanation p {
+    margin-bottom: 15px;
+}
+
+.explanation ul, .explanation ol {
+    margin-left: 20px;
+    margin-bottom: 15px;
+}
+
+.explanation li {
+    margin-bottom: 8px;
+}
+
+.explanation strong {
+    color: var(--primary);
+}
+
+/* ============================================================================
+   DIAGRAMS
+   ============================================================================ */
+
+.diagram {
+    background: #f0f7ff;
+    border: 2px dashed var(--primary);
+    padding: 30px;
+    border-radius: 4px;
+    text-align: center;
+    color: var(--primary);
+    margin: 20px 0;
+    font-size: 14px;
+    min-height: 150px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Courier New', monospace;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    line-height: 1.4;
+}
+
+/* ============================================================================
+   CODE EXAMPLES
+   ============================================================================ */
+
+.code-example {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    margin: 20px 0;
+    overflow: hidden;
+}
+
+.code-tabs {
+    display: flex;
+    background: #f5f5f5;
+    border-bottom: 2px solid var(--border);
+}
+
+.code-tab {
+    padding: 12px 20px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    font-weight: 500;
+    color: var(--text-light);
+    transition: all 0.3s;
+    border-bottom: 3px solid transparent;
+    font-size: 14px;
+}
+
+.code-tab:hover {
+    color: var(--primary);
+}
+
+.code-tab.active {
+    color: var(--primary);
+    border-bottom-color: var(--primary);
+}
+
+.code-editor {
+    background: var(--code-bg);
+    color: var(--code-text);
+    padding: 20px;
+    min-height: 400px;
+    max-height: 700px;
+    overflow: auto;
+    font-family: 'Courier New', monospace;
+    font-size: 14px;
+    line-height: 1.8;
+    border: 1px solid #333;
+    white-space: pre;
+}
+
+.code-editor textarea {
+    background: var(--code-bg);
+    color: var(--code-text);
+    padding: 20px;
+    min-height: 400px;
+    max-height: 700px;
+    overflow: auto;
+    font-family: 'Courier New', monospace;
+    font-size: 14px;
+    line-height: 1.8;
+    border: 1px solid #333;
+    width: 100%;
+    resize: vertical;
+}
+
+.code-editor textarea:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 5px rgba(102,126,234,0.3);
+}
+
+.code-buttons {
+    display: flex;
+    gap: 10px;
+    padding: 15px 20px;
+    background: #f5f5f5;
+    border-top: 1px solid var(--border);
+    flex-wrap: wrap;
+}
+
+.btn {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: all 0.3s;
+    font-size: 14px;
+}
+
+.btn-primary {
+    background: var(--secondary);
+    color: white;
+}
+
+.btn-primary:hover {
+    background: #229954;
+}
+
+.btn-secondary {
+    background: var(--danger);
+    color: white;
+}
+
+.btn-secondary:hover {
+    background: #c0392b;
+}
+
+.output-box {
+    background: var(--code-bg);
+    color: var(--code-text);
+    padding: 15px;
+    border-radius: 4px;
+    max-height: 600px;
+    min-height: 200px;
+    overflow-y: auto;
+    font-family: 'Courier New', monospace;
+    font-size: 14px;
+    line-height: 1.8;
+    margin-top: 10px;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    border: 1px solid #444;
+}
+
+.output-box.error {
+    background: #ffe6e6;
+    color: #d32f2f;
+}
+
+.output-box.success {
+    background: #e6ffe6;
+    color: #1b5e20;
+}
+
+/* ============================================================================
+   ACTIVITY SECTION
+   ============================================================================ */
+
+.activity {
+    background: #fff9e6;
+    border-left: 4px solid var(--warning);
+    padding: 20px;
+    border-radius: 4px;
+    margin: 20px 0;
+}
+
+.activity-title {
+    font-weight: bold;
+    color: #e67e22;
+    margin-bottom: 10px;
+    font-size: 16px;
+}
+
+.activity-difficulty {
+    display: inline-block;
+    padding: 4px 10px;
+    background: #e67e22;
+    color: white;
+    border-radius: 20px;
+    font-size: 12px;
+    margin-bottom: 10px;
+}
+
+.collapsible {
+    width: 100%;
+    padding: 12px;
+    background: #f0f0f0;
+    border: none;
+    text-align: left;
+    cursor: pointer;
+    font-weight: 500;
+    margin-top: 10px;
+    border-radius: 4px;
+    transition: background 0.3s;
+    font-size: 14px;
+}
+
+.collapsible:hover {
+    background: #e0e0e0;
+}
+
+.collapsible-content {
+    display: none;
+    padding: 15px;
+    background: #fafafa;
+    border: 1px solid var(--border);
+    margin-top: 10px;
+    border-radius: 4px;
+    line-height: 1.6;
+}
+
+.collapsible-content.show {
+    display: block;
+}
+
+/* ============================================================================
+   QUIZ SECTION
+   ============================================================================ */
+
+.quiz-container {
+    background: #e8f4f8;
+    border-left: 4px solid var(--info);
+    padding: 20px;
+    border-radius: 4px;
+    text-align: center;
+}
+
+.quiz-btn {
+    background: var(--info);
+    color: white;
+    padding: 15px 30px;
+    border: none;
+    border-radius: 4px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background 0.3s;
+    margin-top: 15px;
+    font-weight: bold;
+}
+
+.quiz-btn:hover {
+    background: #2980b9;
+}
+
+/* ============================================================================
+   QUIZ MODAL
+   ============================================================================ */
+
+.quiz-modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    z-index: 2000;
+    overflow-y: auto;
+    justify-content: center;
+    align-items: center;
+}
+
+.quiz-modal.show {
+    display: flex;
+}
+
+.quiz-modal-content {
+    background: white;
+    padding: 40px;
+    border-radius: 8px;
+    max-width: 700px;
+    width: 90%;
+    max-height: 90vh;
+    overflow-y: auto;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+}
+
+.quiz-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    border-bottom: 2px solid #f0f0f0;
+    padding-bottom: 15px;
+}
+
+.quiz-progress {
+    font-weight: bold;
+    color: var(--primary);
+}
+
+.quiz-close {
+    background: none;
+    border: none;
+    font-size: 28px;
+    cursor: pointer;
+    color: #999;
+}
+
+.quiz-question-number {
+    font-size: 14px;
+    color: #999;
+    margin-bottom: 10px;
+}
+
+.quiz-question-text {
+    font-size: 18px;
+    font-weight: bold;
+    color: var(--text-dark);
+    margin-bottom: 20px;
+}
+
+.quiz-option {
+    margin: 12px 0;
+    padding: 12px;
+    background: #f9f9f9;
+    border: 2px solid var(--border);
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.quiz-option:hover {
+    background: #f0f7ff;
+    border-color: var(--primary);
+}
+
+.quiz-option input[type="radio"],
+.quiz-option input[type="checkbox"] {
+    margin-right: 10px;
+}
+
+.fill-in-input {
+    padding: 10px 15px;
+    font-size: 16px;
+    border: 2px solid var(--border);
+    border-radius: 4px;
+    width: 100%;
+    font-family: 'Courier New', monospace;
+    margin: 15px 0;
+}
+
+.fill-in-input:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 5px rgba(102, 126, 234, 0.3);
+}
+
+.fill-in-hint {
+    font-size: 12px;
+    color: #999;
+    margin-top: 5px;
+    font-style: italic;
+}
+
+.quiz-button-group {
+    display: flex;
+    gap: 10px;
+    margin-top: 30px;
+    justify-content: space-between;
+}
+
+.btn-submit {
+    background: var(--secondary);
+    color: white;
+    padding: 12px 20px;
+    flex: 1;
+}
+
+.btn-submit:hover {
+    background: #229954;
+}
+
+.btn-skip {
+    background: #95a5a6;
+    color: white;
+    padding: 12px 20px;
+}
+
+.btn-skip:hover {
+    background: #7f8c8d;
+}
+
+/* ============================================================================
+   FOOTER
+   ============================================================================ */
+
+footer {
+    background: var(--text-dark);
+    color: white;
+    text-align: center;
+    padding: 20px;
+    margin-top: 40px;
+}
+
+footer a {
+    color: var(--info);
+    text-decoration: none;
+}
+
+footer a:hover {
+    text-decoration: underline;
+}
+
+/* ============================================================================
+   RESPONSIVE DESIGN
+   ============================================================================ */
+
+@media (max-width: 1024px) {
+    .container {
+        grid-template-columns: 200px 1fr;
+    }
+}
+
+@media (max-width: 768px) {
+    .container {
+        grid-template-columns: 1fr;
+        padding: 10px;
+    }
+
+    .sidebar {
+        position: relative;
+        top: 0;
+        max-height: none;
+    }
+
+    .navbar {
+        padding: 10px;
+        flex-wrap: wrap;
+    }
+
+    .navbar-search {
+        display: none;
+    }
+
+    h1 {
+        font-size: 24px;
+    }
+
+    .main-content {
+        padding: 20px;
+    }
+
+    .code-tabs {
+        flex-wrap: wrap;
+    }
+
+    .code-tab {
+        padding: 10px 15px;
+    }
+}
+
+@media (max-width: 480px) {
+    .navbar-brand {
+        font-size: 16px;
+    }
+
+    h1 {
+        font-size: 20px;
+    }
+
+    .section-title {
+        font-size: 16px;
+    }
+
+    .code-editor {
+        min-height: 250px;
+    }
+
+    .quiz-modal-content {
+        padding: 20px;
+    }
+}
+
+/* ============================================================================
+   UTILITIES
+   ============================================================================ */
+
+.text-center {
+    text-align: center;
+}
+
+.mt-20 {
+    margin-top: 20px;
+}
+
+.mb-20 {
+    margin-bottom: 20px;
+}
+
+.hidden {
+    display: none;
+}
+
+.visible {
+    display: block;
+}
