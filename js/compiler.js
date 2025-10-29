@@ -4,7 +4,7 @@ class CompilerAPI {
     constructor() {
         this.clientId = 'e88569616eeb2f699d91f07b6a073ae9';
         this.clientSecret = 'c2f11a63d797790779de8359c2b3f4421918f0211b2cb1817778112ad1b9819b';
-        this.apiUrl = 'https://api.jdoodle.com/v1/execute';
+        this.apiUrl = 'https://cors-anywhere.herokuapp.com/https://api.jdoodle.com/v1/execute';
         this.maxTimeout = 30000;
     }
 
