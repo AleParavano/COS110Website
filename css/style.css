@@ -1,5 +1,5 @@
 /* ============================================================================
-   COS110 OOP STUDY WEBSITE - MAIN STYLESHEET
+   COS110 OOP STUDY WEBSITE - MAIN STYLESHEET (FIXED CODE EDITOR SIZE)
    ============================================================================ */
 
 :root {
@@ -238,30 +238,7 @@ h1 {
 }
 
 /* ============================================================================
-   DIAGRAMS
-   ============================================================================ */
-
-.diagram {
-    background: #f0f7ff;
-    border: 2px dashed var(--primary);
-    padding: 30px;
-    border-radius: 4px;
-    text-align: center;
-    color: var(--primary);
-    margin: 20px 0;
-    font-size: 14px;
-    min-height: 150px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-family: 'Courier New', monospace;
-    white-space: pre-wrap;
-    word-wrap: break-word;
-    line-height: 1.4;
-}
-
-/* ============================================================================
-   CODE EXAMPLES
+   CODE EXAMPLES - FIXED SIZE
    ============================================================================ */
 
 .code-example {
@@ -299,33 +276,34 @@ h1 {
     border-bottom-color: var(--primary);
 }
 
+/* FIXED HEIGHT CODE EDITOR */
 .code-editor {
     background: var(--code-bg);
     color: var(--code-text);
     padding: 20px;
-    min-height: 400px;
-    max-height: 700px;
+    height: 400px;
     overflow: auto;
     font-family: 'Courier New', monospace;
     font-size: 14px;
     line-height: 1.8;
     border: 1px solid #333;
     white-space: pre;
+    display: block;
 }
 
 .code-editor textarea {
     background: var(--code-bg);
     color: var(--code-text);
     padding: 20px;
-    min-height: 400px;
-    max-height: 700px;
+    height: 400px;
     overflow: auto;
     font-family: 'Courier New', monospace;
     font-size: 14px;
     line-height: 1.8;
     border: 1px solid #333;
     width: 100%;
-    resize: vertical;
+    resize: none;
+    box-sizing: border-box;
 }
 
 .code-editor textarea:focus {
@@ -376,8 +354,7 @@ h1 {
     color: var(--code-text);
     padding: 15px;
     border-radius: 4px;
-    max-height: 600px;
-    min-height: 200px;
+    height: 300px;
     overflow-y: auto;
     font-family: 'Courier New', monospace;
     font-size: 14px;
@@ -694,6 +671,14 @@ footer a:hover {
     .code-tab {
         padding: 10px 15px;
     }
+
+    .code-editor {
+        height: 300px;
+    }
+
+    .code-editor textarea {
+        height: 300px;
+    }
 }
 
 @media (max-width: 480px) {
@@ -710,7 +695,11 @@ footer a:hover {
     }
 
     .code-editor {
-        min-height: 250px;
+        height: 250px;
+    }
+
+    .code-editor textarea {
+        height: 250px;
     }
 
     .quiz-modal-content {

@@ -2,8 +2,8 @@
 
 class CompilerAPI {
     constructor() {
-        this.clientId = 'd8bffe526ba72e9cf9c5d3cb4ce47436';
-        this.clientSecret = '6e573cd39a6b96e5a13b0e41be148e923b6e80ad7c5d0c0f1a8b9e4f5c6d7e8a';
+        this.clientId = 'e88569616eeb2f699d91f07b6a073ae9';
+        this.clientSecret = 'c2f11a63d797790779de8359c2b3f4421918f0211b2cb1817778112ad1b9819b';
         this.apiUrl = 'https://api.jdoodle.com/v1/execute';
         this.maxTimeout = 30000;
     }
