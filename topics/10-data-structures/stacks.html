@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stacks - COS110 OOP Study Website</title>
+    <link rel="stylesheet" href="../../css/style.css">
+</head>
+<body>
+    <nav class="navbar">
+        <a href="../../index.html" class="navbar-brand">📚 COS110 OOP</a>
+        <div class="navbar-search"><input type="text" placeholder="Search topics..."></div>
+    </nav>
+
+    <div class="container">
+        <aside class="sidebar">
+            <div class="sidebar-title">📊 Data Structures</div>
+            <a href="../../topics/21-data-structures-linked-lists.html" class="sidebar-item">Linked Lists</a>
+            <a href="../../topics/22-data-structures-doubly-linked.html" class="sidebar-item">Doubly Linked</a>
+            <a href="../../topics/23-data-structures-circular.html" class="sidebar-item">Circular Lists</a>
+            <a href="../../topics/24-data-structures-stacks.html" class="sidebar-item active">Stacks</a>
+            <a href="../../topics/25-data-structures-queues.html" class="sidebar-item">Queues</a>
+            <a href="../../topics/26-data-structures-stl.html" class="sidebar-item">STL</a>
+        </aside>
+
+        <main class="main-content">
+            <h1>📚 Stacks - LIFO Data Structure</h1>
+
+            <section class="section">
+                <div class="section-title">📚 Explanation</div>
+                <div class="explanation">
+                    <h3 style="color: var(--primary);">What is a Stack?</h3>
+                    <p>A stack is a Last-In-First-Out (LIFO) data structure where elements are added and removed from the same end called the top. Think of a stack of plates - you add/remove from the top. Applications: function call stack, undo/redo, expression evaluation, browser history.</p>
+
+                    <h3 style="color: var(--primary); margin-top: 20px;">Stack Operations</h3>
+                    <p>Push: add element to top. Pop: remove and return element from top. Peek/Top: view top element without removing. isEmpty: check if stack is empty. All operations are O(1) time complexity. Can implement using arrays or linked lists.</p>
+
+                    <h3 style="color: var(--primary); margin-top: 20px;">Stack Implementation</h3>
+                    <p>Array-based: use index top to track top element. Linked list-based: use head pointer. Array method is simple and efficient for fixed size. Linked list allows dynamic resizing. Choose based on max size requirements and memory concerns.</p>
+
+                    <h3 style="color: var(--primary); margin-top: 20px;">Stack Applications</h3>
+                    <p>Expression evaluation: convert infix to postfix, evaluate postfix. Parentheses matching: validate balanced brackets. Function calls: call stack in programming. Undo operations: store previous states. Maze solving: backtracking with stack.</p>
+
+                    <h3 style="color: var(--primary); margin-top: 20px;">Stack vs Queue</h3>
+                    <p>Stack is LIFO (last element out first), Queue is FIFO (first element out first). Stack removes from same end it adds. Queue removes from different end. Different applications and properties make them complementary.</p>
+                </div>
+            </section>
+
+            <section class="section">
+                <div class="section-title">💻 Code Examples</div>
+
+                <div class="code-example">
+                    <div class="code-tabs">
+                        <button class="code-tab active" data-tab="simple1">Array-based Stack</button>
+                        <button class="code-tab" data-tab="full1">Full Program</button>
+                    </div>
+                    <div data-tab-content="simple1" class="code-editor">
+template<typename T>
+class Stack {
+private:
+    T items[100];
+    int top;
+public:
+    Stack() : top(-1) {}
+    
+    void push(T val) {
+        items[++top] = val;
+    }
+    
+    T pop() {
+        return items[top--];
+    }
+    
+    T peek() {
+        return items[top];
+    }
+    
+    bool isEmpty() {
+        return top == -1;
+    }
+};
+
+Stack<int> s;
+s.push(10);
+s.push(20);
+cout << s.pop() << endl;  // 20
+                    </div>
+                    <div data-tab-content="full1" style="display: none;">
+                        <textarea class="code-editor" id="code1">#include <iostream>
+using namespace std;
+
+template<typename T>
+class Stack {
+private:
+    static const int MAX = 100;
+    T items[MAX];
+    int top;
+public:
+    Stack() : top(-1) {
+        cout << "Stack created" << endl;
+    }
+    
+    bool isFull() {
+        return top == MAX - 1;
+    }
+    
+    bool isEmpty() {
+        return top == -1;
+    }
+    
+    void push(T val) {
+        if(!isFull()) {
+            items[++top] = val;
+            cout << "Pushed: " << val << endl;
+        } else {
+            cout << "Stack full!" << endl;
+        }
+    }
+    
+    T pop() {
+        if(!isEmpty()) {
+            cout << "Popped: " << items[top] << endl;
+            return items[top--];
+        }
+        return T();
+    }
+    
+    T peek() {
+        if(!isEmpty()) {
+            return items[top];
+        }
+        return T();
+    }
+    
+    int size() {
+        return top + 1;
+    }
+    
+    void display() {
+        cout << "Stack: ";
+        for(int i = 0; i <= top; i++) {
+            cout << items[i] << " ";
+        }
+        cout << endl;
+    }
+};
+
+int main() {
+    Stack<int> s;
+    
+    cout << "\n=== Push Operations ===" << endl;
+    s.push(10);
+    s.push(20);
+    s.push(30);
+    s.push(40);
+    s.display();
+    
+    cout << "\n=== Stack Info ===" << endl;
+    cout << "Size: " << s.size() << endl;
+    cout << "Top: " << s.peek() << endl;
+    
+    cout << "\n=== Pop Operations ===" << endl;
+    s.pop();
+    s.pop();
+    s.display();
+    
+    return 0;
+}
+                        </textarea>
+                    </div>
+                    <div class="code-buttons">
+                        <button class="btn btn-primary" onclick="runCode(document.getElementById('code1'), document.getElementById('output1'))">▶ Run Code</button>
+                    </div>
+                    <div class="output-box" id="output1">Click "Run Code" to execute...</div>
+                </div>
+
+                <div class="code-example">
+                    <div class="code-tabs">
+                        <button class="code-tab active" data-tab="simple2">Balanced Parentheses</button>
+                        <button class="code-tab" data-tab="full2">Full Program</button>
+                    </div>
+                    <div data-tab-content="simple2" class="code-editor">
+bool isBalanced(string expr) {
+    Stack<char> s;
+    for(char c : expr) {
+        if(c == '(' || c == '{') {
+            s.push(c);
+        } else if(c == ')' || c == '}') {
+            if(s.isEmpty()) return false;
+            s.pop();
+        }
+    }
+    return s.isEmpty();
+}
+
+cout << isBalanced("{(x+y)*2}");      // true
+cout << isBalanced("{(x+y)*2");       // false
+                    </div>
+                    <div data-tab-content="full2" style="display: none;">
+                        <textarea class="code-editor" id="code2">#include <iostream>
+#include <string>
+#include <stack>
+using namespace std;
+
+bool isBalanced(string expr) {
+    stack<char> s;
+    for(char c : expr) {
+        if(c == '(' || c == '[' || c == '{') {
+            s.push(c);
+        } else if(c == ')' || c == ']' || c == '}') {
+            if(s.empty()) return false;
+            
+            char top = s.top();
+            if((c == ')' && top != '(') ||
+               (c == ']' && top != '[') ||
+               (c == '}' && top != '{')) {
+                return false;
+            }
+            s.pop();
+        }
+    }
+    return s.empty();
+}
+
+int main() {
+    vector<string> expressions = {
+        "{(a+b)*c}",
+        "((x+y)*2)",
+        "{[a+(b*c)]}",
+        "((x+y)",
+        "{(x+y})",
+        "[a+b)+c]"
+    };
+    
+    cout << "=== Balanced Parentheses Check ===" << endl;
+    for(const auto& expr : expressions) {
+        cout << expr << ": " 
+             << (isBalanced(expr) ? "BALANCED" : "NOT BALANCED") 
+             << endl;
+    }
+    
+    return 0;
+}
+                        </textarea>
+                    </div>
+                    <div class="code-buttons">
+                        <button class="btn btn-primary" onclick="runCode(document.getElementById('code2'), document.getElementById('output2'))">▶ Run Code</button>
+                    </div>
+                    <div class="output-box" id="output2">Click "Run Code" to execute...</div>
+                </div>
+
+                <div class="code-example">
+                    <div class="code-tabs">
+                        <button class="code-tab active" data-tab="simple3">Expression Evaluation</button>
+                        <button class="code-tab" data-tab="full3">Full Program</button>
+                    </div>
+                    <div data-tab-content="simple3" class="code-editor">
+int evaluatePostfix(string expr) {
+    Stack<int> s;
+    for(char c : expr) {
+        if(isdigit(c)) {
+            s.push(c - '0');
+        } else {
+            int b = s.pop();
+            int a = s.pop();
+            if(c == '+') s.push(a + b);
+            else if(c == '-') s.push(a - b);
+            else if(c == '*') s.push(a * b);
+            else if(c == '/') s.push(a / b);
+        }
+    }
+    return s.peek();
+}
+
+cout << evaluatePostfix("23+5*");  // 25 = (2+3)*5
+                    </div>
+                    <div data-tab-content="full3" style="display: none;">
+                        <textarea class="code-editor" id="code3">#include <iostream>
+#include <string>
+#include <stack>
+#include <cctype>
+using namespace std;
+
+int evaluatePostfix(string expr) {
+    stack<int> s;
+    
+    for(char c : expr) {
+        if(isdigit(c)) {
+            s.push(c - '0');
+        } else if(c == ' ') {
+            continue;
+        } else {
+            int b = s.top(); s.pop();
+            int a = s.top(); s.pop();
+            
+            if(c == '+') s.push(a + b);
+            else if(c == '-') s.push(a - b);
+            else if(c == '*') s.push(a * b);
+            else if(c == '/') s.push(a / b);
+        }
+    }
+    return s.top();
+}
+
+int main() {
+    cout << "=== Postfix Expression Evaluation ===" << endl;
+    
+    cout << "23+ (2+3=5): " 
+         << evaluatePostfix("23+") << endl;
+    
+    cout << "34*5+ (3*4+5=17): " 
+         << evaluatePostfix("34*5+") << endl;
+    
+    cout << "123*+ (1+2*3=7): " 
+         << evaluatePostfix("123*+") << endl;
+    
+    cout << "65-3/ ((6-5)/3=0): " 
+         << evaluatePostfix("65-3/") << endl;
+    
+    return 0;
+}
+                        </textarea>
+                    </div>
+                    <div class="code-buttons">
+                        <button class="btn btn-primary" onclick="runCode(document.getElementById('code3'), document.getElementById('output3'))">▶ Run Code</button>
+                    </div>
+                    <div class="output-box" id="output3">Click "Run Code" to execute...</div>
+                </div>
+            </section>
+
+            <section class="section">
+                <div class="section-title">✍️ Coding Activities</div>
+
+                <div class="activity">
+                    <div class="activity-title">⚡ Intermediate Challenge: Stack using Linked List</div>
+                    <p>Implement stack with dynamic allocation using linked list.</p>
+                    <button class="btn btn-secondary" onclick="downloadCode(\`#include <iostream>
+using namespace std;
+
+template<typename T>
+struct Node {
+    T data;
+    Node* next;
+    Node(T val) : data(val), next(nullptr) {}
+};
+
+template<typename T>
+class LinkedStack {
+private:
+    Node<T>* head;
+public:
+    LinkedStack() : head(nullptr) {}
+    
+    // TODO: void push(T val)
+    // TODO: T pop()
+    // TODO: bool isEmpty()
+};
+
+int main() {
+    LinkedStack<int> s;
+    s.push(10);
+    s.push(20);
+    cout << s.pop() << endl;
+    return 0;
+}\`, 'linked_stack.cpp')">⬇ Download Skeleton</button>
+                    <button class="collapsible">▼ Show Solution</button>
+                    <div class="collapsible-content">
+                        <div class="code-editor">
+#include <iostream>
+using namespace std;
+
+template<typename T>
+struct Node {
+    T data;
+    Node* next;
+    Node(T val) : data(val), next(nullptr) {}
+};
+
+template<typename T>
+class LinkedStack {
+private:
+    Node<T>* head;
+public:
+    LinkedStack() : head(nullptr) {}
+    
+    void push(T val) {
+        Node<T>* newNode = new Node<T>(val);
+        newNode->next = head;
+        head = newNode;
+        cout << "Pushed: " << val << endl;
+    }
+    
+    T pop() {
+        if(isEmpty()) {
+            cout << "Stack empty" << endl;
+            return T();
+        }
+        T val = head->data;
+        Node<T>* temp = head;
+        head = head->next;
+        cout << "Popped: " << val << endl;
+        delete temp;
+        return val;
+    }
+    
+    T peek() {
+        if(!isEmpty()) {
+            return head->data;
+        }
+        return T();
+    }
+    
+    bool isEmpty() {
+        return head == nullptr;
+    }
+    
+    ~LinkedStack() {
+        while(!isEmpty()) {
+            pop();
+        }
+    }
+};
+
+int main() {
+    LinkedStack<int> s;
+    
+    cout << "=== Push ===" << endl;
+    s.push(10);
+    s.push(20);
+    s.push(30);
+    
+    cout << "\n=== Peek ===" << endl;
+    cout << "Top: " << s.peek() << endl;
+    
+    cout << "\n=== Pop ===" << endl;
+    s.pop();
+    s.pop();
+    s.pop();
+    
+    return 0;
+}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="activity">
+                    <div class="activity-title">🔥 Advanced Challenge: Infix to Postfix Converter</div>
+                    <p>Convert infix expressions to postfix using stack with operator precedence.</p>
+                    <button class="btn btn-secondary" onclick="downloadCode(\`#include <iostream>
+#include <string>
+#include <cctype>
+using namespace std;
+
+// TODO: Implement infixToPostfix
+// Rules:
+// - Operands go to output
+// - Operators use stack with precedence
+// - Handle parentheses
+
+int main() {
+    cout << \"Infix: a+b*c\" << endl;
+    cout << \"Postfix: \" << infixToPostfix(\"a+b*c\") << endl;
+    return 0;
+}\`, 'infix_to_postfix.cpp')">⬇ Download Skeleton</button>
+                    <button class="collapsible">▼ Show Solution</button>
+                    <div class="collapsible-content">
+                        <div class="code-editor">
+#include <iostream>
+#include <string>
+#include <stack>
+#include <cctype>
+using namespace std;
+
+int precedence(char op) {
+    if(op == '+' || op == '-') return 1;
+    if(op == '*' || op == '/') return 2;
+    return 0;
+}
+
+string infixToPostfix(string infix) {
+    stack<char> s;
+    string postfix = "";
+    
+    for(int i = 0; i < infix.length(); i++) {
+        char c = infix[i];
+        
+        if(isalnum(c)) {
+            postfix += c;
+        }
+        else if(c == '(') {
+            s.push(c);
+        }
+        else if(c == ')') {
+            while(!s.empty() && 
+                  s.top() != '(') {
+                postfix += s.top();
+                s.pop();
+            }
+            if(!s.empty()) s.pop();
+        }
+        else {
+            while(!s.empty() && 
+                  precedence(s.top()) 
+                  >= precedence(c)) {
+                postfix += s.top();
+                s.pop();
+            }
+            s.push(c);
+        }
+    }
+    
+    while(!s.empty()) {
+        postfix += s.top();
+        s.pop();
+    }
+    
+    return postfix;
+}
+
+int main() {
+    vector<string> expressions = {
+        "a+b",
+        "a+b*c",
+        "(a+b)*c",
+        "a*b+c*d",
+        "((a+b)*c)-d"
+    };
+    
+    cout << "=== Infix to Postfix ===" << endl;
+    for(const auto& expr : expressions) {
+        cout << "Infix:   " << expr << endl;
+        cout << "Postfix: " 
+             << infixToPostfix(expr) << endl << endl;
+    }
+    
+    return 0;
+}
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="section">
+                <div class="section-title">📝 Knowledge Check Quiz</div>
+                <div class="quiz-container">
+                    <button class="quiz-btn" onclick="initializeQuiz()">▶ Start Quiz</button>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <footer><p>COS110 OOP Study Website | November 2025</p></footer>
+
+    <script src="../../js/main.js"></script>
+    <script src="../../js/compiler.js"></script>
+    <script src="../../js/quiz.js"></script>
+
+    <script>
+        function initializeQuiz() {
+            const questions = [
+                {type: 'multiple-choice', question: 'Stack is:', options: ['FIFO', 'LIFO', 'Random', 'Linear'], correctAnswer: 'B', explanation: 'Stack is Last-In-First-Out.'},
+                {type: 'true-false', question: 'Push/Pop are O(1).', correctAnswer: 'true', explanation: 'Yes, constant time operations.'},
+                {type: 'fill-in', question: 'Main stack operations:', context: 'push, pop, <span style="color: red;">_______</span>', hint: 'peek', acceptableAnswers: ['peek', 'peek/isEmpty'], explanation: 'Peek and isEmpty are also common.'},
+                {type: 'true-false', question: 'Last element added is first removed.', correctAnswer: 'true', explanation: 'Yes, LIFO property.'},
+                {type: 'multiple-choice', question: 'Stack application:', options: ['Random access', 'Function calls', 'FIFO', 'None'], correctAnswer: 'B', explanation: 'Function call stacks are common.'},
+                {type: 'true-false', question: 'Can implement with array.', correctAnswer: 'true', explanation: 'Yes, simple and efficient.'},
+                {type: 'true-false', question: 'Can implement with linked list.', correctAnswer: 'true', explanation: 'Yes, allows dynamic size.'},
+                {type: 'multiple-choice', question: 'isEmpty check:', options: ['top == -1', 'head == nullptr', 'Both', 'Neither'], correctAnswer: 'C', explanation: 'Depends on implementation.'},
+                {type: 'fill-in', question: 'Balanced parentheses needs:', context: 'a <span style="color: red;">_______</span> to track', hint: 'stack', acceptableAnswers: ['stack', 'stack '], explanation: 'Stack tracks opening brackets.'},
+                {type: 'true-false', question: 'Expression evaluation uses stack.', correctAnswer: 'true', explanation: 'Yes, postfix evaluation needs stack.'},
+                {type: 'multiple-choice', question: 'Peek operation:', options: ['Removes element', 'Views only', 'Modifies', 'None'], correctAnswer: 'B', explanation: 'Peek views without removing.'},
+                {type: 'true-false', question: 'Undo uses stack.', correctAnswer: 'true', explanation: 'Yes, stores history in LIFO.'},
+                {type: 'fill-in', question: 'Pop removes from:', context: '<span style="color: red;">_______</span>', hint: 'top', acceptableAnswers: ['top', 'top '], explanation: 'Pop removes from stack top.'},
+                {type: 'true-false', question: 'Stack memory efficient.', correctAnswer: 'true', explanation: 'Yes, O(n) space for n elements.'},
+                {type: 'multiple-choice', question: 'Array stack advantage:', options: ['Dynamic', 'Simple', 'Unbounded', 'Flexible'], correctAnswer: 'B', explanation: 'Array stack is simple to implement.'},
+                {type: 'true-false', question: 'Linked stack better for unknown size.', correctAnswer: 'true', explanation: 'Yes, grows as needed.'},
+                {type: 'multiple-choice', question: 'Time complexity all ops:', options: ['O(1)', 'O(n)', 'O(log n)', 'Varies'], correctAnswer: 'A', explanation: 'All stack ops are O(1).'},
+                {type: 'true-false', question: 'Can pop empty stack.', correctAnswer: 'false', explanation: 'No, must check isEmpty first.'},
+                {type: 'fill-in', question: 'Top element access:', context: 'return items[<span style="color: red;">_______</span>];', hint: 'top', acceptableAnswers: ['top', 'top '], explanation: 'Top index points to current top.'},
+                {type: 'multiple-choice', question: 'Stack best for:', options: ['Caching', 'History', 'Sequences', 'Graphs'], correctAnswer: 'B', explanation: 'Perfect for maintaining history.'}
+            ];
+
+            window.quizSystem = new QuizSystem('Stacks', questions);
+            openQuizModal();
+        }
+
+        if (!document.getElementById('quizModal')) {
+            const modal = document.createElement('div');
+            modal.id = 'quizModal';
+            modal.className = 'quiz-modal';
+            modal.innerHTML = `<div class="quiz-modal-content"><div class="quiz-header"><div><div class="quiz-question-number">Quiz: Stacks</div><div class="quiz-progress">Question 1 of 20</div></div><button class="quiz-close" onclick="closeQuizModal()">✕</button></div><div class="quiz-questions-container"></div></div>`;
+            document.body.appendChild(modal);
+        }
+    </script>
+</body>
+</html>

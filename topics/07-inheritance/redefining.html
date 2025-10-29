@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inheritance - Redefining Methods - COS110 OOP Study Website</title>
+    <link rel="stylesheet" href="../../css/style.css">
+</head>
+<body>
+    <nav class="navbar">
+        <a href="../../index.html" class="navbar-brand">📚 COS110 OOP</a>
+        <div class="navbar-search"><input type="text" placeholder="Search topics..."></div>
+    </nav>
+
+    <div class="container">
+        <aside class="sidebar">
+            <div class="sidebar-title">👨‍👧 Inheritance</div>
+            <a href="../../topics/14-inheritance-basics.html" class="sidebar-item">Basics</a>
+            <a href="../../topics/16-inheritance-redefining.html" class="sidebar-item active">Redefining</a>
+            <a href="../../topics/17-inheritance-aggregation.html" class="sidebar-item">Aggregation</a>
+        </aside>
+
+        <main class="main-content">
+            <h1>🔄 Inheritance - Redefining Methods</h1>
+
+            <section class="section">
+                <div class="section-title">📚 Explanation</div>
+                <div class="explanation">
+                    <h3 style="color: var(--primary);">Method Hiding vs Overriding</h3>
+                    <p>When a derived class defines a method with the same name as a base class method, it hides the base method (without virtual). This is different from polymorphic overriding. The base method becomes inaccessible through the derived object unless called explicitly via the base class name.</p>
+
+                    <h3 style="color: var(--primary); margin-top: 20px;">Static Method Resolution</h3>
+                    <p>Without virtual, method calls are resolved at compile time based on the variable type, not the object type. A pointer to base class will call the base method even if it points to a derived object. This is compile-time polymorphism.</p>
+
+                    <h3 style="color: var(--primary); margin-top: 20px;">Calling Base Methods</h3>
+                    <p>Use the scope resolution operator (::) to call hidden base methods from derived class. Syntax: Base::method(). This is useful when derived methods want to extend rather than completely replace base functionality.</p>
+
+                    <h3 style="color: var(--primary); margin-top: 20px;">Method Signature Changes</h3>
+                    <p>If derived method has different parameters than base method, it hides all base versions with that name. This can hide overloaded methods. To avoid this, either use virtual or match the exact signature.</p>
+
+                    <h3 style="color: var(--primary); margin-top: 20px;">When to Use Redefining vs Virtual</h3>
+                    <p>Use redefining for compile-time polymorphism and when you want cleaner separation between base and derived. Use virtual for runtime polymorphism and when you want interchangeable objects through base class references.</p>
+                </div>
+            </section>
+
+            <section class="section">
+                <div class="section-title">💻 Code Examples</div>
+
+                <div class="code-example">
+                    <div class="code-tabs">
+                        <button class="code-tab active" data-tab="simple1">Method Hiding</button>
+                        <button class="code-tab" data-tab="full1">Full Program</button>
+                    </div>
+                    <div data-tab-content="simple1" class="code-editor">
+class Base {
+public:
+    void display() {
+        cout << "Base display" << endl;
+    }
+};
+
+class Derived : public Base {
+public:
+    void display() {  // Hides Base::display
+        cout << "Derived display" << endl;
+    }
+};
+
+Base* b = new Derived();
+b->display();  // Calls Base::display()
+delete b;
+                    </div>
+                    <div data-tab-content="full1" style="display: none;">
+                        <textarea class="code-editor" id="code1">#include <iostream>
+using namespace std;
+
+class Animal {
+public:
+    void speak() {
+        cout << "Animal speaks" << endl;
+    }
+    
+    void move() {
+        cout << "Animal moves" << endl;
+    }
+};
+
+class Dog : public Animal {
+public:
+    void speak() {
+        cout << "Dog barks" << endl;
+    }
+    
+    void move() {
+        cout << "Dog runs" << endl;
+    }
+};
+
+int main() {
+    Dog d;
+    d.speak();  // Dog barks
+    d.move();   // Dog runs
+    
+    Animal* a = &d;
+    a->speak();  // Animal speaks (static resolution)
+    a->move();   // Animal moves
+    
+    return 0;
+}
+                        </textarea>
+                    </div>
+                    <div class="code-buttons">
+                        <button class="btn btn-primary" onclick="runCode(document.getElementById('code1'), document.getElementById('output1'))">▶ Run Code</button>
+                    </div>
+                    <div class="output-box" id="output1">Click "Run Code" to execute...</div>
+                </div>
+
+                <div class="code-example">
+                    <div class="code-tabs">
+                        <button class="code-tab active" data-tab="simple2">Calling Base Methods</button>
+                        <button class="code-tab" data-tab="full2">Full Program</button>
+                    </div>
+                    <div data-tab-content="simple2" class="code-editor">
+class Base {
+public:
+    void func() {
+        cout << "Base implementation" << endl;
+    }
+};
+
+class Derived : public Base {
+public:
+    void func() {
+        Base::func();  // Call base version
+        cout << "Derived extension" << endl;
+    }
+};
+
+Derived d;
+d.func();
+// Output:
+// Base implementation
+// Derived extension
+                    </div>
+                    <div data-tab-content="full2" style="display: none;">
+                        <textarea class="code-editor" id="code2">#include <iostream>
+using namespace std;
+
+class Vehicle {
+public:
+    void startup() {
+        cout << "1. Turn on ignition" << endl;
+        cout << "2. Check fuel" << endl;
+    }
+};
+
+class Car : public Vehicle {
+public:
+    void startup() {
+        Vehicle::startup();
+        cout << "3. Adjust mirrors" << endl;
+        cout << "4. Fasten seatbelt" << endl;
+        cout << "Car ready!" << endl;
+    }
+};
+
+class Truck : public Vehicle {
+public:
+    void startup() {
+        Vehicle::startup();
+        cout << "3. Check cargo" << endl;
+        cout << "4. Check lights" << endl;
+        cout << "Truck ready!" << endl;
+    }
+};
+
+int main() {
+    cout << "Car startup sequence:" << endl;
+    Car c;
+    c.startup();
+    
+    cout << "\nTruck startup sequence:" << endl;
+    Truck t;
+    t.startup();
+    
+    return 0;
+}
+                        </textarea>
+                    </div>
+                    <div class="code-buttons">
+                        <button class="btn btn-primary" onclick="runCode(document.getElementById('code2'), document.getElementById('output2'))">▶ Run Code</button>
+                    </div>
+                    <div class="output-box" id="output2">Click "Run Code" to execute...</div>
+                </div>
+
+                <div class="code-example">
+                    <div class="code-tabs">
+                        <button class="code-tab active" data-tab="simple3">Signature Mismatch</button>
+                        <button class="code-tab" data-tab="full3">Full Program</button>
+                    </div>
+                    <div data-tab-content="simple3" class="code-editor">
+class Base {
+public:
+    void process() { cout << "Base" << endl; }
+    void process(int x) { 
+        cout << "Base int: " << x << endl; 
+    }
+};
+
+class Derived : public Base {
+public:
+    void process(double x) {  // Hides BOTH base versions
+        cout << "Derived double: " << x << endl;
+    }
+};
+
+Derived d;
+d.process(5);      // Error! Hides Base::process()
+d.process(5.5);    // OK
+d.Base::process(); // Must use Base::
+                    </div>
+                    <div data-tab-content="full3" style="display: none;">
+                        <textarea class="code-editor" id="code3">#include <iostream>
+using namespace std;
+
+class Printer {
+public:
+    void print() {
+        cout << "Print default" << endl;
+    }
+    
+    void print(const char* text) {
+        cout << "Print text: " << text << endl;
+    }
+    
+    void print(int num) {
+        cout << "Print number: " << num << endl;
+    }
+};
+
+class ColorPrinter : public Printer {
+public:
+    void print(const char* text) {
+        cout << "Color: ";
+        Printer::print(text);
+    }
+};
+
+int main() {
+    ColorPrinter cp;
+    
+    cp.print("hello");     // ColorPrinter version
+    
+    // These cause errors - hidden by ColorPrinter
+    // cp.print();
+    // cp.print(42);
+    
+    // Must call via base class
+    cp.Printer::print();
+    cp.Printer::print(42);
+    
+    return 0;
+}
+                        </textarea>
+                    </div>
+                    <div class="code-buttons">
+                        <button class="btn btn-primary" onclick="runCode(document.getElementById('code3'), document.getElementById('output3'))">▶ Run Code</button>
+                    </div>
+                    <div class="output-box" id="output3">Click "Run Code" to execute...</div>
+                </div>
+            </section>
+
+            <section class="section">
+                <div class="section-title">✍️ Coding Activities</div>
+
+                <div class="activity">
+                    <div class="activity-title">⚡ Intermediate Challenge: Logger Hierarchy</div>
+                    <p>Create Logger base class with Console and File loggers that redefine methods and call base implementations.</p>
+                    <button class="btn btn-secondary" onclick="downloadCode(\`#include <iostream>
+using namespace std;
+
+class Logger {
+public:
+    virtual void log(string msg) {
+        cout << \"[LOG] \" << msg << endl;
+    }
+    
+    void warn(string msg) {
+        cout << \"[WARN] \" << msg << endl;
+    }
+    
+    virtual ~Logger() {}
+};
+
+class ConsoleLogger : public Logger {
+public:
+    void log(string msg) override {
+        cout << \"CONSOLE: \";
+        Logger::log(msg);
+    }
+};
+
+int main() {
+    ConsoleLogger cl;
+    cl.log(\"Test\");
+    return 0;
+}\`, 'logger_hierarchy.cpp')">⬇ Download Skeleton</button>
+                    <button class="collapsible">▼ Show Solution</button>
+                    <div class="collapsible-content">
+                        <div class="code-editor">
+#include <iostream>
+#include <string>
+#include <ctime>
+using namespace std;
+
+class Logger {
+public:
+    virtual void log(string msg) {
+        cout << "[LOG] " << msg << endl;
+    }
+    
+    virtual void error(string msg) {
+        cout << "[ERROR] " << msg << endl;
+    }
+    
+    void warn(string msg) {
+        cout << "[WARN] " << msg << endl;
+    }
+    
+    virtual ~Logger() {}
+};
+
+class ConsoleLogger : public Logger {
+public:
+    void log(string msg) override {
+        cout << ">>> CONSOLE: ";
+        Logger::log(msg);
+    }
+    
+    void error(string msg) override {
+        cout << "!!! CONSOLE: ";
+        Logger::error(msg);
+    }
+};
+
+class DetailedLogger : public Logger {
+public:
+    void log(string msg) override {
+        cout << "[DETAILED-LOG] ";
+        Logger::log(msg);
+    }
+    
+    void error(string msg) override {
+        cout << "[DETAILED-ERROR] ";
+        Logger::error(msg);
+    }
+};
+
+int main() {
+    ConsoleLogger cl;
+    cl.log("Application started");
+    cl.warn("Low memory");
+    cl.error("Critical error");
+    
+    cout << endl;
+    
+    DetailedLogger dl;
+    dl.log("Processing data");
+    dl.error("Division by zero");
+    
+    return 0;
+}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="activity">
+                    <div class="activity-title">🔥 Advanced Challenge: Account System with Redefining</div>
+                    <p>Create Account hierarchy where derived accounts extend base functionality using scope resolution.</p>
+                    <button class="btn btn-secondary" onclick="downloadCode(\`#include <iostream>
+using namespace std;
+
+class Account {
+protected:
+    double balance;
+public:
+    Account(double b) : balance(b) {}
+    
+    void withdraw(double amount) {
+        if(amount > balance) {
+            cout << \"Insufficient funds\" << endl;
+            return;
+        }
+        balance -= amount;
+    }
+    
+    void deposit(double amount) {
+        balance += amount;
+    }
+    
+    void display() {
+        cout << \"Balance: \" << balance << endl;
+    }
+};
+
+class SavingsAccount : public Account {
+private:
+    double rate;
+public:
+    SavingsAccount(double b, double r) 
+        : Account(b), rate(r) {}
+    
+    void withdraw(double amount) {
+        // TODO: Add fee, then call base
+        Account::withdraw(amount);
+    }
+};
+
+int main() {
+    SavingsAccount sa(1000, 0.05);
+    sa.withdraw(100);
+    sa.display();
+    return 0;
+}\`, 'account_system.cpp')">⬇ Download Skeleton</button>
+                    <button class="collapsible">▼ Show Solution</button>
+                    <div class="collapsible-content">
+                        <div class="code-editor">
+#include <iostream>
+using namespace std;
+
+class Account {
+protected:
+    double balance;
+public:
+    Account(double b) : balance(b) {}
+    
+    virtual void withdraw(double amount) {
+        if(amount > balance) {
+            cout << "Insufficient funds" << endl;
+            return;
+        }
+        balance -= amount;
+        cout << "Withdrew: " << amount << endl;
+    }
+    
+    virtual void deposit(double amount) {
+        balance += amount;
+        cout << "Deposited: " << amount << endl;
+    }
+    
+    virtual void display() {
+        cout << "Balance: " << balance << endl;
+    }
+    
+    virtual ~Account() {}
+};
+
+class SavingsAccount : public Account {
+private:
+    double interestRate;
+    const double WITHDRAWAL_FEE = 2.50;
+public:
+    SavingsAccount(double b, double rate) 
+        : Account(b), interestRate(rate) {}
+    
+    void withdraw(double amount) override {
+        cout << "Savings withdrawal (-$" 
+             << WITHDRAWAL_FEE << " fee)" << endl;
+        balance -= WITHDRAWAL_FEE;
+        Account::withdraw(amount);
+    }
+    
+    void applyInterest() {
+        double interest = balance * interestRate;
+        deposit(interest);
+        cout << "Interest applied: " << interest << endl;
+    }
+};
+
+class CheckingAccount : public Account {
+private:
+    int checksWritten;
+public:
+    CheckingAccount(double b) 
+        : Account(b), checksWritten(0) {}
+    
+    void withdraw(double amount) override {
+        cout << "Check written" << endl;
+        Account::withdraw(amount);
+        checksWritten++;
+    }
+    
+    void displayChecks() {
+        cout << "Checks written: " 
+             << checksWritten << endl;
+    }
+};
+
+int main() {
+    SavingsAccount sa(1000, 0.05);
+    sa.display();
+    sa.withdraw(100);
+    sa.display();
+    sa.applyInterest();
+    sa.display();
+    
+    cout << endl;
+    
+    CheckingAccount ca(500);
+    ca.display();
+    ca.withdraw(50);
+    ca.withdraw(75);
+    ca.display();
+    ca.displayChecks();
+    
+    return 0;
+}
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="section">
+                <div class="section-title">📝 Knowledge Check Quiz</div>
+                <div class="quiz-container">
+                    <button class="quiz-btn" onclick="initializeQuiz()">▶ Start Quiz</button>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <footer><p>COS110 OOP Study Website | November 2025</p></footer>
+
+    <script src="../../js/main.js"></script>
+    <script src="../../js/compiler.js"></script>
+    <script src="../../js/quiz.js"></script>
+
+    <script>
+        function initializeQuiz() {
+            const questions = [
+                {type: 'multiple-choice', question: 'Redefining without virtual is:', options: ['Polymorphism', 'Method hiding', 'Overloading', 'None'], correctAnswer: 'B', explanation: 'Without virtual, the base method is hidden, not polymorphically overridden.'},
+                {type: 'true-false', question: 'Redefining resolves at compile time.', correctAnswer: 'true', explanation: 'Yes, method choice is determined by variable type at compile time.'},
+                {type: 'multiple-choice', question: 'Base pointer to derived calls:', options: ['Derived method', 'Base method', 'Both', 'Neither'], correctAnswer: 'B', explanation: 'Without virtual, base pointer calls base method.'},
+                {type: 'fill-in', question: 'Call hidden base method:', context: '<span style="color: red;">_______</span>::methodName()', hint: 'Base', acceptableAnswers: ['Base', 'Base '], explanation: 'Use scope resolution Base:: to call hidden methods.'},
+                {type: 'true-false', question: 'Derived can completely replace base behavior.', correctAnswer: 'true', explanation: 'Yes, redefining allows complete replacement.'},
+                {type: 'multiple-choice', question: 'Method hiding affects:', options: ['Only exact match', 'All methods with name', 'Only one version', 'Nothing'], correctAnswer: 'B', explanation: 'All base versions with same name are hidden.'},
+                {type: 'true-false', question: 'Redefining with different parameters hides all base versions.', correctAnswer: 'true', explanation: 'Yes, even overloaded base methods are hidden.'},
+                {type: 'multiple-choice', question: 'Static polymorphism uses:', options: ['Pointers', 'References', 'Compile time type', 'Virtual tables'], correctAnswer: 'C', explanation: 'Static polymorphism uses compile-time type information.'},
+                {type: 'fill-in', question: 'To extend base functionality:', context: 'call <span style="color: red;">_______</span> then add derived code', hint: 'Base method', acceptableAnswers: ['Base::method', 'Base'], explanation: 'Call Base::method() to reuse base implementation.'},
+                {type: 'true-false', question: 'Redefining is type-safe.', correctAnswer: 'true', explanation: 'Yes, checked at compile time.'},
+                {type: 'multiple-choice', question: 'Redefining vs Virtual main difference:', options: ['Performance', 'When resolved', 'Code clarity', 'All above'], correctAnswer: 'B', explanation: 'Main difference is compile-time vs runtime resolution.'},
+                {type: 'true-false', question: 'Can call base method from derived implementation.', correctAnswer: 'true', explanation: 'Yes, using Base::methodName().'},
+                {type: 'multiple-choice', question: 'Signature mismatch causes:', options: ['Error', 'Hiding', 'Overloading', 'Polymorphism'], correctAnswer: 'B', explanation: 'Different signature causes hiding of all base versions.'},
+                {type: 'fill-in', question: 'Redefining declaration:', context: 'void method() { __ }', hint: 'no virtual', acceptableAnswers: ['redefined', 'redefine', 'new implementation'], explanation: 'Just redefine without virtual keyword for hiding.'},
+                {type: 'true-false', question: 'Using :: is necessary to access hidden methods.', correctAnswer: 'true', explanation: 'Yes, must use Base:: to call hidden base methods.'},
+                {type: 'multiple-choice', question: 'Method hiding is:', options: ['Error', 'Warning', 'Expected behavior', 'Undefined'], correctAnswer: 'C', explanation: 'Method hiding is expected C++ behavior.'},
+                {type: 'true-false', question: 'Redefining and virtual mutually exclusive.', correctAnswer: 'false', explanation: 'Can use virtual with redefining for polymorphism.'},
+                {type: 'multiple-choice', question: 'Which is compile-time decision?', options: ['Virtual call', 'Redefining call', 'Both', 'Neither'], correctAnswer: 'B', explanation: 'Redefining is resolved at compile time.'},
+                {type: 'fill-in', question: 'Base::method() extends functionality by:', context: 'Calling base <span style="color: red;">_______</span> then adding derived code', hint: 'implementation', acceptableAnswers: ['implementation', 'method', 'version'], explanation: 'Call base implementation then extend it.'},
+                {type: 'true-false', question: 'Redefining requires matching signatures.', correctAnswer: 'false', explanation: 'Different signatures still hide, they hide ALL base versions.'}
+            ];
+
+            window.quizSystem = new QuizSystem('Inheritance - Redefining Methods', questions);
+            openQuizModal();
+        }
+
+        if (!document.getElementById('quizModal')) {
+            const modal = document.createElement('div');
+            modal.id = 'quizModal';
+            modal.className = 'quiz-modal';
+            modal.innerHTML = `<div class="quiz-modal-content"><div class="quiz-header"><div><div class="quiz-question-number">Quiz: Redefining Methods</div><div class="quiz-progress">Question 1 of 20</div></div><button class="quiz-close" onclick="closeQuizModal()">✕</button></div><div class="quiz-questions-container"></div></div>`;
+            document.body.appendChild(modal);
+        }
+    </script>
+</body>
+</html>

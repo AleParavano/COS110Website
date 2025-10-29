@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Assignment Operator - COS110 OOP Study Website</title>
+    <link rel="stylesheet" href="../../css/style.css">
+</head>
+<body>
+    <nav class="navbar">
+        <a href="../../index.html" class="navbar-brand">📚 COS110 OOP</a>
+        <div class="navbar-search"><input type="text" placeholder="Search topics..."></div>
+    </nav>
+
+    <div class="container">
+        <aside class="sidebar">
+            <div class="sidebar-title">🔧 Constructors</div>
+            <a href="../../topics/06-copy-constructors.html" class="sidebar-item">Copy Constructors</a>
+            <a href="../../topics/07-assignment-operator.html" class="sidebar-item active">Assignment Operator</a>
+        </aside>
+
+        <main class="main-content">
+            <h1>⚖️ Assignment Operator Overloading</h1>
+
+            <section class="section">
+                <div class="section-title">📚 Explanation</div>
+                <div class="explanation">
+                    <h3 style="color: var(--primary);">What is the Assignment Operator?</h3>
+                    <p>The assignment operator (=) is used to copy data from one object to another after both objects have been created. It's different from the copy constructor, which is called during initialization. Like the copy constructor, you often need to overload it for classes managing dynamic memory.</p>
+
+                    <h3 style="color: var(--primary); margin-top: 20px;">Default Assignment Operator</h3>
+                    <p>C++ provides a default assignment operator that performs shallow copy. For classes without dynamic memory, this is usually fine. For classes with dynamic memory, you must implement a custom assignment operator.</p>
+
+                    <h3 style="color: var(--primary); margin-top: 20px;">Self-Assignment Check</h3>
+                    <p>The most critical aspect of implementing an assignment operator is checking for self-assignment (a = a). Without this check, you could delete memory before copying, causing data loss. Use if(this != &other) to prevent this.</p>
+
+                    <h3 style="color: var(--primary); margin-top: 20px;">Signature and Return Value</h3>
+                    <p>The assignment operator should return a reference to *this: ClassName& operator=(const ClassName& other). Returning a reference allows chaining assignments like a = b = c.</p>
+
+                    <h3 style="color: var(--primary); margin-top: 20px;">Difference from Copy Constructor</h3>
+                    <p>Copy constructor initializes a new object from an existing one. Assignment operator assigns to an already-initialized object. The assignment operator must handle cleanup of old data before acquiring new data.</p>
+                </div>
+            </section>
+
+            <section class="section">
+                <div class="section-title">💻 Code Examples</div>
+
+                <div class="code-example">
+                    <div class="code-tabs">
+                        <button class="code-tab active" data-tab="simple1">Simple Snippet</button>
+                        <button class="code-tab" data-tab="full1">Full Program</button>
+                    </div>
+                    <div data-tab-content="simple1" class="code-editor">
+class Number {
+public:
+    Number& operator=(const Number& other) {
+        if(this != &other) {
+            // Perform assignment
+        }
+        return *this;
+    }
+};
+
+Number a(5), b(10);
+a = b;  // Assignment operator called
+a = b = Number(20);  // Chaining
+                    </div>
+                    <div data-tab-content="full1" style="display: none;">
+                        <textarea class="code-editor" id="code1">#include <iostream>
+using namespace std;
+
+class Number {
+private:
+    int value;
+public:
+    Number(int v = 0) : value(v) {}
+    
+    Number& operator=(const Number& other) {
+        cout << "Assignment operator called" << endl;
+        if(this != &other) {
+            this->value = other.value;
+        }
+        return *this;
+    }
+    
+    void display() const {
+        cout << "Value: " << value << endl;
+    }
+};
+
+int main() {
+    Number n1(42);
+    Number n2(100);
+    
+    cout << "Before assignment:" << endl;
+    n1.display();
+    n2.display();
+    
+    n1 = n2;
+    cout << "\nAfter n1 = n2:" << endl;
+    n1.display();
+    
+    Number n3(5);
+    n3 = n1 = n2;
+    cout << "\nAfter n3 = n1 = n2:" << endl;
+    n3.display();
+    
+    return 0;
+}
+                        </textarea>
+                    </div>
+                    <div class="code-buttons">
+                        <button class="btn btn-primary" onclick="runCode(document.getElementById('code1'), document.getElementById('output1'))">▶ Run Code</button>
+                        <button class="btn btn-secondary" onclick="downloadCode(document.getElementById('code1').value, 'assignment_operator.cpp')">⬇ Download</button>
+                    </div>
+                    <div class="output-box" id="output1">Click "Run Code" to execute...</div>
+                </div>
+
+                <div class="code-example">
+                    <div class="code-tabs">
+                        <button class="code-tab active" data-tab="simple2">Deep Assignment</button>
+                        <button class="code-tab" data-tab="full2">Full Program</button>
+                    </div>
+                    <div data-tab-content="simple2" class="code-editor">
+String& operator=(const String& other) {
+    if(this != &other) {
+        delete[] data;
+        data = new char[strlen(other.data)+1];
+        strcpy(data, other.data);
+    }
+    return *this;
+}
+                    </div>
+                    <div data-tab-content="full2" style="display: none;">
+                        <textarea class="code-editor" id="code2">#include <iostream>
+#include <cstring>
+using namespace std;
+
+class String {
+private:
+    char* data;
+public:
+    String(const char* s = "") {
+        data = new char[strlen(s) + 1];
+        strcpy(data, s);
+    }
+    
+    String(const String& other) {
+        data = new char[strlen(other.data) + 1];
+        strcpy(data, other.data);
+    }
+    
+    String& operator=(const String& other) {
+        if(this != &other) {
+            delete[] data;
+            data = new char[strlen(other.data) + 1];
+            strcpy(data, other.data);
+        }
+        return *this;
+    }
+    
+    ~String() {
+        delete[] data;
+    }
+    
+    void display() const {
+        cout << "String: " << data << endl;
+    }
+};
+
+int main() {
+    String s1("Hello");
+    String s2("World");
+    
+    s1.display();
+    s2.display();
+    
+    s1 = s2;
+    cout << "After s1 = s2:" << endl;
+    s1.display();
+    
+    return 0;
+}
+                        </textarea>
+                    </div>
+                    <div class="code-buttons">
+                        <button class="btn btn-primary" onclick="runCode(document.getElementById('code2'), document.getElementById('output2'))">▶ Run Code</button>
+                        <button class="btn btn-secondary" onclick="downloadCode(document.getElementById('code2').value, 'string_assignment.cpp')">⬇ Download</button>
+                    </div>
+                    <div class="output-box" id="output2">Click "Run Code" to execute...</div>
+                </div>
+
+                <div class="code-example">
+                    <div class="code-tabs">
+                        <button class="code-tab active" data-tab="simple3">Self-Assignment</button>
+                        <button class="code-tab" data-tab="full3">Full Program</button>
+                    </div>
+                    <div data-tab-content="simple3" class="code-editor">
+Array& operator=(const Array& other) {
+    if(this != &other) {
+        // Safe to perform deep copy
+    }
+    return *this;
+}
+
+arr1 = arr1;  // Self-assignment is safe
+                    </div>
+                    <div data-tab-content="full3" style="display: none;">
+                        <textarea class="code-editor" id="code3">#include <iostream>
+using namespace std;
+
+class Array {
+private:
+    int* data;
+    int size;
+public:
+    Array(int s = 0, int val = 0) : size(s) {
+        data = new int[size];
+        for(int i = 0; i < size; i++)
+            data[i] = val;
+    }
+    
+    Array(const Array& other) : size(other.size) {
+        data = new int[size];
+        for(int i = 0; i < size; i++)
+            data[i] = other.data[i];
+    }
+    
+    Array& operator=(const Array& other) {
+        if(this != &other) {
+            delete[] data;
+            size = other.size;
+            data = new int[size];
+            for(int i = 0; i < size; i++)
+                data[i] = other.data[i];
+        }
+        return *this;
+    }
+    
+    ~Array() {
+        delete[] data;
+    }
+    
+    void display() const {
+        for(int i = 0; i < size; i++)
+            cout << data[i] << " ";
+        cout << endl;
+    }
+};
+
+int main() {
+    Array a1(5, 10);
+    Array a2(3, 20);
+    
+    cout << "a1: ";
+    a1.display();
+    cout << "a2: ";
+    a2.display();
+    
+    a1 = a2;
+    cout << "After a1 = a2:" << endl;
+    cout << "a1: ";
+    a1.display();
+    
+    a1 = a1;
+    cout << "After a1 = a1 (self-assignment): ";
+    a1.display();
+    
+    return 0;
+}
+                        </textarea>
+                    </div>
+                    <div class="code-buttons">
+                        <button class="btn btn-primary" onclick="runCode(document.getElementById('code3'), document.getElementById('output3'))">▶ Run Code</button>
+                        <button class="btn btn-secondary" onclick="downloadCode(document.getElementById('code3').value, 'array_assignment.cpp')">⬇ Download</button>
+                    </div>
+                    <div class="output-box" id="output3">Click "Run Code" to execute...</div>
+                </div>
+            </section>
+
+            <section class="section">
+                <div class="section-title">✍️ Coding Activities</div>
+
+                <div class="activity">
+                    <div class="activity-title">⚡ Intermediate Challenge: Safe Assignment Operator</div>
+                    <p>Create a Matrix class with assignment operator that performs proper cleanup and deep copy. Test self-assignment.</p>
+                    <button class="btn btn-secondary" onclick="downloadCode(\`#include <iostream>
+using namespace std;
+
+class Matrix {
+private:
+    double** data;
+    int rows, cols;
+public:
+    Matrix(int r, int c) : rows(r), cols(c) {
+        data = new double*[rows];
+        for(int i = 0; i < rows; i++)
+            data[i] = new double[cols];
+    }
+    
+    // TODO: Implement assignment operator with self-check
+    
+    ~Matrix() {
+        for(int i = 0; i < rows; i++)
+            delete[] data[i];
+        delete[] data;
+    }
+};
+
+int main() {
+    Matrix m1(2, 2);
+    Matrix m2(2, 2);
+    m1 = m2;
+    m1 = m1;  // Self-assignment
+    return 0;
+}\`, 'matrix_assignment.cpp')">⬇ Download Skeleton</button>
+                    <button class="collapsible">▼ Show Solution</button>
+                    <div class="collapsible-content">
+                        <div class="code-editor">
+#include <iostream>
+using namespace std;
+
+class Matrix {
+private:
+    double** data;
+    int rows, cols;
+public:
+    Matrix(int r, int c) : rows(r), cols(c) {
+        data = new double*[rows];
+        for(int i = 0; i < rows; i++)
+            data[i] = new double[cols];
+    }
+    
+    Matrix& operator=(const Matrix& other) {
+        if(this != &other) {
+            for(int i = 0; i < rows; i++)
+                delete[] data[i];
+            delete[] data;
+            
+            rows = other.rows;
+            cols = other.cols;
+            data = new double*[rows];
+            for(int i = 0; i < rows; i++) {
+                data[i] = new double[cols];
+                for(int j = 0; j < cols; j++)
+                    data[i][j] = other.data[i][j];
+            }
+        }
+        return *this;
+    }
+    
+    ~Matrix() {
+        for(int i = 0; i < rows; i++)
+            delete[] data[i];
+        delete[] data;
+    }
+};
+
+int main() {
+    Matrix m1(2, 2);
+    Matrix m2(3, 3);
+    m1 = m2;
+    m1 = m1;
+    return 0;
+}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="activity">
+                    <div class="activity-title">🔥 Advanced Challenge: Chained Assignment</div>
+                    <p>Implement assignment operator that supports chaining (a = b = c = d). Verify it works correctly with self-assignment protection.</p>
+                    <button class="btn btn-secondary" onclick="downloadCode(\`#include <iostream>
+using namespace std;
+
+class Value {
+private:
+    int* ptr;
+public:
+    Value(int v = 0) {
+        ptr = new int(v);
+    }
+    
+    // TODO: Implement assignment with chaining support
+    
+    ~Value() { delete ptr; }
+};
+
+int main() {
+    Value v1(10), v2(20), v3(30), v4(40);
+    v1 = v2 = v3 = v4;
+    v1 = v1 = v2;  // Self-assignment in chain
+    return 0;
+}\`, 'chained_assignment.cpp')">⬇ Download Skeleton</button>
+                    <button class="collapsible">▼ Show Solution</button>
+                    <div class="collapsible-content">
+                        <div class="code-editor">
+#include <iostream>
+using namespace std;
+
+class Value {
+private:
+    int* ptr;
+public:
+    Value(int v = 0) {
+        ptr = new int(v);
+        cout << "Constructor: " << *ptr << endl;
+    }
+    
+    Value(const Value& other) {
+        ptr = new int(*other.ptr);
+    }
+    
+    Value& operator=(const Value& other) {
+        if(this != &other) {
+            *ptr = *other.ptr;
+        }
+        return *this;
+    }
+    
+    ~Value() { delete ptr; }
+    
+    void display() const {
+        cout << "Value: " << *ptr << endl;
+    }
+};
+
+int main() {
+    Value v1(10), v2(20), v3(30), v4(40);
+    
+    v1 = v2 = v3 = v4;
+    v1.display();
+    
+    v1 = v1 = v2;
+    v1.display();
+    
+    return 0;
+}
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="section">
+                <div class="section-title">📝 Knowledge Check Quiz</div>
+                <div class="quiz-container">
+                    <button class="quiz-btn" onclick="initializeQuiz()">▶ Start Quiz</button>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <footer><p>COS110 OOP Study Website | November 2025</p></footer>
+
+    <script src="../../js/main.js"></script>
+    <script src="../../js/compiler.js"></script>
+    <script src="../../js/quiz.js"></script>
+
+    <script>
+        function initializeQuiz() {
+            const questions = [
+                {type: 'multiple-choice', question: 'What does the assignment operator do?', options: ['Creates a new object', 'Copies data to existing object', 'Deletes an object', 'Initializes memory'], correctAnswer: 'B', explanation: 'Assignment operator copies data to an already-created object.'},
+                {type: 'true-false', question: 'The assignment operator must check for self-assignment.', correctAnswer: 'true', explanation: 'Yes, using if(this != &other) is critical.'},
+                {type: 'multiple-choice', question: 'What should assignment operator return?', options: ['void', 'const reference', 'reference to *this', 'nothing'], correctAnswer: 'C', explanation: 'Return reference to *this to allow chaining.'},
+                {type: 'fill-in', question: 'Self-assignment check:', context: 'if(<span style="color: red;">_______</span>) { /* assign */ }', hint: 'this pointer comparison', acceptableAnswers: ['this != &other', 'this!= &other'], explanation: 'if(this != &other) prevents self-assignment.'},
+                {type: 'true-false', question: 'Copy constructor and assignment operator do the same thing.', correctAnswer: 'false', explanation: 'Constructor initializes new object, assignment copies to existing one.'},
+                {type: 'multiple-choice', question: 'What happens in a = b = c?', options: ['Error', 'b = c is evaluated first, then a = result', 'c = b first', 'Left to right'], correctAnswer: 'B', explanation: 'Assignment is right-associative, so b = c is evaluated first.'},
+                {type: 'true-false', question: 'Default assignment operator uses deep copy.', correctAnswer: 'false', explanation: 'Default performs shallow copy, requiring custom implementation for dynamic memory.'},
+                {type: 'multiple-choice', question: 'Before assigning new data, you should:', options: ['Do nothing', 'Delete old data', 'Check type', 'Copy to backup'], correctAnswer: 'B', explanation: 'Always clean up old dynamic memory to prevent leaks.'},
+                {type: 'true-false', question: 'You can chain assignments if operator= returns *this.', correctAnswer: 'true', explanation: 'Returning reference allows chaining like a = b = c.'},
+                {type: 'multiple-choice', question: 'What is the signature of assignment operator?', options: ['operator=(Object)', 'Object& operator=(const Object&)', 'void operator=()', 'operator= const'], correctAnswer: 'B', explanation: 'Type& operator=(const Type&) is the standard signature.'},
+                {type: 'true-false', question: 'Assignment operator is called during object initialization.', correctAnswer: 'false', explanation: 'Copy constructor is called during initialization, not assignment operator.'},
+                {type: 'multiple-choice', question: 'Why is self-assignment check important?', options: ['For performance', 'To avoid deleting data before copying', 'For readability', 'None of the above'], correctAnswer: 'B', explanation: 'Without self-check, you delete memory before copying it, causing data loss.'},
+                {type: 'fill-in', question: 'Assignment operator should delete old data before:', context: 'allocating <span style="color: red;">_______</span> memory', hint: 'type of memory', acceptableAnswers: ['new', 'dynamic'], explanation: 'Delete old data before allocating new memory to prevent leaks.'},
+                {type: 'true-false', question: 'You should use const reference parameter in assignment operator.', correctAnswer: 'true', explanation: 'Yes, const prevents modification of the source object.'},
+                {type: 'multiple-choice', question: 'What is the difference between assignment and initialization?', options: ['No difference', 'Assignment uses constructor, initialization uses operator=', 'Initialization uses constructor, assignment uses operator=', 'Same but different order'], correctAnswer: 'C', explanation: 'Initialization (MyClass a = b) uses copy constructor; assignment (a = b) uses operator=.'},
+                {type: 'true-false', question: 'In a = b = c, the result of (b = c) is assigned to a.', correctAnswer: 'true', explanation: 'Yes, because operator= returns reference to *this.'},
+                {type: 'multiple-choice', question: 'What happens if you forget self-assignment check?', options: ['Compilation error', 'No problem', 'Data loss and crashes', 'Slower performance'], correctAnswer: 'C', explanation: 'Without self-check, deleting and reassigning the same data causes crashes.'},
+                {type: 'fill-in', question: 'To avoid data loss in self-assignment, check:', context: 'if(this <span style="color: red;">_______</span> &other)', hint: 'operator', acceptableAnswers: ['!=', '!= '], explanation: 'if(this != &other) ensures you only assign when objects differ.'},
+                {type: 'true-false', question: 'Assignment operator must return by value to enable chaining.', correctAnswer: 'false', explanation: 'Must return by reference (reference to *this) to enable chaining.'},
+                {type: 'multiple-choice', question: 'Which scenario needs custom assignment operator?', options: ['Classes with pointers', 'Classes with dynamic arrays', 'Classes managing resources', 'All of the above'], correctAnswer: 'D', explanation: 'Any class managing resources needs custom assignment operator for deep copy.'}
+            ];
+
+            window.quizSystem = new QuizSystem('Assignment Operator', questions);
+            openQuizModal();
+        }
+
+        if (!document.getElementById('quizModal')) {
+            const modal = document.createElement('div');
+            modal.id = 'quizModal';
+            modal.className = 'quiz-modal';
+            modal.innerHTML = `<div class="quiz-modal-content"><div class="quiz-header"><div><div class="quiz-question-number">Quiz: Assignment Operator</div><div class="quiz-progress">Question 1 of 20</div></div><button class="quiz-close" onclick="closeQuizModal()">✕</button></div><div class="quiz-questions-container"></div></div>`;
+            document.body.appendChild(modal);
+        }
+    </script>
+</body>
+</html>

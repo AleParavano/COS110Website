@@ -327,7 +327,17 @@ int main() {
                 {type: 'true-false', question: 'Nullptr and NULL are the same thing.', correctAnswer: 'true', explanation: 'Both represent the null pointer, though nullptr is preferred in modern C++.'},
                 {type: 'multiple-choice', question: 'What is a dangling pointer?', options: ['A pointer that points to deleted memory', 'A pointer that swings back and forth', 'A pointer to nullptr', 'An uninitialized pointer'], correctAnswer: 'A', explanation: 'A dangling pointer points to memory that has been freed.'},
                 {type: 'true-false', question: 'Dynamic arrays use bracket notation like static arrays.', correctAnswer: 'true', explanation: 'Yes! Dynamic arrays can be accessed using bracket notation arr[i].'},
-                {type: 'multiple-choice', question: 'In a linked list, what does the next pointer do?', options: ['Points to the previous node', 'Points to the next node', 'Points to the data', 'Points to the head'], correctAnswer: 'B', explanation: 'The next pointer in a linked list node points to the next node in the list.'}
+                {type: 'multiple-choice', question: 'In a linked list, what does the next pointer do?', options: ['Points to the previous node', 'Points to the next node', 'Points to the data', 'Points to the head'], correctAnswer: 'B', explanation: 'The next pointer in a linked list node points to the next node in the list.'},
+                {type: 'fill-in', question: 'To deallocate memory:', context: '<span style="color: red;">_______</span> ptr;', hint: 'keyword', acceptableAnswers: ['delete', 'delete '], explanation: 'Use delete to deallocate single values.'},
+                {type: 'true-false', question: 'Heap memory is slower to access than stack memory.', correctAnswer: 'true', explanation: 'Yes, heap access is slower but provides more flexibility and larger allocation sizes.'},
+                {type: 'multiple-choice', question: 'What is the size of a pointer?', options: ['Always 4 bytes', 'Always 8 bytes', 'Depends on system', 'Depends on what it points to'], correctAnswer: 'C', explanation: 'Pointer size depends on architecture (typically 4 or 8 bytes).'},
+                {type: 'true-false', question: 'You can initialize a pointer with new when declaring.', correctAnswer: 'true', explanation: 'Yes: int* ptr = new int(42) is valid.'},
+                {type: 'multiple-choice', question: 'What happens with double delete?', options: ['Freed twice', 'Undefined behavior/crash', 'Sets to nullptr', 'No problem'], correctAnswer: 'B', explanation: 'Double deletion causes undefined behavior and crashes.'},
+                {type: 'fill-in', question: 'To allocate array of 10 ints:', context: 'int* arr = <span style="color: red;">_______</span>;', hint: 'new with brackets', acceptableAnswers: ['new int[10]', 'new int[10];'], explanation: 'new int[10] allocates an array of 10 integers on the heap.'},
+                {type: 'true-false', question: 'Pointers can be passed to functions by reference.', correctAnswer: 'true', explanation: 'Yes, this allows functions to change what the pointer points to.'},
+                {type: 'multiple-choice', question: 'When should you use dynamic allocation?', options: ['Always', 'Only for arrays', 'When size unknown at compile time', 'Never'], correctAnswer: 'C', explanation: 'Dynamic allocation is useful when size is determined at runtime.'},
+                {type: 'true-false', question: 'Stack overflow can happen with dynamic memory.', correctAnswer: 'false', explanation: 'Stack overflow is about stack, not heap. Heap can run out of memory though.'},
+                {type: 'multiple-choice', question: 'The best practice for deleted pointers is:', options: ['Leave as is', 'Set to nullptr', 'Wrap in try-catch', 'Reuse immediately'], correctAnswer: 'B', explanation: 'Always set deleted pointers to nullptr to prevent dangling pointer bugs.'}
             ];
 
             window.quizSystem = new QuizSystem('Pointers Part 2', questions);
@@ -338,7 +348,7 @@ int main() {
             const modal = document.createElement('div');
             modal.id = 'quizModal';
             modal.className = 'quiz-modal';
-            modal.innerHTML = `<div class="quiz-modal-content"><div class="quiz-header"><div><div class="quiz-question-number">Quiz: Pointers Part 2</div><div class="quiz-progress">Question 1 of 10</div></div><button class="quiz-close" onclick="closeQuizModal()">✕</button></div><div class="quiz-questions-container"></div></div>`;
+            modal.innerHTML = `<div class="quiz-modal-content"><div class="quiz-header"><div><div class="quiz-question-number">Quiz: Pointers Part 2</div><div class="quiz-progress">Question 1 of 20</div></div><button class="quiz-close" onclick="closeQuizModal()">✕</button></div><div class="quiz-questions-container"></div></div>`;
             document.body.appendChild(modal);
         }
     </script>

@@ -1,0 +1,658 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Queues - COS110 OOP Study Website</title>
+    <link rel="stylesheet" href="../../css/style.css">
+</head>
+<body>
+    <nav class="navbar">
+        <a href="../../index.html" class="navbar-brand">📚 COS110 OOP</a>
+        <div class="navbar-search"><input type="text" placeholder="Search topics..."></div>
+    </nav>
+
+    <div class="container">
+        <aside class="sidebar">
+            <div class="sidebar-title">📊 Data Structures</div>
+            <a href="../../topics/21-data-structures-linked-lists.html" class="sidebar-item">Linked Lists</a>
+            <a href="../../topics/22-data-structures-doubly-linked.html" class="sidebar-item">Doubly Linked</a>
+            <a href="../../topics/23-data-structures-circular.html" class="sidebar-item">Circular Lists</a>
+            <a href="../../topics/24-data-structures-stacks.html" class="sidebar-item">Stacks</a>
+            <a href="../../topics/25-data-structures-queues.html" class="sidebar-item active">Queues</a>
+            <a href="../../topics/26-data-structures-stl.html" class="sidebar-item">STL</a>
+        </aside>
+
+        <main class="main-content">
+            <h1>🚦 Queues - FIFO Data Structure</h1>
+
+            <section class="section">
+                <div class="section-title">📚 Explanation</div>
+                <div class="explanation">
+                    <h3 style="color: var(--primary);">What is a Queue?</h3>
+                    <p>A queue is a First-In-First-Out (FIFO) data structure where elements are added at the rear and removed from the front. Think of waiting in line - first person in is first person served. Applications: printer queues, task scheduling, breadth-first search, traffic simulation.</p>
+
+                    <h3 style="color: var(--primary); margin-top: 20px;">Queue Operations</h3>
+                    <p>Enqueue: add element to rear. Dequeue: remove and return element from front. Front/Peek: view front element. isEmpty: check if queue is empty. All operations are O(1) time. Can implement with circular array or linked list for efficiency.</p>
+
+                    <h3 style="color: var(--primary); margin-top: 20px;">Implementation Approaches</h3>
+                    <p>Simple array: maintains front and rear indices, but wastes space after deletions. Circular array: reuses space efficiently by wrapping indices. Linked list: naturally handles insertions/deletions without wasted space. Choose based on expected usage patterns.</p>
+
+                    <h3 style="color: var(--primary); margin-top: 20px;">Queue Applications</h3>
+                    <p>Task scheduling in OS, printer management, breadth-first search in graphs, level-order tree traversal. Simulations: customers in bank, vehicles at traffic light. Resource allocation and load balancing commonly use queues.</p>
+
+                    <h3 style="color: var(--primary); margin-top: 20px;">Deque and Priority Queue</h3>
+                    <p>Deque: double-ended queue allowing insertion/deletion at both ends. Priority queue: elements served by priority not order. These variations extend basic queue concept for specialized applications.</p>
+                </div>
+            </section>
+
+            <section class="section">
+                <div class="section-title">💻 Code Examples</div>
+
+                <div class="code-example">
+                    <div class="code-tabs">
+                        <button class="code-tab active" data-tab="simple1">Circular Queue</button>
+                        <button class="code-tab" data-tab="full1">Full Program</button>
+                    </div>
+                    <div data-tab-content="simple1" class="code-editor">
+template<typename T>
+class CircularQueue {
+private:
+    T items[100];
+    int front, rear;
+    int size;
+public:
+    CircularQueue() : front(0), rear(-1), size(0) {}
+    
+    void enqueue(T val) {
+        rear = (rear + 1) % 100;
+        items[rear] = val;
+        size++;
+    }
+    
+    T dequeue() {
+        T val = items[front];
+        front = (front + 1) % 100;
+        size--;
+        return val;
+    }
+    
+    bool isEmpty() { return size == 0; }
+};
+
+CircularQueue<int> q;
+q.enqueue(10);
+q.enqueue(20);
+cout << q.dequeue() << endl;  // 10
+                    </div>
+                    <div data-tab-content="full1" style="display: none;">
+                        <textarea class="code-editor" id="code1">#include <iostream>
+using namespace std;
+
+template<typename T>
+class CircularQueue {
+private:
+    static const int MAX = 100;
+    T items[MAX];
+    int front, rear;
+    int size;
+public:
+    CircularQueue() : front(0), rear(-1), size(0) {
+        cout << "Queue created" << endl;
+    }
+    
+    bool isEmpty() {
+        return size == 0;
+    }
+    
+    bool isFull() {
+        return size == MAX;
+    }
+    
+    void enqueue(T val) {
+        if(!isFull()) {
+            rear = (rear + 1) % MAX;
+            items[rear] = val;
+            size++;
+            cout << "Enqueued: " << val << endl;
+        } else {
+            cout << "Queue full!" << endl;
+        }
+    }
+    
+    T dequeue() {
+        if(!isEmpty()) {
+            T val = items[front];
+            front = (front + 1) % MAX;
+            size--;
+            cout << "Dequeued: " << val << endl;
+            return val;
+        }
+        return T();
+    }
+    
+    T getFront() {
+        if(!isEmpty()) {
+            return items[front];
+        }
+        return T();
+    }
+    
+    int getSize() {
+        return size;
+    }
+};
+
+int main() {
+    CircularQueue<int> q;
+    
+    cout << "\n=== Enqueue ===" << endl;
+    q.enqueue(10);
+    q.enqueue(20);
+    q.enqueue(30);
+    q.enqueue(40);
+    
+    cout << "\n=== Queue Info ===" << endl;
+    cout << "Front: " << q.getFront() << endl;
+    cout << "Size: " << q.getSize() << endl;
+    
+    cout << "\n=== Dequeue ===" << endl;
+    q.dequeue();
+    q.dequeue();
+    
+    cout << "\n=== Remaining ===" << endl;
+    cout << "Front: " << q.getFront() << endl;
+    cout << "Size: " << q.getSize() << endl;
+    
+    return 0;
+}
+                        </textarea>
+                    </div>
+                    <div class="code-buttons">
+                        <button class="btn btn-primary" onclick="runCode(document.getElementById('code1'), document.getElementById('output1'))">▶ Run Code</button>
+                    </div>
+                    <div class="output-box" id="output1">Click "Run Code" to execute...</div>
+                </div>
+
+                <div class="code-example">
+                    <div class="code-tabs">
+                        <button class="code-tab active" data-tab="simple2">Linked List Queue</button>
+                        <button class="code-tab" data-tab="full2">Full Program</button>
+                    </div>
+                    <div data-tab-content="simple2" class="code-editor">
+template<typename T>
+struct Node {
+    T data;
+    Node* next;
+    Node(T val) : data(val), next(nullptr) {}
+};
+
+template<typename T>
+class Queue {
+private:
+    Node<T>* front;
+    Node<T>* rear;
+public:
+    Queue() : front(nullptr), rear(nullptr) {}
+    
+    void enqueue(T val) {
+        Node<T>* newNode = new Node<T>(val);
+        if(rear == nullptr) {
+            front = rear = newNode;
+        } else {
+            rear->next = newNode;
+            rear = newNode;
+        }
+    }
+    
+    T dequeue() {
+        T val = front->data;
+        Node<T>* temp = front;
+        front = front->next;
+        delete temp;
+        return val;
+    }
+};
+                    </div>
+                    <div data-tab-content="full2" style="display: none;">
+                        <textarea class="code-editor" id="code2">#include <iostream>
+using namespace std;
+
+template<typename T>
+struct Node {
+    T data;
+    Node* next;
+    Node(T val) : data(val), next(nullptr) {}
+};
+
+template<typename T>
+class LinkedQueue {
+private:
+    Node<T>* front;
+    Node<T>* rear;
+    int size;
+public:
+    LinkedQueue() : front(nullptr), rear(nullptr), size(0) {}
+    
+    bool isEmpty() {
+        return front == nullptr;
+    }
+    
+    void enqueue(T val) {
+        Node<T>* newNode = new Node<T>(val);
+        if(rear == nullptr) {
+            front = rear = newNode;
+        } else {
+            rear->next = newNode;
+            rear = newNode;
+        }
+        size++;
+        cout << "Enqueued: " << val << endl;
+    }
+    
+    T dequeue() {
+        if(isEmpty()) {
+            cout << "Queue empty" << endl;
+            return T();
+        }
+        T val = front->data;
+        Node<T>* temp = front;
+        front = front->next;
+        if(front == nullptr) {
+            rear = nullptr;
+        }
+        size--;
+        cout << "Dequeued: " << val << endl;
+        delete temp;
+        return val;
+    }
+    
+    T getFront() {
+        if(!isEmpty()) {
+            return front->data;
+        }
+        return T();
+    }
+    
+    int getSize() {
+        return size;
+    }
+    
+    ~LinkedQueue() {
+        while(!isEmpty()) {
+            dequeue();
+        }
+    }
+};
+
+int main() {
+    LinkedQueue<int> q;
+    
+    cout << "=== Enqueue ===" << endl;
+    q.enqueue(1);
+    q.enqueue(2);
+    q.enqueue(3);
+    q.enqueue(4);
+    q.enqueue(5);
+    
+    cout << "\n=== Queue Info ===" << endl;
+    cout << "Front: " << q.getFront() << endl;
+    cout << "Size: " << q.getSize() << endl;
+    
+    cout << "\n=== Dequeue ===" << endl;
+    for(int i = 0; i < 3; i++) {
+        q.dequeue();
+    }
+    
+    cout << "\n=== Remaining ===" << endl;
+    cout << "Front: " << q.getFront() << endl;
+    cout << "Size: " << q.getSize() << endl;
+    
+    return 0;
+}
+                        </textarea>
+                    </div>
+                    <div class="code-buttons">
+                        <button class="btn btn-primary" onclick="runCode(document.getElementById('code2'), document.getElementById('output2'))">▶ Run Code</button>
+                    </div>
+                    <div class="output-box" id="output2">Click "Run Code" to execute...</div>
+                </div>
+
+                <div class="code-example">
+                    <div class="code-tabs">
+                        <button class="code-tab active" data-tab="simple3">BFS using Queue</button>
+                        <button class="code-tab" data-tab="full3">Full Program</button>
+                    </div>
+                    <div data-tab-content="simple3" class="code-editor">
+void bfs(int start) {
+    Queue<int> q;
+    bool visited[10] = {false};
+    
+    q.enqueue(start);
+    visited[start] = true;
+    
+    while(!q.isEmpty()) {
+        int node = q.dequeue();
+        cout << node << " ";
+        
+        for(int neighbor : adj[node]) {
+            if(!visited[neighbor]) {
+                q.enqueue(neighbor);
+                visited[neighbor] = true;
+            }
+        }
+    }
+}
+
+// Queue is essential for BFS!
+                    </div>
+                    <div data-tab-content="full3" style="display: none;">
+                        <textarea class="code-editor" id="code3">#include <iostream>
+#include <queue>
+#include <vector>
+using namespace std;
+
+class Graph {
+private:
+    int vertices;
+    vector<int>* adjList;
+public:
+    Graph(int v) : vertices(v) {
+        adjList = new vector<int>[v];
+    }
+    
+    void addEdge(int u, int v) {
+        adjList[u].push_back(v);
+        adjList[v].push_back(u);
+    }
+    
+    void bfs(int start) {
+        queue<int> q;
+        bool* visited = new bool[vertices]{false};
+        
+        q.push(start);
+        visited[start] = true;
+        
+        cout << "BFS from " << start << ": ";
+        while(!q.empty()) {
+            int node = q.front();
+            q.pop();
+            cout << node << " ";
+            
+            for(int neighbor : adjList[node]) {
+                if(!visited[neighbor]) {
+                    q.push(neighbor);
+                    visited[neighbor] = true;
+                }
+            }
+        }
+        cout << endl;
+        
+        delete[] visited;
+    }
+    
+    ~Graph() {
+        delete[] adjList;
+    }
+};
+
+int main() {
+    Graph g(6);
+    
+    cout << "=== Building Graph ===" << endl;
+    g.addEdge(0, 1);
+    g.addEdge(0, 2);
+    g.addEdge(1, 3);
+    g.addEdge(2, 3);
+    g.addEdge(2, 4);
+    g.addEdge(3, 5);
+    g.addEdge(4, 5);
+    
+    cout << "\n=== Breadth-First Search ===" << endl;
+    g.bfs(0);
+    
+    cout << "\n=== BFS from Different Start ===" << endl;
+    g.bfs(2);
+    
+    return 0;
+}
+                        </textarea>
+                    </div>
+                    <div class="code-buttons">
+                        <button class="btn btn-primary" onclick="runCode(document.getElementById('code3'), document.getElementById('output3'))">▶ Run Code</button>
+                    </div>
+                    <div class="output-box" id="output3">Click "Run Code" to execute...</div>
+                </div>
+            </section>
+
+            <section class="section">
+                <div class="section-title">✍️ Coding Activities</div>
+
+                <div class="activity">
+                    <div class="activity-title">⚡ Intermediate Challenge: Customer Service Simulation</div>
+                    <p>Simulate customers waiting in queue for service with random arrival/service times.</p>
+                    <button class="btn btn-secondary" onclick="downloadCode(\`#include <iostream>
+#include <queue>
+using namespace std;
+
+struct Customer {
+    int id;
+    int arrivalTime;
+    int serviceTime;
+};
+
+// TODO: Simulate customer queue
+// Track wait times and service times
+
+int main() {
+    queue<Customer> waitingLine;
+    // Simulate 10 minutes
+    for(int time = 0; time < 10; time++) {
+        // Add random customers
+        // Serve customers
+    }
+    return 0;
+}\`, 'customer_service.cpp')">⬇ Download Skeleton</button>
+                    <button class="collapsible">▼ Show Solution</button>
+                    <div class="collapsible-content">
+                        <div class="code-editor">
+#include <iostream>
+#include <queue>
+#include <cstdlib>
+#include <ctime>
+using namespace std;
+
+struct Customer {
+    int id;
+    int arrivalTime;
+    int serviceTime;
+    Customer(int i, int a, int s) 
+        : id(i), arrivalTime(a), serviceTime(s) {}
+};
+
+int main() {
+    srand(time(0));
+    queue<Customer> waitingLine;
+    
+    int customerId = 1;
+    int totalWaitTime = 0;
+    int customersServed = 0;
+    int serverFreeAt = 0;
+    
+    cout << "=== Customer Service Simulation ===" << endl;
+    cout << "(10 minutes)" << endl << endl;
+    
+    for(int time = 0; time < 10; time++) {
+        if(rand() % 3 == 0) {
+            int serviceTime = (rand() % 3) + 1;
+            Customer c(customerId++, time, serviceTime);
+            waitingLine.push(c);
+            cout << "Time " << time << ": Customer " 
+                 << c.id << " arrives (service: " 
+                 << c.serviceTime << "min)" << endl;
+        }
+        
+        if(time >= serverFreeAt && !waitingLine.empty()) {
+            Customer c = waitingLine.front();
+            waitingLine.pop();
+            
+            int waitTime = time - c.arrivalTime;
+            totalWaitTime += waitTime;
+            customersServed++;
+            serverFreeAt = time + c.serviceTime;
+            
+            cout << "Time " << time << ": Serving Customer " 
+                 << c.id << " (waited " << waitTime 
+                 << "min, service: " << c.serviceTime 
+                 << "min)" << endl;
+        }
+    }
+    
+    cout << "\n=== Statistics ===" << endl;
+    cout << "Customers served: " << customersServed << endl;
+    cout << "Customers waiting: " << waitingLine.size() << endl;
+    if(customersServed > 0) {
+        cout << "Average wait time: " 
+             << (double)totalWaitTime / customersServed 
+             << " min" << endl;
+    }
+    
+    return 0;
+}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="activity">
+                    <div class="activity-title">🔥 Advanced Challenge: Print Job Scheduler</div>
+                    <p>Queue-based printer with job priorities and print times.</p>
+                    <button class="btn btn-secondary" onclick="downloadCode(\`#include <iostream>
+#include <queue>
+using namespace std;
+
+struct PrintJob {
+    int id;
+    int pages;
+    int priority;
+};
+
+// TODO: Priority queue for print jobs
+// Higher priority prints first
+// Track total print time
+
+int main() {
+    // Add multiple jobs with different priorities
+    // Process jobs in priority order
+    return 0;
+}\`, 'print_scheduler.cpp')">⬇ Download Skeleton</button>
+                    <button class="collapsible">▼ Show Solution</button>
+                    <div class="collapsible-content">
+                        <div class="code-editor">
+#include <iostream>
+#include <queue>
+using namespace std;
+
+struct PrintJob {
+    int id;
+    int pages;
+    int priority;
+    
+    PrintJob(int i, int p, int pr) 
+        : id(i), pages(p), priority(pr) {}
+    
+    bool operator<(const PrintJob& other) const {
+        return priority < other.priority;
+    }
+};
+
+int main() {
+    priority_queue<PrintJob> printQueue;
+    
+    cout << "=== Adding Print Jobs ===" << endl;
+    printQueue.push(PrintJob(1, 10, 3));
+    cout << "Job 1: 10 pages, priority 3" << endl;
+    
+    printQueue.push(PrintJob(2, 50, 1));
+    cout << "Job 2: 50 pages, priority 1" << endl;
+    
+    printQueue.push(PrintJob(3, 25, 5));
+    cout << "Job 3: 25 pages, priority 5" << endl;
+    
+    printQueue.push(PrintJob(4, 15, 2));
+    cout << "Job 4: 15 pages, priority 2" << endl;
+    
+    cout << "\n=== Processing Queue ===" << endl;
+    int totalPages = 0;
+    while(!printQueue.empty()) {
+        PrintJob job = printQueue.top();
+        printQueue.pop();
+        
+        totalPages += job.pages;
+        cout << "Printing Job " << job.id 
+             << " (" << job.pages << " pages, " 
+             << "priority " << job.priority << ")" << endl;
+    }
+    
+    cout << "\nTotal pages printed: " << totalPages << endl;
+    
+    return 0;
+}
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="section">
+                <div class="section-title">📝 Knowledge Check Quiz</div>
+                <div class="quiz-container">
+                    <button class="quiz-btn" onclick="initializeQuiz()">▶ Start Quiz</button>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <footer><p>COS110 OOP Study Website | November 2025</p></footer>
+
+    <script src="../../js/main.js"></script>
+    <script src="../../js/compiler.js"></script>
+    <script src="../../js/quiz.js"></script>
+
+    <script>
+        function initializeQuiz() {
+            const questions = [
+                {type: 'multiple-choice', question: 'Queue is:', options: ['LIFO', 'FIFO', 'Random', 'Priority'], correctAnswer: 'B', explanation: 'Queue is First-In-First-Out.'},
+                {type: 'true-false', question: 'Enqueue/Dequeue are O(1).', correctAnswer: 'true', explanation: 'Yes, constant time operations.'},
+                {type: 'fill-in', question: 'Main queue operations:', context: 'enqueue, <span style="color: red;">_______</span>', hint: 'dequeue', acceptableAnswers: ['dequeue', 'dequeue '], explanation: 'Enqueue adds, dequeue removes.'},
+                {type: 'true-false', question: 'First added is first removed.', correctAnswer: 'true', explanation: 'Yes, FIFO property.'},
+                {type: 'multiple-choice', question: 'Queue application:', options: ['Call stack', 'Task scheduler', 'Random', 'All'], correctAnswer: 'B', explanation: 'Task scheduling uses queues.'},
+                {type: 'true-false', question: 'Circular queue wastes space.', correctAnswer: 'false', explanation: 'No, circular design reuses space.'},
+                {type: 'true-false', question: 'Can implement with array.', correctAnswer: 'true', explanation: 'Yes, with circular logic.'},
+                {type: 'multiple-choice', question: 'Linked queue advantage:', options: ['Simple', 'Dynamic', 'Speed', 'Memory'], correctAnswer: 'B', explanation: 'Linked grows without waste.'},
+                {type: 'fill-in', question: 'Add to rear, remove from:', context: '<span style="color: red;">_______</span>', hint: 'front', acceptableAnswers: ['front', 'front '], explanation: 'Dequeue from front.'},
+                {type: 'true-false', question: 'BFS uses queue.', correctAnswer: 'true', explanation: 'Yes, breadth-first needs FIFO.'},
+                {type: 'multiple-choice', question: 'Circular indices wrap using:', options: ['if-else', 'modulo', 'array', 'pointer'], correctAnswer: 'B', explanation: 'Modulo operator wraps indices.'},
+                {type: 'true-false', question: 'Priority queue FIFO.', correctAnswer: 'false', explanation: 'No, by priority not order.'},
+                {type: 'fill-in', question: 'Check front without removing:', context: '<span style="color: red;">_______</span>()', hint: 'peek/front', acceptableAnswers: ['peek', 'front'], explanation: 'Peek views without removing.'},
+                {type: 'true-false', question: 'Queue memory efficient.', correctAnswer: 'true', explanation: 'Yes, O(n) space for n items.'},
+                {type: 'multiple-choice', question: 'Enqueue inserts at:', options: ['Front', 'Rear', 'Middle', 'Random'], correctAnswer: 'B', explanation: 'Enqueue adds at rear.'},
+                {type: 'true-false', question: 'Dequeue removes from rear.', correctAnswer: 'false', explanation: 'No, from front.'},
+                {type: 'multiple-choice', question: 'Circular array benefit:', options: ['No waste', 'Simpler', 'Faster', 'All'], correctAnswer: 'A', explanation: 'Reuses deleted space.'},
+                {type: 'true-false', question: 'Can dequeue empty queue.', correctAnswer: 'false', explanation: 'No, must check isEmpty first.'},
+                {type: 'fill-in', question: 'Circular increment:', context: 'rear = (rear + 1) <span style="color: red;">_______</span> MAX;', hint: '%', acceptableAnswers: ['%', '% '], explanation: 'Modulo wraps around.'},
+                {type: 'multiple-choice', question: 'Queue vs Stack:', options: ['Same', 'Different', 'Similar', 'Interchangeable'], correctAnswer: 'B', explanation: 'Queue FIFO, Stack LIFO.'}
+            ];
+
+            window.quizSystem = new QuizSystem('Queues', questions);
+            openQuizModal();
+        }
+
+        if (!document.getElementById('quizModal')) {
+            const modal = document.createElement('div');
+            modal.id = 'quizModal';
+            modal.className = 'quiz-modal';
+            modal.innerHTML = `<div class="quiz-modal-content"><div class="quiz-header"><div><div class="quiz-question-number">Quiz: Queues</div><div class="quiz-progress">Question 1 of 20</div></div><button class="quiz-close" onclick="closeQuizModal()">✕</button></div><div class="quiz-questions-container"></div></div>`;
+            document.body.appendChild(modal);
+        }
+    </script>
+</body>
+</html>

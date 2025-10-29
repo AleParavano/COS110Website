@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Classes More - COS110 OOP Study Website</title>
+    <link rel="stylesheet" href="../../css/style.css">
+</head>
+<body>
+    <nav class="navbar">
+        <a href="../../index.html" class="navbar-brand">📚 COS110 OOP</a>
+        <div class="navbar-search"><input type="text" placeholder="Search topics..."></div>
+    </nav>
+
+    <div class="container">
+        <aside class="sidebar">
+            <div class="sidebar-title">🏗️ Classes & Objects</div>
+            <a href="basics.html" class="sidebar-item">Classes Basics</a>
+            <a href="advanced.html" class="sidebar-item">Classes Advanced</a>
+            <a href="more.html" class="sidebar-item active">Classes More</a>
+        </aside>
+
+        <main class="main-content">
+            <h1>⚙️ Classes and Objects - More Concepts</h1>
+
+            <section class="section">
+                <div class="section-title">📚 Explanation</div>
+                <div class="explanation">
+                    <h3 style="color: var(--primary);">The This Pointer</h3>
+                    <p>Every member function has a hidden parameter called "this" which points to the current object. The "this" pointer allows you to access members of the current object and is especially useful for returning references to self or comparing objects.</p>
+
+                    <h3 style="color: var(--primary); margin-top: 20px;">Operator Arrow (->) vs Dot (.)</h3>
+                    <p>The dot operator (.) is used to access members of objects. The arrow operator (->) is used to access members through pointers. If p is a pointer to an object, p->member is equivalent to (*p).member.</p>
+
+                    <h3 style="color: var(--primary); margin-top: 20px;">Array of Objects</h3>
+                    <p>You can create arrays of objects just like arrays of primitive types. When you declare an array of objects, the default constructor is called for each element. You can access objects using index notation and their members using the dot operator.</p>
+
+                    <h3 style="color: var(--primary); margin-top: 20px;">Objects as Function Arguments</h3>
+                    <p>Objects can be passed to functions by value (copied), by reference, or by const reference. Passing by reference is more efficient as it avoids copying. Const references prevent the function from modifying the object.</p>
+
+                    <h3 style="color: var(--primary); margin-top: 20px;">Returning Objects from Functions</h3>
+                    <p>Functions can return objects by value, reference, or by const reference. Returning by value creates a copy. Returning by reference is faster but must refer to an object that outlives the function call.</p>
+                </div>
+            </section>
+
+            <section class="section">
+                <div class="section-title">💻 Code Examples</div>
+
+                <div class="code-example">
+                    <div class="code-tabs">
+                        <button class="code-tab active" data-tab="simple1">Simple Snippet</button>
+                        <button class="code-tab" data-tab="full1">Full Program</button>
+                    </div>
+                    <div data-tab-content="simple1" class="code-editor">
+class Number {
+public:
+    int value;
+    Number(int v) : value(v) {}
+    void print() {
+        cout << "Value: " << this->value << endl;
+    }
+};
+                    </div>
+                    <div data-tab-content="full1" style="display: none;">
+                        <textarea class="code-editor" id="code1">#include <iostream>
+using namespace std;
+
+class Number {
+public:
+    int value;
+    
+    Number(int v) : value(v) {}
+    
+    void print() {
+        cout << "Value: " << this->value << endl;
+    }
+    
+    bool isEqual(Number& other) {
+        return this->value == other.value;
+    }
+    
+    Number& increment() {
+        this->value++;
+        return *this;
+    }
+};
+
+int main() {
+    Number n1(5);
+    Number n2(5);
+    Number n3(10);
+    
+    n1.print();
+    cout << "n1 equals n2: " << n1.isEqual(n2) << endl;
+    cout << "n1 equals n3: " << n1.isEqual(n3) << endl;
+    
+    n1.increment().increment();
+    n1.print();
+    
+    return 0;
+}
+                        </textarea>
+                    </div>
+                    <div class="code-buttons">
+                        <button class="btn btn-primary" onclick="runCode(document.getElementById('code1'), document.getElementById('output1'))">▶ Run Code</button>
+                        <button class="btn btn-secondary" onclick="downloadCode(document.getElementById('code1').value, 'this_pointer.cpp')">⬇ Download</button>
+                    </div>
+                    <div class="output-box" id="output1">Click "Run Code" to execute...</div>
+                </div>
+
+                <div class="code-example">
+                    <div class="code-tabs">
+                        <button class="code-tab active" data-tab="simple2">Simple Snippet</button>
+                        <button class="code-tab" data-tab="full2">Full Program</button>
+                    </div>
+                    <div data-tab-content="simple2" class="code-editor">
+Person arr[3] = {
+    Person("Alice", 25),
+    Person("Bob", 30),
+    Person("Charlie", 35)
+};
+
+for(int i = 0; i < 3; i++) {
+    arr[i].display();
+}
+                    </div>
+                    <div data-tab-content="full2" style="display: none;">
+                        <textarea class="code-editor" id="code2">#include <iostream>
+#include <string>
+using namespace std;
+
+class Person {
+private:
+    string name;
+    int age;
+public:
+    Person(string n = "", int a = 0) 
+        : name(n), age(a) {}
+    
+    void display() const {
+        cout << name << " is " << age << " years old" << endl;
+    }
+};
+
+int main() {
+    Person arr[3] = {
+        Person("Alice", 25),
+        Person("Bob", 30),
+        Person("Charlie", 35)
+    };
+    
+    cout << "Array of People:" << endl;
+    for(int i = 0; i < 3; i++) {
+        arr[i].display();
+    }
+    
+    return 0;
+}
+                        </textarea>
+                    </div>
+                    <div class="code-buttons">
+                        <button class="btn btn-primary" onclick="runCode(document.getElementById('code2'), document.getElementById('output2'))">▶ Run Code</button>
+                        <button class="btn btn-secondary" onclick="downloadCode(document.getElementById('code2').value, 'array_objects.cpp')">⬇ Download</button>
+                    </div>
+                    <div class="output-box" id="output2">Click "Run Code" to execute...</div>
+                </div>
+
+                <div class="code-example">
+                    <div class="code-tabs">
+                        <button class="code-tab active" data-tab="simple3">Simple Snippet</button>
+                        <button class="code-tab" data-tab="full3">Full Program</button>
+                    </div>
+                    <div data-tab-content="simple3" class="code-editor">
+Point* ptr = new Point(5, 10);
+ptr->display();
+cout << "X: " << ptr->getX() << endl;
+delete ptr;
+ptr = nullptr;
+                    </div>
+                    <div data-tab-content="full3" style="display: none;">
+                        <textarea class="code-editor" id="code3">#include <iostream>
+using namespace std;
+
+class Point {
+private:
+    double x, y;
+public:
+    Point(double px = 0, double py = 0) 
+        : x(px), y(py) {}
+    
+    double getX() const { return x; }
+    double getY() const { return y; }
+    
+    void display() const {
+        cout << "Point: (" << x << ", " << y << ")" << endl;
+    }
+};
+
+int main() {
+    Point p(3, 4);
+    Point* ptr = &p;
+    
+    cout << "Using dot operator:" << endl;
+    p.display();
+    
+    cout << "Using arrow operator:" << endl;
+    ptr->display();
+    
+    cout << "Getting X value: " << ptr->getX() << endl;
+    
+    Point* ptr2 = new Point(5, 12);
+    ptr2->display();
+    delete ptr2;
+    
+    return 0;
+}
+                        </textarea>
+                    </div>
+                    <div class="code-buttons">
+                        <button class="btn btn-primary" onclick="runCode(document.getElementById('code3'), document.getElementById('output3'))">▶ Run Code</button>
+                        <button class="btn btn-secondary" onclick="downloadCode(document.getElementById('code3').value, 'pointer_objects.cpp')">⬇ Download</button>
+                    </div>
+                    <div class="output-box" id="output3">Click "Run Code" to execute...</div>
+                </div>
+            </section>
+
+            <section class="section">
+                <div class="section-title">✍️ Coding Activities</div>
+
+                <div class="activity">
+                    <div class="activity-title">⚡ Intermediate Challenge: Array of Student Objects</div>
+                    <p>Create a Student class with name, id, and gpa. Create an array of 5 students, initialize them, and find the student with highest GPA using pointer iteration.</p>
+                    <button class="btn btn-secondary" onclick="downloadCode(\`#include <iostream>
+#include <string>
+using namespace std;
+
+class Student {
+private:
+    int id;
+    string name;
+    double gpa;
+public:
+    Student(int i = 0, string n = \"\", double g = 0) 
+        : id(i), name(n), gpa(g) {}
+    
+    // TODO: Add getter functions
+    
+    void display() {
+        cout << id << \". \" << name << \" - GPA: \" << gpa << endl;
+    }
+};
+
+int main() {
+    // TODO: Create array of 5 students
+    // TODO: Find highest GPA using pointers
+    return 0;
+}\`, 'student_array.cpp')">⬇ Download Skeleton</button>
+                    <button class="collapsible">▼ Show Solution</button>
+                    <div class="collapsible-content">
+                        <div class="code-editor">
+#include <iostream>
+#include <string>
+using namespace std;
+
+class Student {
+private:
+    int id;
+    string name;
+    double gpa;
+public:
+    Student(int i = 0, string n = "", double g = 0) 
+        : id(i), name(n), gpa(g) {}
+    
+    double getGpa() const { return gpa; }
+    
+    void display() const {
+        cout << id << ". " << name << " - GPA: " << gpa << endl;
+    }
+};
+
+int main() {
+    Student students[5] = {
+        Student(101, "Alice", 3.8),
+        Student(102, "Bob", 3.5),
+        Student(103, "Charlie", 3.9),
+        Student(104, "Diana", 3.7),
+        Student(105, "Eve", 3.6)
+    };
+    
+    cout << "All students:" << endl;
+    for(int i = 0; i < 5; i++) {
+        students[i].display();
+    }
+    
+    Student* maxPtr = &students[0];
+    for(int i = 1; i < 5; i++) {
+        if(students[i].getGpa() > maxPtr->getGpa()) {
+            maxPtr = &students[i];
+        }
+    }
+    
+    cout << "\nHighest GPA: ";
+    maxPtr->display();
+    
+    return 0;
+}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="activity">
+                    <div class="activity-title">🔥 Advanced Challenge: Self-Referencing Using This</div>
+                    <p>Create a Data class that supports method chaining. Implement setValue, multiply, and add methods that return *this, allowing calls like d.setValue(5).add(10).multiply(2).</p>
+                    <button class="btn btn-secondary" onclick="downloadCode(\`#include <iostream>
+using namespace std;
+
+class Data {
+private:
+    int value;
+public:
+    Data(int v = 0) : value(v) {}
+    
+    // TODO: Implement method chaining
+    // setValue(), add(), multiply()
+    // Each returns reference to *this
+    
+    int getValue() const {
+        return value;
+    }
+};
+
+int main() {
+    Data d(5);
+    d.setValue(10).add(5).multiply(2);
+    cout << \"Result: \" << d.getValue() << endl;
+    return 0;
+}\`, 'method_chaining.cpp')">⬇ Download Skeleton</button>
+                    <button class="collapsible">▼ Show Solution</button>
+                    <div class="collapsible-content">
+                        <div class="code-editor">
+#include <iostream>
+using namespace std;
+
+class Data {
+private:
+    int value;
+public:
+    Data(int v = 0) : value(v) {}
+    
+    Data& setValue(int v) {
+        this->value = v;
+        return *this;
+    }
+    
+    Data& add(int n) {
+        this->value += n;
+        return *this;
+    }
+    
+    Data& multiply(int n) {
+        this->value *= n;
+        return *this;
+    }
+    
+    int getValue() const {
+        return this->value;
+    }
+    
+    void display() const {
+        cout << "Value: " << this->value << endl;
+    }
+};
+
+int main() {
+    Data d(5);
+    
+    cout << "Initial: ";
+    d.display();
+    
+    d.setValue(10).add(5).multiply(2);
+    cout << "After chaining: ";
+    d.display();
+    
+    d.setValue(3).multiply(4).add(2).display();
+    
+    return 0;
+}
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="section">
+                <div class="section-title">📝 Knowledge Check Quiz</div>
+                <div class="quiz-container">
+                    <button class="quiz-btn" onclick="initializeQuiz()">▶ Start Quiz</button>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <footer><p>COS110 OOP Study Website | November 2025</p></footer>
+
+    <script src="../../js/main.js"></script>
+    <script src="../../js/compiler.js"></script>
+    <script src="../../js/quiz.js"></script>
+
+    <script>
+        function initializeQuiz() {
+            const questions = [
+                {type: 'multiple-choice', question: 'What does the "this" pointer refer to?', options: ['The current function', 'A pointer to the current object', 'A global variable', 'A temporary value'], correctAnswer: 'B', explanation: '"this" is a pointer to the current object.'},
+                {type: 'true-false', question: 'The arrow operator (->) is used with pointers to objects.', correctAnswer: 'true', explanation: 'Yes, use -> to access members through pointers.'},
+                {type: 'multiple-choice', question: 'How do you access a member of a dynamically allocated object?', options: ['obj.member', 'ptr->member', 'ptr.member', '*ptr.member'], correctAnswer: 'B', explanation: 'Use -> operator for pointers to objects.'},
+                {type: 'true-false', question: 'In an array of objects, the default constructor is called for each element.', correctAnswer: 'true', explanation: 'Yes, if no specific constructor is called.'},
+                {type: 'fill-in', question: 'The arrow operator -> is equivalent to:', context: '(*ptr)<span style="color: red;">_______</span>member', hint: 'operator', acceptableAnswers: ['.', 'dot'], explanation: 'ptr->member is equivalent to (*ptr).member'},
+                {type: 'multiple-choice', question: 'What is method chaining?', options: ['Calling methods in sequence', 'Returning *this to call another method', 'Using loops with methods', 'None of the above'], correctAnswer: 'B', explanation: 'Method chaining returns *this to allow successive method calls.'},
+                {type: 'true-false', question: 'You can pass objects by reference to avoid copying.', correctAnswer: 'true', explanation: 'Yes, passing by reference is more efficient.'},
+                {type: 'multiple-choice', question: 'What does new return?', options: ['A value', 'A reference', 'A pointer', 'An address'], correctAnswer: 'C', explanation: 'new returns a pointer to the allocated memory.'},
+                {type: 'true-false', question: 'After deleting a pointer, it automatically becomes nullptr.', correctAnswer: 'false', explanation: 'You must manually set it to nullptr after delete.'},
+                {type: 'fill-in', question: 'To access X from pointer ptr, use:', context: 'ptr<span style="color: red;">_______</span>X', hint: 'operator', acceptableAnswers: ['->', '-> '], explanation: 'Use arrow operator to access through pointers.'},
+                {type: 'true-false', question: 'The dot operator is used with pointers.', correctAnswer: 'false', explanation: 'Dot is for objects, arrow is for pointers.'},
+                {type: 'multiple-choice', question: 'Array of objects uses default constructor for:', options: ['Each element', 'All elements once', 'No constructor', 'User-defined'], correctAnswer: 'A', explanation: 'Default constructor called for each array element.'},
+                {type: 'true-false', question: 'Passing objects by reference avoids copying.', correctAnswer: 'true', explanation: 'Yes, reference parameter avoids making a copy.'},
+                {type: 'multiple-choice', question: 'The this pointer refers to:', options: ['Current function', 'Current object', 'Current class', 'Global object'], correctAnswer: 'B', explanation: 'this is a pointer to the current object.'},
+                {type: 'fill-in', question: 'In member function, current object is:', context: '<span style="color: red;">_______</span>this', hint: 'operator', acceptableAnswers: ['*', '* '], explanation: '*this is the current object.'},
+                {type: 'true-false', question: 'Arrow operator is equivalent to dot after dereferencing.', correctAnswer: 'true', explanation: 'ptr->member equals (*ptr).member.'},
+                {type: 'multiple-choice', question: 'Method chaining requires:', options: ['Static function', 'Returning *this', 'Friend function', 'Constructor'], correctAnswer: 'B', explanation: 'Returning *this allows successive method calls.'},
+                {type: 'true-false', question: 'You can create pointer to array of objects.', correctAnswer: 'true', explanation: 'Yes, pointers work with arrays of objects.'},
+                {type: 'multiple-choice', question: 'Accessing array element through pointer uses:', options: ['ptr[i]', '*(ptr+i)', 'Both A and B', 'Neither'], correctAnswer: 'C', explanation: 'Both notations are equivalent for arrays.'}
+            ];
+
+            window.quizSystem = new QuizSystem('Classes More', questions);
+            openQuizModal();
+        }
+
+        if (!document.getElementById('quizModal')) {
+            const modal = document.createElement('div');
+            modal.id = 'quizModal';
+            modal.className = 'quiz-modal';
+            modal.innerHTML = `<div class="quiz-modal-content"><div class="quiz-header"><div><div class="quiz-question-number">Quiz: Classes More</div><div class="quiz-progress">Question 1 of 20</div></div><button class="quiz-close" onclick="closeQuizModal()">✕</button></div><div class="quiz-questions-container"></div></div>`;
+            document.body.appendChild(modal);
+        }
+    </script>
+</body>
+</html>

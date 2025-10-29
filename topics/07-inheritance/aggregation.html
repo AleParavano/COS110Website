@@ -1,0 +1,661 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aggregation & Composition - COS110 OOP Study Website</title>
+    <link rel="stylesheet" href="../../css/style.css">
+</head>
+<body>
+    <nav class="navbar">
+        <a href="../../index.html" class="navbar-brand">📚 COS110 OOP</a>
+        <div class="navbar-search"><input type="text" placeholder="Search topics..."></div>
+    </nav>
+
+    <div class="container">
+        <aside class="sidebar">
+            <div class="sidebar-title">👨‍👧 Inheritance</div>
+            <a href="../../topics/14-inheritance-basics.html" class="sidebar-item">Basics</a>
+            <a href="../../topics/16-inheritance-redefining.html" class="sidebar-item">Redefining</a>
+            <a href="../../topics/17-inheritance-aggregation.html" class="sidebar-item active">Aggregation</a>
+        </aside>
+
+        <main class="main-content">
+            <h1>🔗 Aggregation & Composition</h1>
+
+            <section class="section">
+                <div class="section-title">📚 Explanation</div>
+                <div class="explanation">
+                    <h3 style="color: var(--primary);">What is Aggregation?</h3>
+                    <p>Aggregation is a "has-a" relationship where a class contains objects of other classes. Unlike inheritance (IS-A), aggregation shows composition. An object can exist independently even if the containing object is destroyed. For example, a Car HAS-A Engine, but the Engine can exist without the Car.</p>
+
+                    <h3 style="color: var(--primary); margin-top: 20px;">Composition vs Aggregation</h3>
+                    <p>Composition is strong aggregation where the contained object's lifetime depends on the container. When the container is destroyed, contained objects are destroyed too. Aggregation is weak - contained objects can outlive the container. In C++, both are implemented similarly but semantically different.</p>
+
+                    <h3 style="color: var(--primary); margin-top: 20px;">Member Objects</h3>
+                    <p>When a class contains another class as a member, the contained object is constructed when the container is created and destructed when the container is destroyed. Initialize members in the initializer list. This ensures proper construction order and cleanup.</p>
+
+                    <h3 style="color: var(--primary); margin-top: 20px;">Alternatives to Inheritance</h3>
+                    <p>Composition is often preferred over inheritance. It avoids rigid hierarchies and provides more flexibility. If you're tempted to use inheritance, consider if composition would work better. The rule: "Prefer composition over inheritance" is a design principle.</p>
+
+                    <h3 style="color: var(--primary); margin-top: 20px;">Delegation Pattern</h3>
+                    <p>Composition enables the delegation pattern where the container forwards method calls to contained objects. This provides flexibility without creating deep inheritance hierarchies. You can change behavior by swapping contained objects at runtime.</p>
+                </div>
+            </section>
+
+            <section class="section">
+                <div class="section-title">💻 Code Examples</div>
+
+                <div class="code-example">
+                    <div class="code-tabs">
+                        <button class="code-tab active" data-tab="simple1">Basic Aggregation</button>
+                        <button class="code-tab" data-tab="full1">Full Program</button>
+                    </div>
+                    <div data-tab-content="simple1" class="code-editor">
+class Engine {
+public:
+    void start() { cout << "Engine started" << endl; }
+};
+
+class Car {
+private:
+    Engine engine;
+public:
+    Car() {}
+    void drive() {
+        engine.start();
+        cout << "Car driving" << endl;
+    }
+};
+
+Car c;
+c.drive();
+                    </div>
+                    <div data-tab-content="full1" style="display: none;">
+                        <textarea class="code-editor" id="code1">#include <iostream>
+#include <string>
+using namespace std;
+
+class Engine {
+private:
+    string type;
+    int horsepower;
+public:
+    Engine(string t = "V6", int hp = 200) 
+        : type(t), horsepower(hp) {
+        cout << "Engine created: " << type 
+             << " (" << horsepower << "hp)" << endl;
+    }
+    
+    ~Engine() {
+        cout << "Engine destroyed" << endl;
+    }
+    
+    void start() {
+        cout << "Engine started - " 
+             << horsepower << "hp available" << endl;
+    }
+};
+
+class Car {
+private:
+    string brand;
+    Engine engine;
+public:
+    Car(string b, string engineType, int hp) 
+        : brand(b), engine(engineType, hp) {
+        cout << "Car created: " << brand << endl;
+    }
+    
+    ~Car() {
+        cout << "Car destroyed" << endl;
+    }
+    
+    void drive() {
+        cout << "Car driving..." << endl;
+        engine.start();
+    }
+};
+
+int main() {
+    {
+        Car myCar("Toyota", "V4", 150);
+        myCar.drive();
+    }
+    cout << "Car went out of scope" << endl;
+    
+    return 0;
+}
+                        </textarea>
+                    </div>
+                    <div class="code-buttons">
+                        <button class="btn btn-primary" onclick="runCode(document.getElementById('code1'), document.getElementById('output1'))">▶ Run Code</button>
+                    </div>
+                    <div class="output-box" id="output1">Click "Run Code" to execute...</div>
+                </div>
+
+                <div class="code-example">
+                    <div class="code-tabs">
+                        <button class="code-tab active" data-tab="simple2">Multiple Members</button>
+                        <button class="code-tab" data-tab="full2">Full Program</button>
+                    </div>
+                    <div data-tab-content="simple2" class="code-editor">
+class Wheel {
+    void roll() { cout << "Wheel rolling" << endl; }
+};
+
+class Seat {
+    void adjust() { cout << "Seat adjusted" << endl; }
+};
+
+class Car {
+private:
+    Wheel wheels[4];
+    Seat seats[5];
+    Engine engine;
+public:
+    void start() { engine.start(); }
+    void adjustSeat() { seats[0].adjust(); }
+};
+                    </div>
+                    <div data-tab-content="full2" style="display: none;">
+                        <textarea class="code-editor" id="code2">#include <iostream>
+using namespace std;
+
+class Wheel {
+private:
+    double size;
+public:
+    Wheel(double s = 18) : size(s) {}
+    
+    void roll() {
+        cout << "Wheel (" << size 
+             << "\") rolling" << endl;
+    }
+};
+
+class Seat {
+private:
+    string material;
+public:
+    Seat(string m = "Leather") : material(m) {}
+    
+    void adjust() {
+        cout << "Seat (" << material 
+             << ") adjusted" << endl;
+    }
+};
+
+class Engine {
+public:
+    void start() { cout << "Engine started" << endl; }
+};
+
+class Car {
+private:
+    Wheel wheels[4];
+    Seat seats[5];
+    Engine engine;
+public:
+    Car() : wheels(Wheel(20)), 
+            seats(Seat("Leather")) {
+        cout << "Car fully assembled" << endl;
+    }
+    
+    void start() {
+        engine.start();
+    }
+    
+    void adjustFrontSeat() {
+        seats[0].adjust();
+    }
+    
+    void wheelCheck() {
+        cout << "Checking wheels:" << endl;
+        wheels[0].roll();
+        wheels[1].roll();
+    }
+};
+
+int main() {
+    Car myCar;
+    myCar.start();
+    myCar.adjustFrontSeat();
+    myCar.wheelCheck();
+    
+    return 0;
+}
+                        </textarea>
+                    </div>
+                    <div class="code-buttons">
+                        <button class="btn btn-primary" onclick="runCode(document.getElementById('code2'), document.getElementById('output2'))">▶ Run Code</button>
+                    </div>
+                    <div class="output-box" id="output2">Click "Run Code" to execute...</div>
+                </div>
+
+                <div class="code-example">
+                    <div class="code-tabs">
+                        <button class="code-tab active" data-tab="simple3">Delegation Pattern</button>
+                        <button class="code-tab" data-tab="full3">Full Program</button>
+                    </div>
+                    <div data-tab-content="simple3" class="code-editor">
+class Logger {
+public:
+    virtual void log(string msg) = 0;
+};
+
+class ConsoleLogger : public Logger {
+    void log(string msg) override {
+        cout << "[Console] " << msg << endl;
+    }
+};
+
+class Application {
+private:
+    Logger* logger;
+public:
+    Application(Logger* l) : logger(l) {}
+    
+    void run() {
+        logger->log("App started");
+    }
+};
+
+ConsoleLogger cl;
+Application app(&cl);
+app.run();
+                    </div>
+                    <div data-tab-content="full3" style="display: none;">
+                        <textarea class="code-editor" id="code3">#include <iostream>
+#include <string>
+using namespace std;
+
+class Logger {
+public:
+    virtual void log(string msg) = 0;
+    virtual ~Logger() {}
+};
+
+class ConsoleLogger : public Logger {
+public:
+    void log(string msg) override {
+        cout << "[CONSOLE] " << msg << endl;
+    }
+};
+
+class FileLogger : public Logger {
+public:
+    void log(string msg) override {
+        cout << "[FILE] " << msg << endl;
+    }
+};
+
+class Database {
+public:
+    void query(string sql) {
+        cout << "Executing: " << sql << endl;
+    }
+};
+
+class Application {
+private:
+    Logger* logger;
+    Database db;
+public:
+    Application(Logger* l) : logger(l) {}
+    
+    void start() {
+        logger->log("Application starting");
+        db.query("SELECT * FROM users");
+        logger->log("Query complete");
+    }
+    
+    void shutdown() {
+        logger->log("Application shutting down");
+    }
+    
+    ~Application() {
+        shutdown();
+    }
+};
+
+int main() {
+    ConsoleLogger cl;
+    FileLogger fl;
+    
+    cout << "=== Using Console Logger ===" << endl;
+    {
+        Application app1(&cl);
+        app1.start();
+    }
+    
+    cout << "\n=== Using File Logger ===" << endl;
+    {
+        Application app2(&fl);
+        app2.start();
+    }
+    
+    return 0;
+}
+                        </textarea>
+                    </div>
+                    <div class="code-buttons">
+                        <button class="btn btn-primary" onclick="runCode(document.getElementById('code3'), document.getElementById('output3'))">▶ Run Code</button>
+                    </div>
+                    <div class="output-box" id="output3">Click "Run Code" to execute...</div>
+                </div>
+            </section>
+
+            <section class="section">
+                <div class="section-title">✍️ Coding Activities</div>
+
+                <div class="activity">
+                    <div class="activity-title">⚡ Intermediate Challenge: Computer System</div>
+                    <p>Create Computer with CPU, RAM, and Disk components showing composition relationships.</p>
+                    <button class="btn btn-secondary" onclick="downloadCode(\`#include <iostream>
+using namespace std;
+
+class CPU {
+private:
+    int cores;
+public:
+    CPU(int c) : cores(c) {}
+    void execute() {
+        cout << cores << \" cores executing\" << endl;
+    }
+};
+
+// TODO: RAM class
+// TODO: Disk class
+// TODO: Computer class with members
+
+int main() {
+    Computer pc(8, 16, 512);
+    pc.powerOn();
+    return 0;
+}\`, 'computer_system.cpp')">⬇ Download Skeleton</button>
+                    <button class="collapsible">▼ Show Solution</button>
+                    <div class="collapsible-content">
+                        <div class="code-editor">
+#include <iostream>
+using namespace std;
+
+class CPU {
+private:
+    int cores;
+public:
+    CPU(int c = 4) : cores(c) {
+        cout << "CPU: " << cores << " cores" << endl;
+    }
+    
+    void execute() {
+        cout << "  CPU executing with " 
+             << cores << " cores" << endl;
+    }
+};
+
+class RAM {
+private:
+    int capacity;
+public:
+    RAM(int c = 8) : capacity(c) {
+        cout << "RAM: " << capacity << "GB" << endl;
+    }
+    
+    void load() {
+        cout << "  Loading data into " 
+             << capacity << "GB RAM" << endl;
+    }
+};
+
+class Disk {
+private:
+    int capacity;
+public:
+    Disk(int c = 256) : capacity(c) {
+        cout << "Disk: " << capacity << "GB" << endl;
+    }
+    
+    void store() {
+        cout << "  Storing on " 
+             << capacity << "GB disk" << endl;
+    }
+};
+
+class Computer {
+private:
+    CPU cpu;
+    RAM ram;
+    Disk disk;
+public:
+    Computer(int cpuCores, int ramGB, 
+             int diskGB) 
+        : cpu(cpuCores), ram(ramGB), 
+          disk(diskGB) {
+        cout << "Computer assembled" << endl;
+    }
+    
+    void powerOn() {
+        cout << "Powering on..." << endl;
+        cpu.execute();
+        ram.load();
+        disk.store();
+    }
+};
+
+int main() {
+    Computer pc(8, 16, 512);
+    pc.powerOn();
+    
+    return 0;
+}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="activity">
+                    <div class="activity-title">🔥 Advanced Challenge: Game Character with Inventory</div>
+                    <p>Create Character class with Inventory and Equipment using composition and delegation.</p>
+                    <button class="btn btn-secondary" onclick="downloadCode(\`#include <iostream>
+#include <vector>
+using namespace std;
+
+class Item {
+protected:
+    string name;
+    int weight;
+public:
+    Item(string n, int w) : name(n), weight(w) {}
+    string getName() { return name; }
+    int getWeight() { return weight; }
+};
+
+class Weapon : public Item {
+private:
+    int damage;
+public:
+    Weapon(string n, int w, int d) 
+        : Item(n, w), damage(d) {}
+    int getDamage() { return damage; }
+};
+
+// TODO: Inventory class with addItem, removeItem
+// TODO: Character class with inventory and equipment
+
+int main() {
+    Character hero(\"Aragorn\", 100);
+    Weapon sword(\"Excalibur\", 10, 50);
+    hero.addToInventory(sword);
+    return 0;
+}\`, 'game_character.cpp')">⬇ Download Skeleton</button>
+                    <button class="collapsible">▼ Show Solution</button>
+                    <div class="collapsible-content">
+                        <div class="code-editor">
+#include <iostream>
+#include <vector>
+#include <string>
+using namespace std;
+
+class Item {
+protected:
+    string name;
+    int weight;
+public:
+    Item(string n, int w) 
+        : name(n), weight(w) {}
+    
+    virtual ~Item() {}
+    
+    string getName() const { return name; }
+    int getWeight() const { return weight; }
+};
+
+class Weapon : public Item {
+private:
+    int damage;
+public:
+    Weapon(string n, int w, int d) 
+        : Item(n, w), damage(d) {}
+    
+    int getDamage() const { return damage; }
+};
+
+class Armor : public Item {
+private:
+    int defense;
+public:
+    Armor(string n, int w, int d) 
+        : Item(n, w), defense(d) {}
+    
+    int getDefense() const { return defense; }
+};
+
+class Inventory {
+private:
+    vector<Item*> items;
+    int maxWeight;
+    int currentWeight;
+public:
+    Inventory(int max = 100) 
+        : maxWeight(max), currentWeight(0) {}
+    
+    bool addItem(Item* item) {
+        if(currentWeight + item->getWeight() 
+           > maxWeight) {
+            cout << "Inventory full!" << endl;
+            return false;
+        }
+        items.push_back(item);
+        currentWeight += item->getWeight();
+        cout << "Added: " << item->getName() << endl;
+        return true;
+    }
+    
+    void display() const {
+        cout << "Inventory (" << currentWeight 
+             << "/" << maxWeight << "): ";
+        for(auto item : items) {
+            cout << item->getName() << " ";
+        }
+        cout << endl;
+    }
+};
+
+class Character {
+private:
+    string name;
+    int health;
+    Inventory inventory;
+public:
+    Character(string n, int h) 
+        : name(n), health(h), 
+          inventory(100) {
+        cout << "Character created: " << name 
+             << endl;
+    }
+    
+    void addToInventory(Item* item) {
+        inventory.addItem(item);
+    }
+    
+    void showStatus() {
+        cout << "Name: " << name 
+             << ", Health: " << health << endl;
+        inventory.display();
+    }
+};
+
+int main() {
+    Character hero("Aragorn", 100);
+    
+    Weapon sword("Excalibur", 10, 50);
+    Armor shield("Shield", 15, 20);
+    Weapon dagger("Dagger", 3, 15);
+    
+    hero.addToInventory(&sword);
+    hero.addToInventory(&shield);
+    hero.addToInventory(&dagger);
+    
+    hero.showStatus();
+    
+    return 0;
+}
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="section">
+                <div class="section-title">📝 Knowledge Check Quiz</div>
+                <div class="quiz-container">
+                    <button class="quiz-btn" onclick="initializeQuiz()">▶ Start Quiz</button>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <footer><p>COS110 OOP Study Website | November 2025</p></footer>
+
+    <script src="../../js/main.js"></script>
+    <script src="../../js/compiler.js"></script>
+    <script src="../../js/quiz.js"></script>
+
+    <script>
+        function initializeQuiz() {
+            const questions = [
+                {type: 'multiple-choice', question: 'Aggregation is:', options: ['IS-A', 'HAS-A', 'USE-A', 'NONE'], correctAnswer: 'B', explanation: 'Aggregation represents a HAS-A relationship.'},
+                {type: 'true-false', question: 'Composition is weak aggregation.', correctAnswer: 'false', explanation: 'Composition is strong aggregation with dependent lifetimes.'},
+                {type: 'multiple-choice', question: 'In composition, lifetime depends on:', options: ['Container', 'Contained', 'Both', 'Neither'], correctAnswer: 'A', explanation: 'Contained objects live as long as container.'},
+                {type: 'fill-in', question: 'Member object initialization:', context: 'ClassName() : <span style="color: red;">_______</span>(args)', hint: 'member', acceptableAnswers: ['member', 'Member'], explanation: 'Initialize members in initializer list.'},
+                {type: 'true-false', question: 'Aggregation requires inheritance.', correctAnswer: 'false', explanation: 'Aggregation is independent of inheritance.'},
+                {type: 'multiple-choice', question: 'When to use composition:', options: ['Always', 'HAS-A relationship', 'IS-A relationship', 'Never'], correctAnswer: 'B', explanation: 'Use composition for HAS-A relationships.'},
+                {type: 'true-false', question: 'Contained objects constructed before container.', correctAnswer: 'false', explanation: 'Member objects constructed as part of container.'},
+                {type: 'multiple-choice', question: 'Delegation pattern uses:', options: ['Inheritance', 'Composition', 'Pointers', 'B and C'], correctAnswer: 'D', explanation: 'Delegation combines composition with forwarding.'},
+                {type: 'true-false', question: 'Composition avoids deep hierarchies.', correctAnswer: 'true', explanation: 'Yes, composition is more flexible than inheritance.'},
+                {type: 'fill-in', question: 'Destroy order for members:', context: 'Container destructed <span style="color: red;">_______</span>', hint: 'before members', acceptableAnswers: ['before', 'before members'], explanation: 'Container destructor runs first.'},
+                {type: 'true-false', question: 'Can have multiple member objects.', correctAnswer: 'true', explanation: 'Yes, a class can contain many objects.'},
+                {type: 'multiple-choice', question: 'Loose coupling achieved with:', options: ['Inheritance', 'Composition', 'Aggregation', 'B and C'], correctAnswer: 'D', explanation: 'Composition and aggregation reduce coupling.'},
+                {type: 'true-false', question: 'Member objects are copied when class copied.', correctAnswer: 'true', explanation: 'Yes, members are part of the object.'},
+                {type: 'multiple-choice', question: 'Aggregation advantage:', options: ['Flexibility', 'Reusability', 'Reduced coupling', 'All above'], correctAnswer: 'D', explanation: 'Aggregation provides all these benefits.'},
+                {type: 'fill-in', question: 'Access member methods:', context: 'container.<span style="color: red;">_______</span>.method()', hint: 'memberName', acceptableAnswers: ['memberName', 'member'], explanation: 'Use dot operator to access member methods.'},
+                {type: 'true-false', question: 'Prefer composition over inheritance.', correctAnswer: 'true', explanation: 'Yes, this is a design principle in OOP.'},
+                {type: 'multiple-choice', question: 'HAS-A example:', options: ['Dog IS-A Animal', 'Car HAS-A Engine', 'Circle IS-A Shape', 'All A'], correctAnswer: 'B', explanation: 'HAS-A means composition/aggregation.'},
+                {type: 'true-false', question: 'Aggregated objects need external lifetime mgmt.', correctAnswer: 'false', explanation: 'Container manages member lifetime automatically.'},
+                {type: 'multiple-choice', question: 'Delegation means:', options: ['Inheriting', 'Forwarding calls', 'Copying', 'Deleting'], correctAnswer: 'B', explanation: 'Delegation forwards method calls to members.'},
+                {type: 'true-false', question: 'Composition enables runtime flexibility.', correctAnswer: 'true', explanation: 'Yes, can swap implementations at runtime.'}
+            ];
+
+            window.quizSystem = new QuizSystem('Aggregation & Composition', questions);
+            openQuizModal();
+        }
+
+        if (!document.getElementById('quizModal')) {
+            const modal = document.createElement('div');
+            modal.id = 'quizModal';
+            modal.className = 'quiz-modal';
+            modal.innerHTML = `<div class="quiz-modal-content"><div class="quiz-header"><div><div class="quiz-question-number">Quiz: Aggregation</div><div class="quiz-progress">Question 1 of 20</div></div><button class="quiz-close" onclick="closeQuizModal()">✕</button></div><div class="quiz-questions-container"></div></div>`;
+            document.body.appendChild(modal);
+        }
+    </script>
+</body>
+</html>

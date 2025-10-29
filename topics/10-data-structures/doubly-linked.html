@@ -1,0 +1,812 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Doubly Linked Lists - COS110 OOP Study Website</title>
+    <link rel="stylesheet" href="../../css/style.css">
+</head>
+<body>
+    <nav class="navbar">
+        <a href="../../index.html" class="navbar-brand">📚 COS110 OOP</a>
+        <div class="navbar-search"><input type="text" placeholder="Search topics..."></div>
+    </nav>
+
+    <div class="container">
+        <aside class="sidebar">
+            <div class="sidebar-title">📊 Data Structures</div>
+            <a href="../../topics/21-data-structures-linked-lists.html" class="sidebar-item">Linked Lists</a>
+            <a href="../../topics/22-data-structures-doubly-linked.html" class="sidebar-item active">Doubly Linked</a>
+            <a href="../../topics/23-data-structures-circular.html" class="sidebar-item">Circular Lists</a>
+            <a href="../../topics/24-data-structures-stacks.html" class="sidebar-item">Stacks</a>
+            <a href="../../topics/25-data-structures-queues.html" class="sidebar-item">Queues</a>
+            <a href="../../topics/26-data-structures-stl.html" class="sidebar-item">STL</a>
+        </aside>
+
+        <main class="main-content">
+            <h1>🔗 Doubly Linked Lists</h1>
+
+            <section class="section">
+                <div class="section-title">📚 Explanation</div>
+                <div class="explanation">
+                    <h3 style="color: var(--primary);">Doubly Linked List Structure</h3>
+                    <p>A doubly linked list has nodes with three components: data, next pointer, and previous pointer. This allows traversal in both directions - forward through next pointers and backward through previous pointers. The first node's previous is nullptr, and the last node's next is nullptr.</p>
+
+                    <h3 style="color: var(--primary); margin-top: 20px;">Bidirectional Traversal</h3>
+                    <p>Doubly linked lists enable reverse traversal without recursion. You can start from the head and move backward using prev pointers. This is useful for operations like undo/redo, bidirectional searching, and displaying lists in reverse order.</p>
+
+                    <h3 style="color: var(--primary); margin-top: 20px;">Insertion in Doubly Linked Lists</h3>
+                    <p>When inserting, you must update both next and previous pointers. Insert at beginning: new node's next = head, head->prev = new node. Insert in middle: update both neighbors' pointers. Proper pointer manipulation prevents data loss and maintains list integrity.</p>
+
+                    <h3 style="color: var(--primary); margin-top: 20px;">Deletion in Doubly Linked Lists</h3>
+                    <p>Deletion is safer in doubly linked lists because you can access both neighbors directly. Find the node, update previous->next and next->prev pointers, then delete. No need to track the predecessor separately, reducing code complexity.</p>
+
+                    <h3 style="color: var(--primary); margin-top: 20px;">Memory and Complexity Trade-offs</h3>
+                    <p>Doubly linked lists use more memory (extra pointer per node) but enable faster operations. Some operations that need backward traversal are O(n) in singly linked but O(n) forward in doubly linked. Trade memory for functionality depending on use case.</p>
+                </div>
+            </section>
+
+            <section class="section">
+                <div class="section-title">💻 Code Examples</div>
+
+                <div class="code-example">
+                    <div class="code-tabs">
+                        <button class="code-tab active" data-tab="simple1">Basic Doubly Linked List</button>
+                        <button class="code-tab" data-tab="full1">Full Program</button>
+                    </div>
+                    <div data-tab-content="simple1" class="code-editor">
+struct Node {
+    int data;
+    Node* next;
+    Node* prev;
+    Node(int val) : data(val), next(nullptr), 
+                    prev(nullptr) {}
+};
+
+class DoublyLinkedList {
+private:
+    Node* head;
+public:
+    DoublyLinkedList() : head(nullptr) {}
+    
+    void insertAtBegin(int val) {
+        Node* newNode = new Node(val);
+        if(head == nullptr) {
+            head = newNode;
+            return;
+        }
+        newNode->next = head;
+        head->prev = newNode;
+        head = newNode;
+    }
+    
+    void displayForward() {
+        Node* curr = head;
+        while(curr != nullptr) {
+            cout << curr->data << " -> ";
+            curr = curr->next;
+        }
+        cout << "NULL" << endl;
+    }
+};
+                    </div>
+                    <div data-tab-content="full1" style="display: none;">
+                        <textarea class="code-editor" id="code1">#include <iostream>
+using namespace std;
+
+struct Node {
+    int data;
+    Node* next;
+    Node* prev;
+    Node(int val) : data(val), next(nullptr), 
+                    prev(nullptr) {}
+};
+
+class DoublyLinkedList {
+private:
+    Node* head;
+public:
+    DoublyLinkedList() : head(nullptr) {}
+    
+    void insertAtBegin(int val) {
+        Node* newNode = new Node(val);
+        if(head == nullptr) {
+            head = newNode;
+            return;
+        }
+        newNode->next = head;
+        head->prev = newNode;
+        head = newNode;
+    }
+    
+    void insertAtEnd(int val) {
+        Node* newNode = new Node(val);
+        if(head == nullptr) {
+            head = newNode;
+            return;
+        }
+        Node* curr = head;
+        while(curr->next != nullptr) {
+            curr = curr->next;
+        }
+        curr->next = newNode;
+        newNode->prev = curr;
+    }
+    
+    void displayForward() {
+        cout << "Forward: ";
+        Node* curr = head;
+        while(curr != nullptr) {
+            cout << curr->data << " -> ";
+            curr = curr->next;
+        }
+        cout << "NULL" << endl;
+    }
+    
+    void displayBackward() {
+        cout << "Backward: ";
+        Node* curr = head;
+        if(curr == nullptr) {
+            cout << "NULL" << endl;
+            return;
+        }
+        while(curr->next != nullptr) {
+            curr = curr->next;
+        }
+        while(curr != nullptr) {
+            cout << curr->data << " -> ";
+            curr = curr->prev;
+        }
+        cout << "NULL" << endl;
+    }
+    
+    ~DoublyLinkedList() {
+        Node* curr = head;
+        while(curr != nullptr) {
+            Node* temp = curr;
+            curr = curr->next;
+            delete temp;
+        }
+    }
+};
+
+int main() {
+    DoublyLinkedList list;
+    
+    cout << "=== Inserting ===" << endl;
+    list.insertAtEnd(10);
+    list.insertAtEnd(20);
+    list.insertAtEnd(30);
+    
+    cout << "\n=== Insert at Begin ===" << endl;
+    list.insertAtBegin(5);
+    list.insertAtBegin(1);
+    
+    list.displayForward();
+    list.displayBackward();
+    
+    return 0;
+}
+                        </textarea>
+                    </div>
+                    <div class="code-buttons">
+                        <button class="btn btn-primary" onclick="runCode(document.getElementById('code1'), document.getElementById('output1'))">▶ Run Code</button>
+                    </div>
+                    <div class="output-box" id="output1">Click "Run Code" to execute...</div>
+                </div>
+
+                <div class="code-example">
+                    <div class="code-tabs">
+                        <button class="code-tab active" data-tab="simple2">Deletion</button>
+                        <button class="code-tab" data-tab="full2">Full Program</button>
+                    </div>
+                    <div data-tab-content="simple2" class="code-editor">
+void deleteNode(Node* node) {
+    if(node == nullptr) return;
+    
+    if(node->prev != nullptr) {
+        node->prev->next = node->next;
+    } else {
+        head = node->next;
+    }
+    
+    if(node->next != nullptr) {
+        node->next->prev = node->prev;
+    }
+    
+    delete node;
+}
+
+// Easier deletion - access both neighbors!
+                    </div>
+                    <div data-tab-content="full2" style="display: none;">
+                        <textarea class="code-editor" id="code2">#include <iostream>
+using namespace std;
+
+struct Node {
+    int data;
+    Node* next;
+    Node* prev;
+    Node(int val) : data(val), next(nullptr), 
+                    prev(nullptr) {}
+};
+
+class DoublyLinkedList {
+private:
+    Node* head;
+public:
+    DoublyLinkedList() : head(nullptr) {}
+    
+    void insertAtEnd(int val) {
+        Node* newNode = new Node(val);
+        if(head == nullptr) {
+            head = newNode;
+            return;
+        }
+        Node* curr = head;
+        while(curr->next != nullptr) {
+            curr = curr->next;
+        }
+        curr->next = newNode;
+        newNode->prev = curr;
+    }
+    
+    void deleteFromBegin() {
+        if(head == nullptr) return;
+        cout << "Deleting: " << head->data << endl;
+        Node* temp = head;
+        head = head->next;
+        if(head != nullptr) {
+            head->prev = nullptr;
+        }
+        delete temp;
+    }
+    
+    void deleteFromEnd() {
+        if(head == nullptr) return;
+        
+        Node* curr = head;
+        while(curr->next != nullptr) {
+            curr = curr->next;
+        }
+        cout << "Deleting: " << curr->data << endl;
+        
+        if(curr->prev != nullptr) {
+            curr->prev->next = nullptr;
+        } else {
+            head = nullptr;
+        }
+        delete curr;
+    }
+    
+    void displayForward() {
+        cout << "Forward: ";
+        Node* curr = head;
+        while(curr != nullptr) {
+            cout << curr->data << " -> ";
+            curr = curr->next;
+        }
+        cout << "NULL" << endl;
+    }
+    
+    ~DoublyLinkedList() {
+        while(head != nullptr) {
+            deleteFromBegin();
+        }
+    }
+};
+
+int main() {
+    DoublyLinkedList list;
+    
+    cout << "=== Building ===" << endl;
+    for(int i = 10; i <= 50; i += 10) {
+        list.insertAtEnd(i);
+    }
+    list.displayForward();
+    
+    cout << "\n=== Delete from Begin ===" << endl;
+    list.deleteFromBegin();
+    list.displayForward();
+    
+    cout << "\n=== Delete from End ===" << endl;
+    list.deleteFromEnd();
+    list.displayForward();
+    
+    return 0;
+}
+                        </textarea>
+                    </div>
+                    <div class="code-buttons">
+                        <button class="btn btn-primary" onclick="runCode(document.getElementById('code2'), document.getElementById('output2'))">▶ Run Code</button>
+                    </div>
+                    <div class="output-box" id="output2">Click "Run Code" to execute...</div>
+                </div>
+
+                <div class="code-example">
+                    <div class="code-tabs">
+                        <button class="code-tab active" data-tab="simple3">Bidirectional Traversal</button>
+                        <button class="code-tab" data-tab="full3">Full Program</button>
+                    </div>
+                    <div data-tab-content="simple3" class="code-editor">
+void displayBackward() {
+    // Find last node
+    Node* curr = head;
+    while(curr->next != nullptr) {
+        curr = curr->next;
+    }
+    
+    // Traverse backward using prev
+    cout << "Backward: ";
+    while(curr != nullptr) {
+        cout << curr->data << " -> ";
+        curr = curr->prev;
+    }
+    cout << "NULL" << endl;
+}
+
+// Can now traverse in both directions!
+                    </div>
+                    <div data-tab-content="full3" style="display: none;">
+                        <textarea class="code-editor" id="code3">#include <iostream>
+using namespace std;
+
+struct Node {
+    int data;
+    Node* next;
+    Node* prev;
+    Node(int val) : data(val), next(nullptr), 
+                    prev(nullptr) {}
+};
+
+class DoublyLinkedList {
+private:
+    Node* head;
+public:
+    DoublyLinkedList() : head(nullptr) {}
+    
+    void insert(int val) {
+        Node* newNode = new Node(val);
+        if(head == nullptr) {
+            head = newNode;
+            return;
+        }
+        Node* curr = head;
+        while(curr->next != nullptr) {
+            curr = curr->next;
+        }
+        curr->next = newNode;
+        newNode->prev = curr;
+    }
+    
+    void displayForward() {
+        cout << "Forward:  ";
+        Node* curr = head;
+        while(curr != nullptr) {
+            cout << curr->data << " -> ";
+            curr = curr->next;
+        }
+        cout << "NULL" << endl;
+    }
+    
+    void displayBackward() {
+        cout << "Backward: ";
+        Node* curr = head;
+        if(curr == nullptr) {
+            cout << "NULL" << endl;
+            return;
+        }
+        while(curr->next != nullptr) {
+            curr = curr->next;
+        }
+        while(curr != nullptr) {
+            cout << curr->data << " -> ";
+            curr = curr->prev;
+        }
+        cout << "NULL" << endl;
+    }
+    
+    int sumForward() {
+        int sum = 0;
+        Node* curr = head;
+        while(curr != nullptr) {
+            sum += curr->data;
+            curr = curr->next;
+        }
+        return sum;
+    }
+    
+    int sumBackward() {
+        int sum = 0;
+        Node* curr = head;
+        if(curr == nullptr) return sum;
+        
+        while(curr->next != nullptr) {
+            curr = curr->next;
+        }
+        while(curr != nullptr) {
+            sum += curr->data;
+            curr = curr->prev;
+        }
+        return sum;
+    }
+    
+    ~DoublyLinkedList() {
+        Node* curr = head;
+        while(curr != nullptr) {
+            Node* temp = curr;
+            curr = curr->next;
+            delete temp;
+        }
+    }
+};
+
+int main() {
+    DoublyLinkedList list;
+    
+    cout << "=== Building List ===" << endl;
+    for(int i = 1; i <= 5; i++) {
+        list.insert(i * 10);
+    }
+    
+    cout << "\n=== Display Both Directions ===" << endl;
+    list.displayForward();
+    list.displayBackward();
+    
+    cout << "\n=== Sum Both Directions ===" << endl;
+    cout << "Forward sum: " << list.sumForward() << endl;
+    cout << "Backward sum: " << list.sumBackward() << endl;
+    
+    return 0;
+}
+                        </textarea>
+                    </div>
+                    <div class="code-buttons">
+                        <button class="btn btn-primary" onclick="runCode(document.getElementById('code3'), document.getElementById('output3'))">▶ Run Code</button>
+                    </div>
+                    <div class="output-box" id="output3">Click "Run Code" to execute...</div>
+                </div>
+            </section>
+
+            <section class="section">
+                <div class="section-title">✍️ Coding Activities</div>
+
+                <div class="activity">
+                    <div class="activity-title">⚡ Intermediate Challenge: Search from Both Ends</div>
+                    <p>Implement binary search pattern by searching from both ends simultaneously.</p>
+                    <button class="btn btn-secondary" onclick="downloadCode(\`#include <iostream>
+using namespace std;
+
+struct Node {
+    int data;
+    Node* next;
+    Node* prev;
+    Node(int val) : data(val), next(nullptr), prev(nullptr) {}
+};
+
+class DoublyLinkedList {
+private:
+    Node* head;
+public:
+    DoublyLinkedList() : head(nullptr) {}
+    
+    // TODO: bool searchFromBothEnds(int target)
+    // Search from head and tail simultaneously
+    
+    void insert(int val) { /* existing */ }
+};
+
+int main() {
+    DoublyLinkedList list;
+    // Build and search
+    return 0;
+}\`, 'doubly_search_both.cpp')">⬇ Download Skeleton</button>
+                    <button class="collapsible">▼ Show Solution</button>
+                    <div class="collapsible-content">
+                        <div class="code-editor">
+#include <iostream>
+using namespace std;
+
+struct Node {
+    int data;
+    Node* next;
+    Node* prev;
+    Node(int val) : data(val), next(nullptr), prev(nullptr) {}
+};
+
+class DoublyLinkedList {
+private:
+    Node* head;
+public:
+    DoublyLinkedList() : head(nullptr) {}
+    
+    void insert(int val) {
+        Node* newNode = new Node(val);
+        if(head == nullptr) {
+            head = newNode;
+            return;
+        }
+        Node* curr = head;
+        while(curr->next != nullptr) {
+            curr = curr->next;
+        }
+        curr->next = newNode;
+        newNode->prev = curr;
+    }
+    
+    bool searchFromBothEnds(int target) {
+        Node* front = head;
+        Node* back = head;
+        
+        if(head == nullptr) return false;
+        
+        while(back->next != nullptr) {
+            back = back->next;
+        }
+        
+        while(front != back && front->prev != back) {
+            if(front->data == target) {
+                cout << "Found " << target 
+                     << " from front" << endl;
+                return true;
+            }
+            if(back->data == target) {
+                cout << "Found " << target 
+                     << " from back" << endl;
+                return true;
+            }
+            front = front->next;
+            back = back->prev;
+        }
+        
+        if(front->data == target || back->data == target) {
+            cout << "Found " << target << endl;
+            return true;
+        }
+        
+        cout << target << " not found" << endl;
+        return false;
+    }
+    
+    ~DoublyLinkedList() {
+        Node* curr = head;
+        while(curr != nullptr) {
+            Node* temp = curr;
+            curr = curr->next;
+            delete temp;
+        }
+    }
+};
+
+int main() {
+    DoublyLinkedList list;
+    
+    for(int i = 1; i <= 10; i++) {
+        list.insert(i * 10);
+    }
+    
+    list.searchFromBothEnds(50);
+    list.searchFromBothEnds(100);
+    list.searchFromBothEnds(25);
+    
+    return 0;
+}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="activity">
+                    <div class="activity-title">🔥 Advanced Challenge: Undo/Redo System</div>
+                    <p>Implement undo/redo using doubly linked list for command history.</p>
+                    <button class="btn btn-secondary" onclick="downloadCode(\`#include <iostream>
+#include <string>
+using namespace std;
+
+struct Command {
+    string action;
+    Command(string a) : action(a) {}
+};
+
+struct Node {
+    Command* cmd;
+    Node* next;
+    Node* prev;
+    Node(Command* c) : cmd(c), next(nullptr), prev(nullptr) {}
+};
+
+class CommandHistory {
+private:
+    Node* current;
+    Node* head;
+public:
+    CommandHistory() : current(nullptr), head(nullptr) {}
+    
+    // TODO: void execute(string cmd)
+    // TODO: void undo()
+    // TODO: void redo()
+};
+
+int main() {
+    CommandHistory history;
+    history.execute(\"CreateFile\");
+    history.execute(\"EditText\");
+    history.undo();
+    history.redo();
+    return 0;
+}\`, 'undo_redo_system.cpp')">⬇ Download Skeleton</button>
+                    <button class="collapsible">▼ Show Solution</button>
+                    <div class="collapsible-content">
+                        <div class="code-editor">
+#include <iostream>
+#include <string>
+using namespace std;
+
+struct Node {
+    string action;
+    Node* next;
+    Node* prev;
+    Node(string a) : action(a), next(nullptr), prev(nullptr) {}
+};
+
+class CommandHistory {
+private:
+    Node* current;
+    Node* head;
+public:
+    CommandHistory() : current(nullptr), head(nullptr) {}
+    
+    void execute(string action) {
+        Node* newNode = new Node(action);
+        
+        if(head == nullptr) {
+            head = current = newNode;
+        } else {
+            if(current->next != nullptr) {
+                Node* temp = current->next;
+                while(temp != nullptr) {
+                    Node* toDelete = temp;
+                    temp = temp->next;
+                    delete toDelete;
+                }
+                current->next = nullptr;
+            }
+            
+            current->next = newNode;
+            newNode->prev = current;
+            current = newNode;
+        }
+        
+        cout << "Executed: " << action << endl;
+    }
+    
+    void undo() {
+        if(current == nullptr) {
+            cout << "Nothing to undo" << endl;
+            return;
+        }
+        cout << "Undid: " << current->action << endl;
+        if(current->prev != nullptr) {
+            current = current->prev;
+        }
+    }
+    
+    void redo() {
+        if(current == nullptr) {
+            cout << "Nothing to redo" << endl;
+            return;
+        }
+        if(current->next != nullptr) {
+            current = current->next;
+            cout << "Redid: " << current->action << endl;
+        } else {
+            cout << "Nothing to redo" << endl;
+        }
+    }
+    
+    void showHistory() {
+        Node* temp = head;
+        cout << "History: ";
+        while(temp != nullptr) {
+            if(temp == current) cout << "[";
+            cout << temp->action;
+            if(temp == current) cout << "]";
+            cout << " <- ";
+            temp = temp->next;
+        }
+        cout << "END" << endl;
+    }
+    
+    ~CommandHistory() {
+        Node* temp = head;
+        while(temp != nullptr) {
+            Node* toDelete = temp;
+            temp = temp->next;
+            delete toDelete;
+        }
+    }
+};
+
+int main() {
+    CommandHistory history;
+    
+    cout << "=== Commands ===" << endl;
+    history.execute("CreateFile");
+    history.execute("EditText");
+    history.execute("SaveFile");
+    history.showHistory();
+    
+    cout << "\n=== Undo ===" << endl;
+    history.undo();
+    history.showHistory();
+    history.undo();
+    history.showHistory();
+    
+    cout << "\n=== Redo ===" << endl;
+    history.redo();
+    history.showHistory();
+    
+    cout << "\n=== New Command After Undo ===" << endl;
+    history.execute("DeleteText");
+    history.showHistory();
+    
+    return 0;
+}
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="section">
+                <div class="section-title">📝 Knowledge Check Quiz</div>
+                <div class="quiz-container">
+                    <button class="quiz-btn" onclick="initializeQuiz()">▶ Start Quiz</button>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <footer><p>COS110 OOP Study Website | November 2025</p></footer>
+
+    <script src="../../js/main.js"></script>
+    <script src="../../js/compiler.js"></script>
+    <script src="../../js/quiz.js"></script>
+
+    <script>
+        function initializeQuiz() {
+            const questions = [
+                {type: 'multiple-choice', question: 'Doubly linked list difference:', options: ['Same as singly', 'Has prev pointer', 'Has two heads', 'Circular'], correctAnswer: 'B', explanation: 'Each node has prev pointer for backward traversal.'},
+                {type: 'true-false', question: 'Can traverse backward efficiently.', correctAnswer: 'true', explanation: 'Yes, using prev pointers.'},
+                {type: 'fill-in', question: 'Node has pointers:', context: 'data, next, and <span style="color: red;">_______</span>', hint: 'prev', acceptableAnswers: ['prev', 'prev '], explanation: 'Doubly linked has prev pointer.'},
+                {type: 'true-false', question: 'Uses more memory than singly linked.', correctAnswer: 'true', explanation: 'Yes, extra pointer per node.'},
+                {type: 'multiple-choice', question: 'Last node prev is:', options: ['nullptr', 'first', 'node', 'undefined'], correctAnswer: 'A', explanation: 'Last node prev points to predecessor.'},
+                {type: 'true-false', question: 'Deletion easier in doubly linked.', correctAnswer: 'true', explanation: 'Yes, direct access to both neighbors.'},
+                {type: 'multiple-choice', question: 'Backward traversal time:', options: ['O(1)', 'O(n)', 'O(log n)', 'O(n²)'], correctAnswer: 'B', explanation: 'Still O(n) for full traversal.'},
+                {type: 'true-false', question: 'Must update both pointers on insert.', correctAnswer: 'true', explanation: 'Yes, maintain consistency.'},
+                {type: 'fill-in', question: 'When inserting after node:', context: 'node->next->prev = <span style="color: red;">_______</span>;', hint: 'newNode', acceptableAnswers: ['newNode', 'new'], explanation: 'Update next node prev pointer.'},
+                {type: 'true-false', question: 'Can use for undo/redo.', correctAnswer: 'true', explanation: 'Yes, bidirectional traversal enables this.'},
+                {type: 'multiple-choice', question: 'Advantage of doubly linked:', options: ['Fast access', 'Bidirectional', 'Space efficient', 'Simple code'], correctAnswer: 'B', explanation: 'Main advantage is bidirectional traversal.'},
+                {type: 'true-false', question: 'Deletion from middle simpler.', correctAnswer: 'true', explanation: 'Yes, access both neighbors directly.'},
+                {type: 'multiple-choice', question: 'Insert before requires:', options: ['Backward search', 'Forward then back', 'Direct insert', 'Impossible'], correctAnswer: 'C', explanation: 'Can insert before using prev pointers.'},
+                {type: 'fill-in', question: 'Update when deleting node:', context: 'node->prev->next = <span style="color: red;">_______</span>;', hint: 'node->next', acceptableAnswers: ['node->next', 'next'], explanation: 'Skip deleted node in chain.'},
+                {type: 'true-false', question: 'Need to find last node first for backward.', correctAnswer: 'true', explanation: 'Yes, must reach end before going back.'},
+                {type: 'multiple-choice', question: 'Use case for doubly linked:', options: ['Simple storage', 'Undo/Redo', 'Arrays better', 'Never'], correctAnswer: 'B', explanation: 'Bidirectional navigation useful for undo/redo.'},
+                {type: 'true-false', question: 'First node prev is nullptr.', correctAnswer: 'true', explanation: 'Yes, no predecessor for head.'},
+                {type: 'multiple-choice', question: 'Compare to singly for insertion:', options: ['Faster', 'Same', 'Easier code', 'B and C'], correctAnswer: 'D', explanation: 'Same time but easier to code.'},
+                {type: 'true-false', question: 'Can navigate middle to ends.', correctAnswer: 'true', explanation: 'Yes, can go both directions from any node.'},
+                {type: 'multiple-choice', question: 'Memory overhead:', options: ['None', 'One pointer', 'Two pointers', 'Depends'], correctAnswer: 'B', explanation: 'One extra pointer per node.'}
+            ];
+
+            window.quizSystem = new QuizSystem('Doubly Linked Lists', questions);
+            openQuizModal();
+        }
+
+        if (!document.getElementById('quizModal')) {
+            const modal = document.createElement('div');
+            modal.id = 'quizModal';
+            modal.className = 'quiz-modal';
+            modal.innerHTML = `<div class="quiz-modal-content"><div class="quiz-header"><div><div class="quiz-question-number">Quiz: Doubly Linked</div><div class="quiz-progress">Question 1 of 20</div></div><button class="quiz-close" onclick="closeQuizModal()">✕</button></div><div class="quiz-questions-container"></div></div>`;
+            document.body.appendChild(modal);
+        }
+    </script>
+</body>
+</html>

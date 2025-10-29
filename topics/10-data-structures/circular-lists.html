@@ -1,0 +1,755 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Circular Linked Lists - COS110 OOP Study Website</title>
+    <link rel="stylesheet" href="../../css/style.css">
+</head>
+<body>
+    <nav class="navbar">
+        <a href="../../index.html" class="navbar-brand">📚 COS110 OOP</a>
+        <div class="navbar-search"><input type="text" placeholder="Search topics..."></div>
+    </nav>
+
+    <div class="container">
+        <aside class="sidebar">
+            <div class="sidebar-title">📊 Data Structures</div>
+            <a href="../../topics/21-data-structures-linked-lists.html" class="sidebar-item">Linked Lists</a>
+            <a href="../../topics/22-data-structures-doubly-linked.html" class="sidebar-item">Doubly Linked</a>
+            <a href="../../topics/23-data-structures-circular.html" class="sidebar-item active">Circular Lists</a>
+            <a href="../../topics/24-data-structures-stacks.html" class="sidebar-item">Stacks</a>
+            <a href="../../topics/25-data-structures-queues.html" class="sidebar-item">Queues</a>
+            <a href="../../topics/26-data-structures-stl.html" class="sidebar-item">STL</a>
+        </aside>
+
+        <main class="main-content">
+            <h1>🔄 Circular Linked Lists</h1>
+
+            <section class="section">
+                <div class="section-title">📚 Explanation</div>
+                <div class="explanation">
+                    <h3 style="color: var(--primary);">Circular Linked List Structure</h3>
+                    <p>In a circular linked list, the last node's next pointer points to the first node instead of nullptr. This creates a circular structure with no explicit end. You can start from any node and eventually return to it by following pointers. Only need to store head pointer, no separate tail needed.</p>
+
+                    <h3 style="color: var(--primary); margin-top: 20px;">Traversal in Circular Lists</h3>
+                    <p>Traversal uses a different termination condition. Instead of checking curr != nullptr, check if curr has returned to head (curr->next == head). Must have an initial reference to know when to stop. Any node can serve as starting point.</p>
+
+                    <h3 style="color: var(--primary); margin-top: 20px;">Insertion in Circular Lists</h3>
+                    <p>Insert at beginning: new node->next = head->next, head->next = new node (or update head). Insert at end: easier than singly linked - last node is one before head. Insert is straightforward with circular structure once head is maintained properly.</p>
+
+                    <h3 style="color: var(--primary); margin-top: 20px;">Applications of Circular Lists</h3>
+                    <p>Circular lists are ideal for round-robin scheduling, buffering, and processes that loop indefinitely. Examples: CPU scheduling queues, multiplayer game turns, music playlists. The circular nature matches these use cases naturally without artificial end conditions.</p>
+
+                    <h3 style="color: var(--primary); margin-top: 20px;">Advantages and Trade-offs</h3>
+                    <p>No null pointer dereferencing after the last node. Can easily find both ends in O(1). Disadvantage: must handle infinite loops carefully in traversal. Need explicit condition to stop. Good for cyclic applications, overhead similar to singly linked.</p>
+                </div>
+            </section>
+
+            <section class="section">
+                <div class="section-title">💻 Code Examples</div>
+
+                <div class="code-example">
+                    <div class="code-tabs">
+                        <button class="code-tab active" data-tab="simple1">Basic Circular List</button>
+                        <button class="code-tab" data-tab="full1">Full Program</button>
+                    </div>
+                    <div data-tab-content="simple1" class="code-editor">
+struct Node {
+    int data;
+    Node* next;
+    Node(int val) : data(val), next(nullptr) {}
+};
+
+class CircularLinkedList {
+private:
+    Node* head;
+public:
+    CircularLinkedList() : head(nullptr) {}
+    
+    void insertAtEnd(int val) {
+        Node* newNode = new Node(val);
+        if(head == nullptr) {
+            head = newNode;
+            newNode->next = head;
+            return;
+        }
+        Node* curr = head;
+        while(curr->next != head) {
+            curr = curr->next;
+        }
+        curr->next = newNode;
+        newNode->next = head;
+    }
+    
+    void display() {
+        if(head == nullptr) return;
+        Node* curr = head;
+        do {
+            cout << curr->data << " -> ";
+            curr = curr->next;
+        } while(curr != head);
+        cout << "HEAD" << endl;
+    }
+};
+                    </div>
+                    <div data-tab-content="full1" style="display: none;">
+                        <textarea class="code-editor" id="code1">#include <iostream>
+using namespace std;
+
+struct Node {
+    int data;
+    Node* next;
+    Node(int val) : data(val), next(nullptr) {}
+};
+
+class CircularLinkedList {
+private:
+    Node* head;
+public:
+    CircularLinkedList() : head(nullptr) {}
+    
+    void insertAtEnd(int val) {
+        Node* newNode = new Node(val);
+        if(head == nullptr) {
+            head = newNode;
+            newNode->next = head;
+            cout << "Inserted " << val << " as head" << endl;
+            return;
+        }
+        Node* curr = head;
+        while(curr->next != head) {
+            curr = curr->next;
+        }
+        curr->next = newNode;
+        newNode->next = head;
+        cout << "Inserted " << val << " at end" << endl;
+    }
+    
+    void insertAtBegin(int val) {
+        Node* newNode = new Node(val);
+        if(head == nullptr) {
+            head = newNode;
+            newNode->next = head;
+            return;
+        }
+        Node* curr = head;
+        while(curr->next != head) {
+            curr = curr->next;
+        }
+        newNode->next = head;
+        curr->next = newNode;
+        head = newNode;
+    }
+    
+    void display() {
+        if(head == nullptr) {
+            cout << "Empty list" << endl;
+            return;
+        }
+        cout << "Circular: ";
+        Node* curr = head;
+        do {
+            cout << curr->data << " -> ";
+            curr = curr->next;
+        } while(curr != head);
+        cout << "HEAD" << endl;
+    }
+    
+    ~CircularLinkedList() {
+        if(head == nullptr) return;
+        Node* curr = head->next;
+        while(curr != head) {
+            Node* temp = curr;
+            curr = curr->next;
+            delete temp;
+        }
+        delete head;
+    }
+};
+
+int main() {
+    CircularLinkedList list;
+    
+    cout << "=== Insert at End ===" << endl;
+    list.insertAtEnd(10);
+    list.insertAtEnd(20);
+    list.insertAtEnd(30);
+    list.display();
+    
+    cout << "\n=== Insert at Begin ===" << endl;
+    list.insertAtBegin(5);
+    list.display();
+    
+    return 0;
+}
+                        </textarea>
+                    </div>
+                    <div class="code-buttons">
+                        <button class="btn btn-primary" onclick="runCode(document.getElementById('code1'), document.getElementById('output1'))">▶ Run Code</button>
+                    </div>
+                    <div class="output-box" id="output1">Click "Run Code" to execute...</div>
+                </div>
+
+                <div class="code-example">
+                    <div class="code-tabs">
+                        <button class="code-tab active" data-tab="simple2">Traversal</button>
+                        <button class="code-tab" data-tab="full2">Full Program</button>
+                    </div>
+                    <div data-tab-content="simple2" class="code-editor">
+void display() {
+    if(head == nullptr) return;
+    
+    Node* curr = head;
+    do {
+        cout << curr->data << " -> ";
+        curr = curr->next;
+    } while(curr != head);  // Stop when back at head
+    
+    cout << "HEAD" << endl;
+}
+
+// Key: use do-while and check curr != head
+                    </div>
+                    <div data-tab-content="full2" style="display: none;">
+                        <textarea class="code-editor" id="code2">#include <iostream>
+using namespace std;
+
+struct Node {
+    int data;
+    Node* next;
+    Node(int val) : data(val), next(nullptr) {}
+};
+
+class CircularLinkedList {
+private:
+    Node* head;
+public:
+    CircularLinkedList() : head(nullptr) {}
+    
+    void insert(int val) {
+        Node* newNode = new Node(val);
+        if(head == nullptr) {
+            head = newNode;
+            newNode->next = head;
+            return;
+        }
+        Node* curr = head;
+        while(curr->next != head) {
+            curr = curr->next;
+        }
+        curr->next = newNode;
+        newNode->next = head;
+    }
+    
+    void display() {
+        if(head == nullptr) return;
+        Node* curr = head;
+        do {
+            cout << curr->data << " -> ";
+            curr = curr->next;
+        } while(curr != head);
+        cout << "HEAD" << endl;
+    }
+    
+    int count() {
+        if(head == nullptr) return 0;
+        int cnt = 0;
+        Node* curr = head;
+        do {
+            cnt++;
+            curr = curr->next;
+        } while(curr != head);
+        return cnt;
+    }
+    
+    int sum() {
+        if(head == nullptr) return 0;
+        int total = 0;
+        Node* curr = head;
+        do {
+            total += curr->data;
+            curr = curr->next;
+        } while(curr != head);
+        return total;
+    }
+    
+    ~CircularLinkedList() {
+        if(head == nullptr) return;
+        Node* curr = head->next;
+        while(curr != head) {
+            Node* temp = curr;
+            curr = curr->next;
+            delete temp;
+        }
+        delete head;
+    }
+};
+
+int main() {
+    CircularLinkedList list;
+    
+    for(int i = 10; i <= 50; i += 10) {
+        list.insert(i);
+    }
+    
+    cout << "=== Display ===" << endl;
+    list.display();
+    
+    cout << "\n=== Statistics ===" << endl;
+    cout << "Count: " << list.count() << endl;
+    cout << "Sum: " << list.sum() << endl;
+    
+    return 0;
+}
+                        </textarea>
+                    </div>
+                    <div class="code-buttons">
+                        <button class="btn btn-primary" onclick="runCode(document.getElementById('code2'), document.getElementById('output2'))">▶ Run Code</button>
+                    </div>
+                    <div class="output-box" id="output2">Click "Run Code" to execute...</div>
+                </div>
+
+                <div class="code-example">
+                    <div class="code-tabs">
+                        <button class="code-tab active" data-tab="simple3">Round-Robin Scheduling</button>
+                        <button class="code-tab" data-tab="full3">Full Program</button>
+                    </div>
+                    <div data-tab-content="simple3" class="code-editor">
+void roundRobin(int timeSlice) {
+    if(head == nullptr) return;
+    
+    Node* curr = head;
+    int process = 1;
+    for(int i = 0; i < 10; i++) {
+        cout << "Process " << curr->data 
+             << " runs for " << timeSlice 
+             << "ms" << endl;
+        curr = curr->next;
+    }
+}
+
+// Perfect use case for circular lists!
+                    </div>
+                    <div data-tab-content="full3" style="display: none;">
+                        <textarea class="code-editor" id="code3">#include <iostream>
+using namespace std;
+
+struct Node {
+    int data;
+    Node* next;
+    Node(int val) : data(val), next(nullptr) {}
+};
+
+class CircularLinkedList {
+private:
+    Node* head;
+public:
+    CircularLinkedList() : head(nullptr) {}
+    
+    void insert(int val) {
+        Node* newNode = new Node(val);
+        if(head == nullptr) {
+            head = newNode;
+            newNode->next = head;
+            return;
+        }
+        Node* curr = head;
+        while(curr->next != head) {
+            curr = curr->next;
+        }
+        curr->next = newNode;
+        newNode->next = head;
+    }
+    
+    void roundRobinSchedule(int timeSlice) {
+        if(head == nullptr) {
+            cout << "No processes" << endl;
+            return;
+        }
+        
+        cout << "=== Round-Robin Scheduling ===" << endl;
+        cout << "Time slice: " << timeSlice 
+             << "ms" << endl << endl;
+        
+        Node* curr = head;
+        int time = 0;
+        for(int i = 0; i < 10; i++) {
+            cout << "Time " << time << "-" 
+                 << (time + timeSlice) 
+                 << "ms: Process P" << curr->data 
+                 << " executing" << endl;
+            time += timeSlice;
+            curr = curr->next;
+        }
+    }
+    
+    ~CircularLinkedList() {
+        if(head == nullptr) return;
+        Node* curr = head->next;
+        while(curr != head) {
+            Node* temp = curr;
+            curr = curr->next;
+            delete temp;
+        }
+        delete head;
+    }
+};
+
+int main() {
+    CircularLinkedList scheduler;
+    
+    for(int i = 1; i <= 4; i++) {
+        scheduler.insert(i);
+    }
+    
+    scheduler.roundRobinSchedule(10);
+    
+    return 0;
+}
+                        </textarea>
+                    </div>
+                    <div class="code-buttons">
+                        <button class="btn btn-primary" onclick="runCode(document.getElementById('code3'), document.getElementById('output3'))">▶ Run Code</button>
+                    </div>
+                    <div class="output-box" id="output3">Click "Run Code" to execute...</div>
+                </div>
+            </section>
+
+            <section class="section">
+                <div class="section-title">✍️ Coding Activities</div>
+
+                <div class="activity">
+                    <div class="activity-title">⚡ Intermediate Challenge: Josephus Problem</div>
+                    <p>Solve classic Josephus problem using circular linked list.</p>
+                    <button class="btn btn-secondary" onclick="downloadCode(\`#include <iostream>
+using namespace std;
+
+// Josephus Problem: n people, every kth eliminated
+// Find survivor using circular linked list
+
+struct Node {
+    int data;
+    Node* next;
+    Node(int val) : data(val), next(nullptr) {}
+};
+
+class Josephus {
+private:
+    Node* head;
+public:
+    Josephus() : head(nullptr) {}
+    void addPerson(int id) { /* add to list */ }
+    int solve(int k) { /* find survivor */ }
+};
+
+int main() {
+    Josephus j;
+    for(int i = 1; i <= 7; i++) {
+        j.addPerson(i);
+    }
+    cout << \"Survivor: \" << j.solve(3) << endl;
+    return 0;
+}\`, 'josephus_problem.cpp')">⬇ Download Skeleton</button>
+                    <button class="collapsible">▼ Show Solution</button>
+                    <div class="collapsible-content">
+                        <div class="code-editor">
+#include <iostream>
+using namespace std;
+
+struct Node {
+    int data;
+    Node* next;
+    Node(int val) : data(val), next(nullptr) {}
+};
+
+class Josephus {
+private:
+    Node* head;
+public:
+    Josephus() : head(nullptr) {}
+    
+    void addPerson(int id) {
+        Node* newNode = new Node(id);
+        if(head == nullptr) {
+            head = newNode;
+            newNode->next = head;
+            return;
+        }
+        Node* curr = head;
+        while(curr->next != head) {
+            curr = curr->next;
+        }
+        curr->next = newNode;
+        newNode->next = head;
+    }
+    
+    int solve(int k) {
+        if(head == nullptr) return -1;
+        
+        Node* curr = head;
+        Node* prev = nullptr;
+        
+        while(curr->next != curr) {
+            for(int i = 0; i < k - 1; i++) {
+                prev = curr;
+                curr = curr->next;
+            }
+            
+            cout << "Eliminating: " << curr->data 
+                 << endl;
+            
+            if(prev != nullptr) {
+                prev->next = curr->next;
+            }
+            Node* temp = curr;
+            curr = curr->next;
+            delete temp;
+        }
+        
+        return curr->data;
+    }
+    
+    ~Josephus() {
+        if(head == nullptr) return;
+        Node* curr = head->next;
+        while(curr != head) {
+            Node* temp = curr;
+            curr = curr->next;
+            delete temp;
+        }
+        delete head;
+    }
+};
+
+int main() {
+    Josephus j;
+    
+    cout << "=== Josephus Problem ===" << endl;
+    cout << "7 people, every 3rd eliminated:" << endl;
+    for(int i = 1; i <= 7; i++) {
+        j.addPerson(i);
+    }
+    
+    int survivor = j.solve(3);
+    cout << "\nSurvivor: Person " 
+         << survivor << endl;
+    
+    return 0;
+}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="activity">
+                    <div class="activity-title">🔥 Advanced Challenge: Music Playlist</div>
+                    <p>Implement circular playlist with next/previous and shuffle.</p>
+                    <button class="btn btn-secondary" onclick="downloadCode(\`#include <iostream>
+#include <string>
+using namespace std;
+
+struct Song {
+    string title;
+    int duration;
+    Song(string t, int d) : title(t), duration(d) {}
+};
+
+struct Node {
+    Song* song;
+    Node* next;
+    Node(Song* s) : song(s), next(nullptr) {}
+};
+
+class Playlist {
+private:
+    Node* head;
+    Node* current;
+public:
+    Playlist() : head(nullptr), current(nullptr) {}
+    
+    // TODO: void addSong(string title, int duration)
+    // TODO: void play()
+    // TODO: void next()
+    // TODO: void previous()
+};
+
+int main() {
+    Playlist playlist;
+    playlist.addSong(\"Song1\", 180);
+    playlist.play();
+    playlist.next();
+    return 0;
+}\`, 'music_playlist.cpp')">⬇ Download Skeleton</button>
+                    <button class="collapsible">▼ Show Solution</button>
+                    <div class="collapsible-content">
+                        <div class="code-editor">
+#include <iostream>
+#include <string>
+using namespace std;
+
+struct Node {
+    string title;
+    int duration;
+    Node* next;
+    Node(string t, int d) 
+        : title(t), duration(d), next(nullptr) {}
+};
+
+class Playlist {
+private:
+    Node* head;
+    Node* current;
+public:
+    Playlist() : head(nullptr), current(nullptr) {}
+    
+    void addSong(string title, int duration) {
+        Node* newNode = new Node(title, duration);
+        if(head == nullptr) {
+            head = newNode;
+            current = head;
+            newNode->next = head;
+            cout << "Added: " << title << endl;
+            return;
+        }
+        Node* temp = head;
+        while(temp->next != head) {
+            temp = temp->next;
+        }
+        temp->next = newNode;
+        newNode->next = head;
+        cout << "Added: " << title << endl;
+    }
+    
+    void play() {
+        if(current == nullptr) return;
+        cout << "Now playing: " << current->title 
+             << " (" << current->duration 
+             << "s)" << endl;
+    }
+    
+    void next() {
+        if(current == nullptr) return;
+        current = current->next;
+        cout << "Next: " << current->title << endl;
+        play();
+    }
+    
+    void previous() {
+        if(current == nullptr) return;
+        if(head == nullptr) return;
+        
+        Node* temp = head;
+        while(temp->next != current) {
+            temp = temp->next;
+        }
+        current = temp;
+        cout << "Previous: " << current->title 
+             << endl;
+        play();
+    }
+    
+    void displayAll() {
+        if(head == nullptr) return;
+        cout << "\nPlaylist:" << endl;
+        Node* temp = head;
+        int i = 1;
+        do {
+            cout << i++ << ". " << temp->title 
+                 << " (" << temp->duration 
+                 << "s)" << endl;
+            temp = temp->next;
+        } while(temp != head);
+    }
+    
+    ~Playlist() {
+        if(head == nullptr) return;
+        Node* curr = head->next;
+        while(curr != head) {
+            Node* temp = curr;
+            curr = curr->next;
+            delete temp;
+        }
+        delete head;
+    }
+};
+
+int main() {
+    Playlist playlist;
+    
+    cout << "=== Building Playlist ===" << endl;
+    playlist.addSong("Bohemian Rhapsody", 354);
+    playlist.addSong("Imagine", 183);
+    playlist.addSong("Hotel California", 391);
+    playlist.addSong("Stairway to Heaven", 482);
+    
+    playlist.displayAll();
+    
+    cout << "\n=== Playing ===" << endl;
+    playlist.play();
+    
+    cout << "\n=== Navigation ===" << endl;
+    playlist.next();
+    playlist.next();
+    playlist.previous();
+    
+    return 0;
+}
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="section">
+                <div class="section-title">📝 Knowledge Check Quiz</div>
+                <div class="quiz-container">
+                    <button class="quiz-btn" onclick="initializeQuiz()">▶ Start Quiz</button>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <footer><p>COS110 OOP Study Website | November 2025</p></footer>
+
+    <script src="../../js/main.js"></script>
+    <script src="../../js/compiler.js"></script>
+    <script src="../../js/quiz.js"></script>
+
+    <script>
+        function initializeQuiz() {
+            const questions = [
+                {type: 'multiple-choice', question: 'Circular list characteristic:', options: ['Has end node', 'Last points to first', 'No pointers', 'Array-based'], correctAnswer: 'B', explanation: 'Last node next points to first node.'},
+                {type: 'true-false', question: 'Circular list has nullptr.', correctAnswer: 'false', explanation: 'No nullptr, forms a circle.'},
+                {type: 'fill-in', question: 'Traversal termination:', context: 'while(<span style="color: red;">_______</span> != head)', hint: 'curr', acceptableAnswers: ['curr', 'current'], explanation: 'Stop when returning to head.'},
+                {type: 'true-false', question: 'Can start from any node.', correctAnswer: 'true', explanation: 'Yes, circle has no special start.'},
+                {type: 'multiple-choice', question: 'Use do-while for:', options: ['Efficiency', 'Correctness', 'Style', 'Required'], correctAnswer: 'B', explanation: 'Do-while ensures processing first node.'},
+                {type: 'true-false', question: 'Need head pointer always.', correctAnswer: 'true', explanation: 'Yes, to identify start for traversal.'},
+                {type: 'fill-in', question: 'When inserting last node:', context: 'newNode->next = <span style="color: red;">_______</span>;', hint: 'head', acceptableAnswers: ['head', 'head '], explanation: 'Last node points back to head.'},
+                {type: 'true-false', question: 'Good for round-robin.', correctAnswer: 'true', explanation: 'Yes, natural cyclic structure.'},
+                {type: 'multiple-choice', question: 'Advantage of circular:', options: ['Access both ends', 'No special cases', 'Better memory', 'Speed'], correctAnswer: 'B', explanation: 'No end pointer needed.'},
+                {type: 'multiple-choice', question: 'Disadvantage:', options: ['Complex', 'Infinite loops', 'More pointers', 'No real issue'], correctAnswer: 'B', explanation: 'Must carefully handle infinite loops.'},
+                {type: 'true-false', question: 'Traversal same as singly.', correctAnswer: 'false', explanation: 'No, must check curr != head.'},
+                {type: 'fill-in', question: 'Initialize circular:', context: 'newNode->next = <span style="color: red;">_______</span>;', hint: 'newNode', acceptableAnswers: ['newNode', 'self'], explanation: 'Single node points to itself.'},
+                {type: 'true-false', question: 'Can insert before easily.', correctAnswer: 'true', explanation: 'Yes, any node accessible.'},
+                {type: 'multiple-choice', question: 'Applications:', options: ['Scheduling', 'Buffering', 'Playlists', 'All'], correctAnswer: 'D', explanation: 'All suited for circular lists.'},
+                {type: 'true-false', question: 'Memory overhead vs singly.', correctAnswer: 'false', explanation: 'Same, no extra pointers.'},
+                {type: 'multiple-choice', question: 'Last node check:', options: ['curr == nullptr', 'curr->next == head', 'curr->prev == nullptr', 'count'], correctAnswer: 'B', explanation: 'Last node next is head.'},
+                {type: 'true-false', question: 'Can reverse circular.', correctAnswer: 'true', explanation: 'Yes, similar to singly.'},
+                {type: 'multiple-choice', question: 'Best loop structure:', options: ['while', 'for', 'do-while', 'depends'], correctAnswer: 'C', explanation: 'Do-while handles first node.'},
+                {type: 'true-false', question: 'Josephus problem perfect fit.', correctAnswer: 'true', explanation: 'Yes, circular elimination.'},
+                {type: 'multiple-choice', question: 'Vs doubly circular:', options: ['Same', 'More pointers', 'Less pointers', 'Different'], correctAnswer: 'B', explanation: 'Doubly circular has prev too.'}
+            ];
+
+            window.quizSystem = new QuizSystem('Circular Linked Lists', questions);
+            openQuizModal();
+        }
+
+        if (!document.getElementById('quizModal')) {
+            const modal = document.createElement('div');
+            modal.id = 'quizModal';
+            modal.className = 'quiz-modal';
+            modal.innerHTML = `<div class="quiz-modal-content"><div class="quiz-header"><div><div class="quiz-question-number">Quiz: Circular Lists</div><div class="quiz-progress">Question 1 of 20</div></div><button class="quiz-close" onclick="closeQuizModal()">✕</button></div><div class="quiz-questions-container"></div></div>`;
+            document.body.appendChild(modal);
+        }
+    </script>
+</body>
+</html>

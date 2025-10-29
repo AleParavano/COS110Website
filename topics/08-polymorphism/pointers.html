@@ -1,0 +1,651 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Polymorphism - Pointers - COS110 OOP Study Website</title>
+    <link rel="stylesheet" href="../../css/style.css">
+</head>
+<body>
+    <nav class="navbar">
+        <a href="../../index.html" class="navbar-brand">📚 COS110 OOP</a>
+        <div class="navbar-search"><input type="text" placeholder="Search topics..."></div>
+    </nav>
+
+    <div class="container">
+        <aside class="sidebar">
+            <div class="sidebar-title">🔄 Polymorphism</div>
+            <a href="../../topics/15-inheritance-virtual.html" class="sidebar-item">Virtual Functions</a>
+            <a href="../../topics/18-polymorphism-pointers.html" class="sidebar-item active">Pointers</a>
+        </aside>
+
+        <main class="main-content">
+            <h1>🎯 Polymorphism - Pointers & References</h1>
+
+            <section class="section">
+                <div class="section-title">📚 Explanation</div>
+                <div class="explanation">
+                    <h3 style="color: var(--primary);">Base Class Pointers</h3>
+                    <p>A pointer to a base class can point to derived class objects. This enables polymorphism - the same pointer type can refer to different derived types. When you call virtual functions through a base pointer, the derived version is called based on the actual object type, not the pointer type.</p>
+
+                    <h3 style="color: var(--primary); margin-top: 20px;">Base Class References</h3>
+                    <p>References work similarly to pointers for polymorphism. A base class reference can refer to derived objects. References have the same effect as pointers but with cleaner syntax (no -> operator). References cannot be null and must be initialized.</p>
+
+                    <h3 style="color: var(--primary); margin-top: 20px;">Type Conversions</h3>
+                    <p>Derived pointers can implicitly convert to base pointers (upcasting). This is safe and always allowed. The reverse (downcasting) requires explicit casting and is potentially unsafe. Use dynamic_cast for safe downcasting with runtime type checking.</p>
+
+                    <h3 style="color: var(--primary); margin-top: 20px;">Dynamic Casting</h3>
+                    <p>dynamic_cast checks type at runtime and returns nullptr for invalid casts. Syntax: Base* b = dynamic_cast<Base*>(derivedPtr). Only works with virtual functions. Allows safe downcasting and polymorphic behavior checking at runtime.</p>
+
+                    <h3 style="color: var(--primary); margin-top: 20px;">Polymorphic Containers</h3>
+                    <p>Store base pointers in collections like vectors to create heterogeneous containers. This lets you store different derived types in the same container and process them polymorphically. Enables powerful generic algorithms and data structures.</p>
+                </div>
+            </section>
+
+            <section class="section">
+                <div class="section-title">💻 Code Examples</div>
+
+                <div class="code-example">
+                    <div class="code-tabs">
+                        <button class="code-tab active" data-tab="simple1">Base Pointers</button>
+                        <button class="code-tab" data-tab="full1">Full Program</button>
+                    </div>
+                    <div data-tab-content="simple1" class="code-editor">
+class Animal {
+public:
+    virtual void speak() = 0;
+    virtual ~Animal() {}
+};
+
+class Dog : public Animal {
+    void speak() override { cout << "Woof!" << endl; }
+};
+
+class Cat : public Animal {
+    void speak() override { cout << "Meow!" << endl; }
+};
+
+Animal* a1 = new Dog();
+Animal* a2 = new Cat();
+a1->speak();  // Calls Dog::speak
+a2->speak();  // Calls Cat::speak
+                    </div>
+                    <div data-tab-content="full1" style="display: none;">
+                        <textarea class="code-editor" id="code1">#include <iostream>
+using namespace std;
+
+class Shape {
+public:
+    virtual void draw() = 0;
+    virtual double area() = 0;
+    virtual ~Shape() {}
+};
+
+class Circle : public Shape {
+private:
+    double radius;
+public:
+    Circle(double r) : radius(r) {}
+    
+    void draw() override {
+        cout << "Drawing Circle" << endl;
+    }
+    
+    double area() override {
+        return 3.14159 * radius * radius;
+    }
+};
+
+class Rectangle : public Shape {
+private:
+    double width, height;
+public:
+    Rectangle(double w, double h) 
+        : width(w), height(h) {}
+    
+    void draw() override {
+        cout << "Drawing Rectangle" << endl;
+    }
+    
+    double area() override {
+        return width * height;
+    }
+};
+
+int main() {
+    Circle c(5);
+    Rectangle r(4, 3);
+    
+    Shape* shapes[2];
+    shapes[0] = &c;
+    shapes[1] = &r;
+    
+    for(int i = 0; i < 2; i++) {
+        shapes[i]->draw();
+        cout << "Area: " << shapes[i]->area() 
+             << endl << endl;
+    }
+    
+    return 0;
+}
+                        </textarea>
+                    </div>
+                    <div class="code-buttons">
+                        <button class="btn btn-primary" onclick="runCode(document.getElementById('code1'), document.getElementById('output1'))">▶ Run Code</button>
+                    </div>
+                    <div class="output-box" id="output1">Click "Run Code" to execute...</div>
+                </div>
+
+                <div class="code-example">
+                    <div class="code-tabs">
+                        <button class="code-tab active" data-tab="simple2">References</button>
+                        <button class="code-tab" data-tab="full2">Full Program</button>
+                    </div>
+                    <div data-tab-content="simple2" class="code-editor">
+class Vehicle {
+public:
+    virtual void accelerate() = 0;
+    virtual ~Vehicle() {}
+};
+
+class Car : public Vehicle {
+    void accelerate() override { 
+        cout << "Car accelerating" << endl; 
+    }
+};
+
+void testVehicle(Vehicle& v) {
+    v.accelerate();  // Polymorphic call
+}
+
+Car c;
+testVehicle(c);  // Pass derived by reference
+                    </div>
+                    <div data-tab-content="full2" style="display: none;">
+                        <textarea class="code-editor" id="code2">#include <iostream>
+using namespace std;
+
+class Employee {
+protected:
+    string name;
+public:
+    Employee(string n) : name(n) {}
+    
+    virtual void work() = 0;
+    virtual double getSalary() = 0;
+    virtual ~Employee() {}
+};
+
+class Manager : public Employee {
+private:
+    double salary;
+public:
+    Manager(string n, double s) 
+        : Employee(n), salary(s) {}
+    
+    void work() override {
+        cout << "Manager " << name 
+             << " managing team" << endl;
+    }
+    
+    double getSalary() override {
+        return salary * 1.2;
+    }
+};
+
+class Developer : public Employee {
+private:
+    double salary;
+public:
+    Developer(string n, double s) 
+        : Employee(n), salary(s) {}
+    
+    void work() override {
+        cout << "Developer " << name 
+             << " coding" << endl;
+    }
+    
+    double getSalary() override {
+        return salary;
+    }
+};
+
+void assignWork(Employee& emp) {
+    emp.work();
+    cout << "Salary: $" << emp.getSalary() << endl;
+}
+
+int main() {
+    Manager m("Alice", 80000);
+    Developer d("Bob", 60000);
+    
+    assignWork(m);
+    cout << endl;
+    assignWork(d);
+    
+    return 0;
+}
+                        </textarea>
+                    </div>
+                    <div class="code-buttons">
+                        <button class="btn btn-primary" onclick="runCode(document.getElementById('code2'), document.getElementById('output2'))">▶ Run Code</button>
+                    </div>
+                    <div class="output-box" id="output2">Click "Run Code" to execute...</div>
+                </div>
+
+                <div class="code-example">
+                    <div class="code-tabs">
+                        <button class="code-tab active" data-tab="simple3">Dynamic Casting</button>
+                        <button class="code-tab" data-tab="full3">Full Program</button>
+                    </div>
+                    <div data-tab-content="simple3" class="code-editor">
+class Animal {
+public:
+    virtual ~Animal() {}
+};
+
+class Dog : public Animal {
+public:
+    void bark() { cout << "Woof!" << endl; }
+};
+
+Animal* a = new Dog();
+Dog* d = dynamic_cast<Dog*>(a);
+
+if(d != nullptr) {
+    d->bark();  // Safe!
+} else {
+    cout << "Not a dog" << endl;
+}
+                    </div>
+                    <div data-tab-content="full3" style="display: none;">
+                        <textarea class="code-editor" id="code3">#include <iostream>
+using namespace std;
+
+class Animal {
+public:
+    virtual ~Animal() {}
+};
+
+class Dog : public Animal {
+public:
+    void bark() { 
+        cout << "Dog barks: Woof!" << endl; 
+    }
+};
+
+class Cat : public Animal {
+public:
+    void meow() { 
+        cout << "Cat meows: Meow!" << endl; 
+    }
+};
+
+void processAnimal(Animal* animal) {
+    Dog* dog = dynamic_cast<Dog*>(animal);
+    if(dog != nullptr) {
+        dog->bark();
+        return;
+    }
+    
+    Cat* cat = dynamic_cast<Cat*>(animal);
+    if(cat != nullptr) {
+        cat->meow();
+        return;
+    }
+    
+    cout << "Unknown animal" << endl;
+}
+
+int main() {
+    Dog d;
+    Cat c;
+    
+    cout << "Processing dog:" << endl;
+    processAnimal(&d);
+    
+    cout << "\nProcessing cat:" << endl;
+    processAnimal(&c);
+    
+    return 0;
+}
+                        </textarea>
+                    </div>
+                    <div class="code-buttons">
+                        <button class="btn btn-primary" onclick="runCode(document.getElementById('code3'), document.getElementById('output3'))">▶ Run Code</button>
+                    </div>
+                    <div class="output-box" id="output3">Click "Run Code" to execute...</div>
+                </div>
+            </section>
+
+            <section class="section">
+                <div class="section-title">✍️ Coding Activities</div>
+
+                <div class="activity">
+                    <div class="activity-title">⚡ Intermediate Challenge: Shape Drawing System</div>
+                    <p>Create polymorphic shape system with vector of pointers and polymorphic drawing.</p>
+                    <button class="btn btn-secondary" onclick="downloadCode(\`#include <iostream>
+#include <vector>
+#include <cmath>
+using namespace std;
+
+class Shape {
+public:
+    virtual void draw() = 0;
+    virtual double getArea() = 0;
+    virtual ~Shape() {}
+};
+
+// TODO: Circle, Rectangle, Triangle classes
+
+int main() {
+    vector<Shape*> shapes;
+    
+    shapes.push_back(new Circle(5));
+    shapes.push_back(new Rectangle(4, 3));
+    
+    for(auto s : shapes) {
+        s->draw();
+        cout << \"Area: \" << s->getArea() << endl;
+        delete s;
+    }
+    
+    return 0;
+}\`, 'shape_system.cpp')">⬇ Download Skeleton</button>
+                    <button class="collapsible">▼ Show Solution</button>
+                    <div class="collapsible-content">
+                        <div class="code-editor">
+#include <iostream>
+#include <vector>
+#include <cmath>
+using namespace std;
+
+class Shape {
+public:
+    virtual void draw() = 0;
+    virtual double getArea() = 0;
+    virtual ~Shape() {}
+};
+
+class Circle : public Shape {
+private:
+    double radius;
+public:
+    Circle(double r) : radius(r) {}
+    
+    void draw() override {
+        cout << "Drawing Circle with radius " 
+             << radius << endl;
+    }
+    
+    double getArea() override {
+        return 3.14159 * radius * radius;
+    }
+};
+
+class Rectangle : public Shape {
+private:
+    double width, height;
+public:
+    Rectangle(double w, double h) 
+        : width(w), height(h) {}
+    
+    void draw() override {
+        cout << "Drawing Rectangle " << width 
+             << "x" << height << endl;
+    }
+    
+    double getArea() override {
+        return width * height;
+    }
+};
+
+class Triangle : public Shape {
+private:
+    double base, height;
+public:
+    Triangle(double b, double h) 
+        : base(b), height(h) {}
+    
+    void draw() override {
+        cout << "Drawing Triangle base=" 
+             << base << " height=" << height << endl;
+    }
+    
+    double getArea() override {
+        return 0.5 * base * height;
+    }
+};
+
+int main() {
+    vector<Shape*> shapes;
+    
+    shapes.push_back(new Circle(5));
+    shapes.push_back(new Rectangle(4, 3));
+    shapes.push_back(new Triangle(6, 4));
+    
+    double totalArea = 0;
+    for(auto s : shapes) {
+        s->draw();
+        double area = s->getArea();
+        cout << "Area: " << area << endl << endl;
+        totalArea += area;
+        delete s;
+    }
+    
+    cout << "Total Area: " << totalArea << endl;
+    
+    return 0;
+}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="activity">
+                    <div class="activity-title">🔥 Advanced Challenge: Game Object Manager</div>
+                    <p>Create GameObject base with dynamic casting, polymorphic container, and type-specific behavior.</p>
+                    <button class="btn btn-secondary" onclick="downloadCode(\`#include <iostream>
+#include <vector>
+using namespace std;
+
+class GameObject {
+protected:
+    string name;
+    int x, y;
+public:
+    GameObject(string n, int px, int py) 
+        : name(n), x(px), y(py) {}
+    
+    virtual void update() = 0;
+    virtual void render() = 0;
+    virtual ~GameObject() {}
+};
+
+// TODO: Player, Enemy, Item classes
+// TODO: GameManager with polymorphic updates
+
+int main() {
+    GameManager gm;
+    gm.addObject(new Player(0, 0));
+    gm.addObject(new Enemy(10, 10));
+    gm.update();
+    return 0;
+}\`, 'game_manager.cpp')">⬇ Download Skeleton</button>
+                    <button class="collapsible">▼ Show Solution</button>
+                    <div class="collapsible-content">
+                        <div class="code-editor">
+#include <iostream>
+#include <vector>
+using namespace std;
+
+class GameObject {
+protected:
+    string name;
+    int x, y;
+public:
+    GameObject(string n, int px, int py) 
+        : name(n), x(px), y(py) {}
+    
+    virtual void update() = 0;
+    virtual void render() = 0;
+    virtual ~GameObject() {}
+};
+
+class Player : public GameObject {
+private:
+    int health;
+public:
+    Player(int px, int py) 
+        : GameObject("Player", px, py), health(100) {}
+    
+    void update() override {
+        cout << "Player updating at (" 
+             << x << "," << y << ")" << endl;
+    }
+    
+    void render() override {
+        cout << "Rendering Player [HP:" 
+             << health << "]" << endl;
+    }
+};
+
+class Enemy : public GameObject {
+private:
+    int damage;
+public:
+    Enemy(int px, int py) 
+        : GameObject("Enemy", px, py), damage(10) {}
+    
+    void update() override {
+        x += 1;
+        cout << "Enemy moving to (" 
+             << x << "," << y << ")" << endl;
+    }
+    
+    void render() override {
+        cout << "Rendering Enemy [DMG:" 
+             << damage << "]" << endl;
+    }
+};
+
+class Item : public GameObject {
+private:
+    int value;
+public:
+    Item(int px, int py) 
+        : GameObject("Item", px, py), value(50) {}
+    
+    void update() override {
+        cout << "Item idle" << endl;
+    }
+    
+    void render() override {
+        cout << "Rendering Item [VALUE:" 
+             << value << "]" << endl;
+    }
+};
+
+class GameManager {
+private:
+    vector<GameObject*> objects;
+public:
+    void addObject(GameObject* obj) {
+        objects.push_back(obj);
+    }
+    
+    void update() {
+        cout << "=== Update Phase ===" << endl;
+        for(auto obj : objects) {
+            obj->update();
+        }
+    }
+    
+    void render() {
+        cout << "\n=== Render Phase ===" << endl;
+        for(auto obj : objects) {
+            obj->render();
+        }
+    }
+    
+    void run() {
+        update();
+        render();
+    }
+    
+    ~GameManager() {
+        for(auto obj : objects) {
+            delete obj;
+        }
+    }
+};
+
+int main() {
+    GameManager gm;
+    
+    gm.addObject(new Player(0, 0));
+    gm.addObject(new Enemy(10, 10));
+    gm.addObject(new Item(5, 5));
+    
+    gm.run();
+    
+    return 0;
+}
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="section">
+                <div class="section-title">📝 Knowledge Check Quiz</div>
+                <div class="quiz-container">
+                    <button class="quiz-btn" onclick="initializeQuiz()">▶ Start Quiz</button>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <footer><p>COS110 OOP Study Website | November 2025</p></footer>
+
+    <script src="../../js/main.js"></script>
+    <script src="../../js/compiler.js"></script>
+    <script src="../../js/quiz.js"></script>
+
+    <script>
+        function initializeQuiz() {
+            const questions = [
+                {type: 'multiple-choice', question: 'Base pointer can point to:', options: ['Base only', 'Derived', 'Both', 'Neither'], correctAnswer: 'C', explanation: 'Base pointers can point to base or derived objects.'},
+                {type: 'true-false', question: 'Virtual call through base pointer uses derived version.', correctAnswer: 'true', explanation: 'Yes, the actual object type determines which method is called.'},
+                {type: 'multiple-choice', question: 'Upcasting (derived to base):', options: ['Needs cast', 'Implicit', 'Dangerous', 'Forbidden'], correctAnswer: 'B', explanation: 'Upcasting is always safe and implicit.'},
+                {type: 'fill-in', question: 'Downcasting syntax:', context: 'Type* ptr = <span style="color: red;">_______</span><Type*>(basePtr);', hint: 'dynamic_cast', acceptableAnswers: ['dynamic_cast', 'dynamic_cast'], explanation: 'Use dynamic_cast for safe downcasting.'},
+                {type: 'true-false', question: 'Dynamic_cast works without virtual functions.', correctAnswer: 'false', explanation: 'Dynamic_cast requires RTTI which requires virtual functions.'},
+                {type: 'multiple-choice', question: 'Failed dynamic_cast returns:', options: ['Exception', 'nullptr', 'Random', 'Undefined'], correctAnswer: 'B', explanation: 'Failed cast returns nullptr for pointer, throws for reference.'},
+                {type: 'true-false', question: 'References enable polymorphism like pointers.', correctAnswer: 'true', explanation: 'Yes, references have same polymorphic behavior as pointers.'},
+                {type: 'multiple-choice', question: 'Base reference to derived:', options: ['Impossible', 'Requires cast', 'Implicit', 'Forbidden'], correctAnswer: 'C', explanation: 'Base references can implicitly refer to derived objects.'},
+                {type: 'true-false', question: 'Can store mixed derived types in base vector.', correctAnswer: 'true', explanation: 'Yes, vector<Base*> can hold different derived types.'},
+                {type: 'fill-in', question: 'Check if downcast succeeded:', context: 'if(<span style="color: red;">_______</span> != nullptr)', hint: 'ptr', acceptableAnswers: ['ptr', 'derivedPtr'], explanation: 'Check for nullptr after dynamic_cast.'},
+                {type: 'multiple-choice', question: 'Polymorphic container advantage:', options: ['Type safety', 'Code reuse', 'Flexibility', 'B and C'], correctAnswer: 'D', explanation: 'Polymorphic containers enable reuse and flexibility.'},
+                {type: 'true-false', question: 'Base pointer syntax: ptr->method().', correctAnswer: 'true', explanation: 'Yes, use arrow operator for pointers.'},
+                {type: 'multiple-choice', question: 'Dynamic_cast purpose:', options: ['Performance', 'Type checking', 'Conversion', 'B and C'], correctAnswer: 'D', explanation: 'Dynamic_cast checks type at runtime for safe conversion.'},
+                {type: 'true-false', question: 'Reference must be initialized.', correctAnswer: 'true', explanation: 'Yes, unlike pointers, references cannot be null.'},
+                {type: 'fill-in', question: 'Base reference syntax:', context: 'Base& ref = <span style="color: red;">_______</span>;', hint: 'derived', acceptableAnswers: ['derivedObj', 'derived object'], explanation: 'Reference is initialized to derived object.'},
+                {type: 'true-false', question: 'Upcasting can fail.', correctAnswer: 'false', explanation: 'Upcasting is always safe and never fails.'},
+                {type: 'multiple-choice', question: 'Downcasting can fail because:', options: ['Type mismatch', 'Wrong pointer', 'Both', 'Neither'], correctAnswer: 'C', explanation: 'Downcast fails if pointer is not actually that type.'},
+                {type: 'true-false', question: 'Polymorphism requires pointers/references.', correctAnswer: 'true', explanation: 'Yes, polymorphism needs indirection for virtual calls.'},
+                {type: 'multiple-choice', question: 'Vector<Base*> contains:', options: ['Only base', 'Mixed derived', 'Both', 'Neither'], correctAnswer: 'C', explanation: 'Base pointer vector can hold any derived types.'},
+                {type: 'true-false', question: 'Dynamic_cast is type-safe conversion.', correctAnswer: 'true', explanation: 'Yes, it checks type at runtime and ensures safety.'}
+            ];
+
+            window.quizSystem = new QuizSystem('Polymorphism - Pointers', questions);
+            openQuizModal();
+        }
+
+        if (!document.getElementById('quizModal')) {
+            const modal = document.createElement('div');
+            modal.id = 'quizModal';
+            modal.className = 'quiz-modal';
+            modal.innerHTML = `<div class="quiz-modal-content"><div class="quiz-header"><div><div class="quiz-question-number">Quiz: Polymorphism Pointers</div><div class="quiz-progress">Question 1 of 20</div></div><button class="quiz-close" onclick="closeQuizModal()">✕</button></div><div class="quiz-questions-container"></div></div>`;
+            document.body.appendChild(modal);
+        }
+    </script>
+</body>
+</html>

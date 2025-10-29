@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Operator Overloading Basics - COS110 OOP Study Website</title>
+    <link rel="stylesheet" href="../../css/style.css">
+</head>
+<body>
+    <nav class="navbar">
+        <a href="../../index.html" class="navbar-brand">📚 COS110 OOP</a>
+        <div class="navbar-search"><input type="text" placeholder="Search topics..."></div>
+    </nav>
+
+    <div class="container">
+        <aside class="sidebar">
+            <div class="sidebar-title">🔀 Operator Overloading</div>
+            <a href="../../topics/08-operator-overloading-basics.html" class="sidebar-item active">Basics</a>
+            <a href="../../topics/09-operator-friends.html" class="sidebar-item">Friends</a>
+            <a href="../../topics/10-operator-references.html" class="sidebar-item">References</a>
+        </aside>
+
+        <main class="main-content">
+            <h1>🔀 Operator Overloading - Basics</h1>
+
+            <section class="section">
+                <div class="section-title">📚 Explanation</div>
+                <div class="explanation">
+                    <h3 style="color: var(--primary);">What is Operator Overloading?</h3>
+                    <p>Operator overloading allows you to redefine how operators work with custom classes. For example, you can make the + operator work with your own class to add two objects. This makes your custom types behave intuitively like built-in types.</p>
+
+                    <h3 style="color: var(--primary); margin-top: 20px;">Unary Operators</h3>
+                    <p>Unary operators work on a single operand. Examples include ++ (increment), -- (decrement), and - (negation). Unary operators as member functions take no parameters (the object itself is the operand).</p>
+
+                    <h3 style="color: var(--primary); margin-top: 20px;">Binary Operators</h3>
+                    <p>Binary operators work on two operands. Examples include + (addition), - (subtraction), * (multiplication), and == (equality). As member functions, binary operators take one parameter (the right operand).</p>
+
+                    <h3 style="color: var(--primary); margin-top: 20px;">Member vs Non-Member Overloading</h3>
+                    <p>Operators can be overloaded as member functions or non-member functions. Member functions have access to the class's private members but the object is always the left operand. Non-member functions (often friends) offer more flexibility.</p>
+
+                    <h3 style="color: var(--primary); margin-top: 20px;">Operators That Cannot Be Overloaded</h3>
+                    <p>Some operators cannot be overloaded: . (dot), .* (pointer to member), :: (scope resolution), ?: (conditional), and sizeof. These are fundamental to C++ syntax.</p>
+                </div>
+            </section>
+
+            <section class="section">
+                <div class="section-title">💻 Code Examples</div>
+
+                <div class="code-example">
+                    <div class="code-tabs">
+                        <button class="code-tab active" data-tab="simple1">Simple Snippet</button>
+                        <button class="code-tab" data-tab="full1">Full Program</button>
+                    </div>
+                    <div data-tab-content="simple1" class="code-editor">
+class Number {
+public:
+    int value;
+    Number(int v = 0) : value(v) {}
+    
+    Number operator+(const Number& other) {
+        return Number(value + other.value);
+    }
+};
+
+Number a(5), b(3);
+Number c = a + b;
+cout << c.value << endl;  // 8
+                    </div>
+                    <div data-tab-content="full1" style="display: none;">
+                        <textarea class="code-editor" id="code1">#include <iostream>
+using namespace std;
+
+class Number {
+public:
+    int value;
+    
+    Number(int v = 0) : value(v) {}
+    
+    Number operator+(const Number& other) {
+        return Number(value + other.value);
+    }
+    
+    Number operator-(const Number& other) {
+        return Number(value - other.value);
+    }
+    
+    void display() {
+        cout << "Number: " << value << endl;
+    }
+};
+
+int main() {
+    Number a(10);
+    Number b(3);
+    
+    Number sum = a + b;
+    Number diff = a - b;
+    
+    cout << "a + b = ";
+    sum.display();
+    
+    cout << "a - b = ";
+    diff.display();
+    
+    return 0;
+}
+                        </textarea>
+                    </div>
+                    <div class="code-buttons">
+                        <button class="btn btn-primary" onclick="runCode(document.getElementById('code1'), document.getElementById('output1'))">▶ Run Code</button>
+                    </div>
+                    <div class="output-box" id="output1">Click "Run Code" to execute...</div>
+                </div>
+
+                <div class="code-example">
+                    <div class="code-tabs">
+                        <button class="code-tab active" data-tab="simple2">Unary Operator</button>
+                        <button class="code-tab" data-tab="full2">Full Program</button>
+                    </div>
+                    <div data-tab-content="simple2" class="code-editor">
+class Counter {
+public:
+    int count;
+    Counter(int c = 0) : count(c) {}
+    
+    Counter operator++() {
+        count++;
+        return *this;
+    }
+    
+    Counter operator--(int) {
+        Counter temp = *this;
+        count--;
+        return temp;
+    }
+};
+                    </div>
+                    <div data-tab-content="full2" style="display: none;">
+                        <textarea class="code-editor" id="code2">#include <iostream>
+using namespace std;
+
+class Counter {
+public:
+    int count;
+    
+    Counter(int c = 0) : count(c) {}
+    
+    Counter& operator++() {
+        ++count;
+        return *this;
+    }
+    
+    Counter operator++(int) {
+        Counter temp = *this;
+        count++;
+        return temp;
+    }
+    
+    void display() {
+        cout << "Count: " << count << endl;
+    }
+};
+
+int main() {
+    Counter c(5);
+    c.display();
+    
+    ++c;
+    cout << "After ++c: ";
+    c.display();
+    
+    Counter c2 = c++;
+    cout << "After c++: ";
+    c.display();
+    cout << "c2: ";
+    c2.display();
+    
+    return 0;
+}
+                        </textarea>
+                    </div>
+                    <div class="code-buttons">
+                        <button class="btn btn-primary" onclick="runCode(document.getElementById('code2'), document.getElementById('output2'))">▶ Run Code</button>
+                    </div>
+                    <div class="output-box" id="output2">Click "Run Code" to execute...</div>
+                </div>
+
+                <div class="code-example">
+                    <div class="code-tabs">
+                        <button class="code-tab active" data-tab="simple3">Comparison Operator</button>
+                        <button class="code-tab" data-tab="full3">Full Program</button>
+                    </div>
+                    <div data-tab-content="simple3" class="code-editor">
+class Point {
+public:
+    int x, y;
+    Point(int px = 0, int py = 0) : x(px), y(py) {}
+    
+    bool operator==(const Point& other) {
+        return (x == other.x && y == other.y);
+    }
+    
+    bool operator<(const Point& other) {
+        return (x*x + y*y) < 
+               (other.x*other.x + other.y*other.y);
+    }
+};
+                    </div>
+                    <div data-tab-content="full3" style="display: none;">
+                        <textarea class="code-editor" id="code3">#include <iostream>
+using namespace std;
+
+class Point {
+public:
+    int x, y;
+    
+    Point(int px = 0, int py = 0) : x(px), y(py) {}
+    
+    bool operator==(const Point& other) {
+        return (x == other.x && y == other.y);
+    }
+    
+    bool operator<(const Point& other) {
+        int dist1 = x*x + y*y;
+        int dist2 = other.x*other.x + other.y*other.y;
+        return dist1 < dist2;
+    }
+    
+    void display() {
+        cout << "(" << x << ", " << y << ")";
+    }
+};
+
+int main() {
+    Point p1(3, 4);
+    Point p2(3, 4);
+    Point p3(1, 1);
+    
+    cout << "p1 ";
+    p1.display();
+    cout << " == p2 ";
+    p2.display();
+    cout << ": " << (p1 == p2) << endl;
+    
+    cout << "p3 < p1: " << (p3 < p1) << endl;
+    
+    return 0;
+}
+                        </textarea>
+                    </div>
+                    <div class="code-buttons">
+                        <button class="btn btn-primary" onclick="runCode(document.getElementById('code3'), document.getElementById('output3'))">▶ Run Code</button>
+                    </div>
+                    <div class="output-box" id="output3">Click "Run Code" to execute...</div>
+                </div>
+            </section>
+
+            <section class="section">
+                <div class="section-title">✍️ Coding Activities</div>
+
+                <div class="activity">
+                    <div class="activity-title">⚡ Intermediate Challenge: Complex Number Operators</div>
+                    <p>Create a Complex class and overload +, -, * for complex number arithmetic.</p>
+                    <button class="btn btn-secondary" onclick="downloadCode(\`#include <iostream>
+using namespace std;
+
+class Complex {
+public:
+    double real, imag;
+    Complex(double r = 0, double i = 0) : real(r), imag(i) {}
+    
+    // TODO: Overload + operator
+    // TODO: Overload - operator
+    // TODO: Overload * operator
+    
+    void display() {
+        cout << real << \" + \" << imag << \"i\" << endl;
+    }
+};
+
+int main() {
+    Complex c1(3, 4);
+    Complex c2(1, 2);
+    Complex sum = c1 + c2;
+    sum.display();
+    return 0;
+}\`, 'complex_operators.cpp')">⬇ Download Skeleton</button>
+                    <button class="collapsible">▼ Show Solution</button>
+                    <div class="collapsible-content">
+                        <div class="code-editor">
+#include <iostream>
+using namespace std;
+
+class Complex {
+public:
+    double real, imag;
+    
+    Complex(double r = 0, double i = 0) 
+        : real(r), imag(i) {}
+    
+    Complex operator+(const Complex& other) {
+        return Complex(real + other.real, 
+                      imag + other.imag);
+    }
+    
+    Complex operator-(const Complex& other) {
+        return Complex(real - other.real, 
+                      imag - other.imag);
+    }
+    
+    Complex operator*(const Complex& other) {
+        return Complex(
+            real*other.real - imag*other.imag,
+            real*other.imag + imag*other.real
+        );
+    }
+    
+    void display() {
+        cout << real << " + " << imag << "i" << endl;
+    }
+};
+
+int main() {
+    Complex c1(3, 4);
+    Complex c2(1, 2);
+    
+    Complex sum = c1 + c2;
+    Complex diff = c1 - c2;
+    Complex prod = c1 * c2;
+    
+    cout << "Sum: ";
+    sum.display();
+    cout << "Diff: ";
+    diff.display();
+    cout << "Product: ";
+    prod.display();
+    
+    return 0;
+}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="activity">
+                    <div class="activity-title">🔥 Advanced Challenge: Vector Class with Operators</div>
+                    <p>Create a Vector class with +=, -=, and [] operators for element access.</p>
+                    <button class="btn btn-secondary" onclick="downloadCode(\`#include <iostream>
+using namespace std;
+
+class Vector {
+private:
+    double* data;
+    int size;
+public:
+    Vector(int s) : size(s) {
+        data = new double[size];
+        for(int i = 0; i < size; i++)
+            data[i] = 0;
+    }
+    
+    // TODO: Overload += operator
+    // TODO: Overload -= operator
+    // TODO: Overload [] operator
+    
+    ~Vector() { delete[] data; }
+};
+
+int main() {
+    Vector v1(3);
+    Vector v2(3);
+    v1[0] = 1; v1[1] = 2; v1[2] = 3;
+    v2 += v1;
+    return 0;
+}\`, 'vector_operators.cpp')">⬇ Download Skeleton</button>
+                    <button class="collapsible">▼ Show Solution</button>
+                    <div class="collapsible-content">
+                        <div class="code-editor">
+#include <iostream>
+using namespace std;
+
+class Vector {
+private:
+    double* data;
+    int size;
+public:
+    Vector(int s) : size(s) {
+        data = new double[size];
+        for(int i = 0; i < size; i++)
+            data[i] = 0;
+    }
+    
+    Vector& operator+=(const Vector& other) {
+        for(int i = 0; i < size; i++)
+            data[i] += other.data[i];
+        return *this;
+    }
+    
+    Vector& operator-=(const Vector& other) {
+        for(int i = 0; i < size; i++)
+            data[i] -= other.data[i];
+        return *this;
+    }
+    
+    double& operator[](int index) {
+        return data[index];
+    }
+    
+    void display() {
+        cout << "[";
+        for(int i = 0; i < size; i++) {
+            cout << data[i];
+            if(i < size-1) cout << ", ";
+        }
+        cout << "]" << endl;
+    }
+    
+    ~Vector() { delete[] data; }
+};
+
+int main() {
+    Vector v1(3);
+    Vector v2(3);
+    
+    v1[0] = 1; v1[1] = 2; v1[2] = 3;
+    v2[0] = 4; v2[1] = 5; v2[2] = 6;
+    
+    cout << "v1: ";
+    v1.display();
+    cout << "v2: ";
+    v2.display();
+    
+    v1 += v2;
+    cout << "After v1 += v2: ";
+    v1.display();
+    
+    return 0;
+}
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="section">
+                <div class="section-title">📝 Knowledge Check Quiz</div>
+                <div class="quiz-container">
+                    <button class="quiz-btn" onclick="initializeQuiz()">▶ Start Quiz</button>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <footer><p>COS110 OOP Study Website | November 2025</p></footer>
+
+    <script src="../../js/main.js"></script>
+    <script src="../../js/compiler.js"></script>
+    <script src="../../js/quiz.js"></script>
+
+    <script>
+        function initializeQuiz() {
+            const questions = [
+                {type: 'multiple-choice', question: 'What is operator overloading?', options: ['Redefining operators for custom types', 'Using multiple operators', 'Loading operators into memory', 'None'], correctAnswer: 'A', explanation: 'Operator overloading allows redefining operators to work with custom classes.'},
+                {type: 'true-false', question: 'All operators can be overloaded.', correctAnswer: 'false', explanation: 'Some operators like :: and . cannot be overloaded.'},
+                {type: 'multiple-choice', question: 'Unary operators have how many operands?', options: ['One', 'Two', 'Three', 'Variable'], correctAnswer: 'A', explanation: 'Unary operators work on a single operand.'},
+                {type: 'multiple-choice', question: 'Binary operators have how many operands?', options: ['One', 'Two', 'Three', 'Variable'], correctAnswer: 'B', explanation: 'Binary operators work on two operands.'},
+                {type: 'fill-in', question: 'Operator overload syntax:', context: 'ReturnType <span style="color: red;">_______</span>(Parameters);', hint: 'keyword operator', acceptableAnswers: ['operator+', 'operator+ ', 'operator'], explanation: 'Use operator keyword followed by operator symbol.'},
+                {type: 'true-false', question: 'Overloaded operators as members take parameters.', correctAnswer: 'true', explanation: 'Yes, they take the right operand(s) as parameters.'},
+                {type: 'multiple-choice', question: 'For binary operator +, as member function takes:', options: ['No parameters', 'One parameter', 'Two parameters', 'Three parameters'], correctAnswer: 'B', explanation: 'One parameter for the right operand; left is *this.'},
+                {type: 'true-false', question: 'Member functions can overload operators.', correctAnswer: 'true', explanation: 'Yes, many operators are best overloaded as members.'},
+                {type: 'multiple-choice', question: 'Which operator cannot be overloaded?', options: ['+', '-', '::', '=='], correctAnswer: 'C', explanation: 'The scope resolution operator :: cannot be overloaded.'},
+                {type: 'fill-in', question: 'Operator++ prefix and postfix differ by:', context: '<span style="color: red;">_______</span> parameter', hint: 'empty int', acceptableAnswers: ['int', 'int ', 'dummy'], explanation: 'Postfix takes a dummy int parameter to distinguish it.'},
+                {type: 'true-false', question: 'operator++ returns same reference for prefix.', correctAnswer: 'true', explanation: 'Prefix returns *this by reference.'},
+                {type: 'multiple-choice', question: 'operator++(int) returns:', options: ['*this', 'Reference to *this', 'Copy of old value', 'Nothing'], correctAnswer: 'C', explanation: 'Postfix returns copy of object before increment.'},
+                {type: 'multiple-choice', question: 'Comparison operators should return:', options: ['int', 'void', 'bool', 'Object'], correctAnswer: 'C', explanation: 'Comparison operators return boolean values.'},
+                {type: 'fill-in', question: 'Member operator parameter is usually:', context: '<span style="color: red;">_______</span> reference', hint: 'const', acceptableAnswers: ['const', 'const '], explanation: 'const reference prevents modification and avoids copying.'},
+                {type: 'true-false', question: 'Prefix ++ is more efficient than postfix.', correctAnswer: 'true', explanation: 'Prefix doesn\'t create a temporary object.'},
+                {type: 'multiple-choice', question: 'Which operator makes sense as friend?', options: ['++', '--', '<<', 'All'], correctAnswer: 'C', explanation: 'Stream operators are typically friends.'},
+                {type: 'true-false', question: 'You can change operator associativity.', correctAnswer: 'false', explanation: 'Associativity is fixed and cannot be changed.'},
+                {type: 'true-false', question: 'You can create new operators.', correctAnswer: 'false', explanation: 'You can only overload existing operators.'},
+                {type: 'multiple-choice', question: 'Compound assignment operators like += typically:', options: ['Return void', 'Return reference to *this', 'Return new object', 'Return bool'], correctAnswer: 'B', explanation: 'Compound assignments return reference for chaining.'},
+                {type: 'true-false', question: 'Operators maintain their precedence when overloaded.', correctAnswer: 'true', explanation: 'Operator precedence cannot be changed.'}
+            ];
+
+            window.quizSystem = new QuizSystem('Operator Overloading Basics', questions);
+            openQuizModal();
+        }
+
+        if (!document.getElementById('quizModal')) {
+            const modal = document.createElement('div');
+            modal.id = 'quizModal';
+            modal.className = 'quiz-modal';
+            modal.innerHTML = `<div class="quiz-modal-content"><div class="quiz-header"><div><div class="quiz-question-number">Quiz: Operator Overloading Basics</div><div class="quiz-progress">Question 1 of 20</div></div><button class="quiz-close" onclick="closeQuizModal()">✕</button></div><div class="quiz-questions-container"></div></div>`;
+            document.body.appendChild(modal);
+        }
+    </script>
+</body>
+</html>

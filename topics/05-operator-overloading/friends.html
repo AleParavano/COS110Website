@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Operator Friends - COS110 OOP Study Website</title>
+    <link rel="stylesheet" href="../../css/style.css">
+</head>
+<body>
+    <nav class="navbar">
+        <a href="../../index.html" class="navbar-brand">📚 COS110 OOP</a>
+        <div class="navbar-search"><input type="text" placeholder="Search topics..."></div>
+    </nav>
+
+    <div class="container">
+        <aside class="sidebar">
+            <div class="sidebar-title">🔀 Operator Overloading</div>
+            <a href="../../topics/08-operator-overloading-basics.html" class="sidebar-item">Basics</a>
+            <a href="../../topics/09-operator-friends.html" class="sidebar-item active">Friends</a>
+            <a href="../../topics/10-operator-references.html" class="sidebar-item">References</a>
+        </aside>
+
+        <main class="main-content">
+            <h1>👥 Operator Overloading - Friends & Stream</h1>
+
+            <section class="section">
+                <div class="section-title">📚 Explanation</div>
+                <div class="explanation">
+                    <h3 style="color: var(--primary);">Friend Functions for Operators</h3>
+                    <p>Some operators are better implemented as friend functions instead of members. This allows both operands to be treated equally and provides more flexibility. Friend functions have access to private members but are not members themselves.</p>
+
+                    <h3 style="color: var(--primary); margin-top: 20px;">Stream Insertion Operator <<</h3>
+                    <p>The << operator outputs data to streams. It must be a friend or non-member function because the left operand is the stream, not your object. Similarly, >> is for input. These are commonly used for convenient printing.</p>
+
+                    <h3 style="color: var(--primary); margin-top: 20px;">Stream Extraction Operator >></h3>
+                    <p>The >> operator inputs data from streams into your objects. Like <<, it must be a friend or non-member function. It typically modifies the object, so it takes a non-const reference.</p>
+
+                    <h3 style="color: var(--primary); margin-top: 20px;">Comparison Operators</h3>
+                    <p>While comparison operators can be members, implementing them as friends sometimes provides cleaner syntax and more flexibility. Operators like <, >, <=, >= work well as friends.</p>
+
+                    <h3 style="color: var(--primary); margin-top: 20px;">Arithmetic Operators as Friends</h3>
+                    <p>Binary arithmetic operators (+, -, *, /) can be implemented as friends. This allows symmetry - both sides can be treated the same way, enabling implicit conversions on both operands.</p>
+                </div>
+            </section>
+
+            <section class="section">
+                <div class="section-title">💻 Code Examples</div>
+
+                <div class="code-example">
+                    <div class="code-tabs">
+                        <button class="code-tab active" data-tab="simple1">Simple Snippet</button>
+                        <button class="code-tab" data-tab="full1">Full Program</button>
+                    </div>
+                    <div data-tab-content="simple1" class="code-editor">
+class Number {
+friend ostream& operator<<(ostream& os, 
+                          const Number& n);
+private:
+    int value;
+public:
+    Number(int v = 0) : value(v) {}
+};
+
+ostream& operator<<(ostream& os, 
+                   const Number& n) {
+    os << "Number: " << n.value;
+    return os;
+}
+
+Number n(42);
+cout << n << endl;
+                    </div>
+                    <div data-tab-content="full1" style="display: none;">
+                        <textarea class="code-editor" id="code1">#include <iostream>
+using namespace std;
+
+class Number {
+private:
+    int value;
+public:
+    Number(int v = 0) : value(v) {}
+    
+    friend ostream& operator<<(ostream& os, 
+                              const Number& n);
+    friend istream& operator>>(istream& is, 
+                              Number& n);
+};
+
+ostream& operator<<(ostream& os, 
+                   const Number& n) {
+    os << "Number: " << n.value;
+    return os;
+}
+
+istream& operator>>(istream& is, Number& n) {
+    is >> n.value;
+    return is;
+}
+
+int main() {
+    Number n1(42);
+    cout << n1 << endl;
+    
+    Number n2;
+    cout << "Enter a number: ";
+    cin >> n2;
+    cout << n2 << endl;
+    
+    return 0;
+}
+                        </textarea>
+                    </div>
+                    <div class="code-buttons">
+                        <button class="btn btn-primary" onclick="runCode(document.getElementById('code1'), document.getElementById('output1'))">▶ Run Code</button>
+                    </div>
+                    <div class="output-box" id="output1">Click "Run Code" to execute...</div>
+                </div>
+
+                <div class="code-example">
+                    <div class="code-tabs">
+                        <button class="code-tab active" data-tab="simple2">Friend Addition</button>
+                        <button class="code-tab" data-tab="full2">Full Program</button>
+                    </div>
+                    <div data-tab-content="simple2" class="code-editor">
+class Complex {
+friend Complex operator+(const Complex& a, 
+                        const Complex& b);
+private:
+    double real, imag;
+public:
+    Complex(double r = 0, double i = 0) 
+        : real(r), imag(i) {}
+};
+
+Complex operator+(const Complex& a, 
+                 const Complex& b) {
+    return Complex(a.real + b.real, 
+                  a.imag + b.imag);
+}
+                    </div>
+                    <div data-tab-content="full2" style="display: none;">
+                        <textarea class="code-editor" id="code2">#include <iostream>
+using namespace std;
+
+class Complex {
+private:
+    double real, imag;
+public:
+    Complex(double r = 0, double i = 0) 
+        : real(r), imag(i) {}
+    
+    friend Complex operator+(const Complex& a, 
+                            const Complex& b);
+    friend ostream& operator<<(ostream& os, 
+                              const Complex& c);
+};
+
+Complex operator+(const Complex& a, 
+                 const Complex& b) {
+    return Complex(a.real + b.real, 
+                  a.imag + b.imag);
+}
+
+ostream& operator<<(ostream& os, 
+                   const Complex& c) {
+    os << c.real << " + " << c.imag << "i";
+    return os;
+}
+
+int main() {
+    Complex c1(3, 4);
+    Complex c2(1, 2);
+    
+    Complex sum = c1 + c2;
+    cout << c1 << " + " << c2 << " = " 
+         << sum << endl;
+    
+    return 0;
+}
+                        </textarea>
+                    </div>
+                    <div class="code-buttons">
+                        <button class="btn btn-primary" onclick="runCode(document.getElementById('code2'), document.getElementById('output2'))">▶ Run Code</button>
+                    </div>
+                    <div class="output-box" id="output2">Click "Run Code" to execute...</div>
+                </div>
+
+                <div class="code-example">
+                    <div class="code-tabs">
+                        <button class="code-tab active" data-tab="simple3">Friend Comparison</button>
+                        <button class="code-tab" data-tab="full3">Full Program</button>
+                    </div>
+                    <div data-tab-content="simple3" class="code-editor">
+class Person {
+friend bool operator==(const Person& a, 
+                      const Person& b);
+friend bool operator<(const Person& a, 
+                     const Person& b);
+private:
+    string name;
+    int age;
+public:
+    Person(string n, int a) : name(n), age(a) {}
+};
+
+bool operator==(const Person& a, 
+               const Person& b) {
+    return a.age == b.age;
+}
+
+bool operator<(const Person& a, 
+              const Person& b) {
+    return a.age < b.age;
+}
+                    </div>
+                    <div data-tab-content="full3" style="display: none;">
+                        <textarea class="code-editor" id="code3">#include <iostream>
+#include <string>
+using namespace std;
+
+class Person {
+private:
+    string name;
+    int age;
+public:
+    Person(string n, int a) : name(n), age(a) {}
+    
+    friend bool operator==(const Person& a, 
+                          const Person& b);
+    friend bool operator<(const Person& a, 
+                         const Person& b);
+    friend ostream& operator<<(ostream& os, 
+                              const Person& p);
+};
+
+bool operator==(const Person& a, 
+               const Person& b) {
+    return a.age == b.age;
+}
+
+bool operator<(const Person& a, 
+              const Person& b) {
+    return a.age < b.age;
+}
+
+ostream& operator<<(ostream& os, 
+                   const Person& p) {
+    os << p.name << " (" << p.age << ")";
+    return os;
+}
+
+int main() {
+    Person p1("Alice", 25);
+    Person p2("Bob", 25);
+    Person p3("Charlie", 30);
+    
+    cout << p1 << " == " << p2 << ": " 
+         << (p1 == p2) << endl;
+    cout << p1 << " < " << p3 << ": " 
+         << (p1 < p3) << endl;
+    
+    return 0;
+}
+                        </textarea>
+                    </div>
+                    <div class="code-buttons">
+                        <button class="btn btn-primary" onclick="runCode(document.getElementById('code3'), document.getElementById('output3'))">▶ Run Code</button>
+                    </div>
+                    <div class="output-box" id="output3">Click "Run Code" to execute...</div>
+                </div>
+            </section>
+
+            <section class="section">
+                <div class="section-title">✍️ Coding Activities</div>
+
+                <div class="activity">
+                    <div class="activity-title">⚡ Intermediate Challenge: Fraction with Friends</div>
+                    <p>Create a Fraction class with friend operators for +, -, == and friend functions for input/output.</p>
+                    <button class="btn btn-secondary" onclick="downloadCode(\`#include <iostream>
+using namespace std;
+
+class Fraction {
+friend Fraction operator+(const Fraction& a, 
+                         const Fraction& b);
+friend bool operator==(const Fraction& a, 
+                      const Fraction& b);
+friend ostream& operator<<(ostream& os, 
+                          const Fraction& f);
+private:
+    int num, den;
+public:
+    Fraction(int n = 0, int d = 1) 
+        : num(n), den(d) {}
+};
+
+// TODO: Implement friend operators
+
+int main() {
+    Fraction f1(1, 2);
+    Fraction f2(1, 3);
+    Fraction f3 = f1 + f2;
+    cout << f3 << endl;
+    return 0;
+}\`, 'fraction_friends.cpp')">⬇ Download Skeleton</button>
+                    <button class="collapsible">▼ Show Solution</button>
+                    <div class="collapsible-content">
+                        <div class="code-editor">
+#include <iostream>
+using namespace std;
+
+class Fraction {
+private:
+    int num, den;
+public:
+    Fraction(int n = 0, int d = 1) 
+        : num(n), den(d) {}
+    
+    friend Fraction operator+(const Fraction& a, 
+                             const Fraction& b);
+    friend bool operator==(const Fraction& a, 
+                          const Fraction& b);
+    friend ostream& operator<<(ostream& os, 
+                              const Fraction& f);
+};
+
+Fraction operator+(const Fraction& a, 
+                  const Fraction& b) {
+    return Fraction(
+        a.num*b.den + b.num*a.den,
+        a.den*b.den
+    );
+}
+
+bool operator==(const Fraction& a, 
+               const Fraction& b) {
+    return a.num*b.den == b.num*a.den;
+}
+
+ostream& operator<<(ostream& os, 
+                   const Fraction& f) {
+    os << f.num << "/" << f.den;
+    return os;
+}
+
+int main() {
+    Fraction f1(1, 2);
+    Fraction f2(1, 3);
+    
+    Fraction sum = f1 + f2;
+    cout << f1 << " + " << f2 << " = " 
+         << sum << endl;
+    
+    cout << f1 << " == " << f2 << ": " 
+         << (f1 == f2) << endl;
+    
+    return 0;
+}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="activity">
+                    <div class="activity-title">🔥 Advanced Challenge: Vector with Stream Operators</div>
+                    <p>Implement a 3D Vector class with friend stream operators, friend addition, and friend dot product.</p>
+                    <button class="btn btn-secondary" onclick="downloadCode(\`#include <iostream>
+using namespace std;
+
+class Vector {
+friend Vector operator+(const Vector& a, 
+                       const Vector& b);
+friend double operator*(const Vector& a, 
+                       const Vector& b);
+friend ostream& operator<<(ostream& os, 
+                          const Vector& v);
+friend istream& operator>>(istream& is, 
+                          Vector& v);
+private:
+    double x, y, z;
+public:
+    Vector(double x = 0, double y = 0, 
+           double z = 0) 
+        : x(x), y(y), z(z) {}
+};
+
+// TODO: Implement all friend operators
+
+int main() {
+    Vector v1(1, 2, 3);
+    Vector v2(4, 5, 6);
+    Vector v3 = v1 + v2;
+    double dot = v1 * v2;
+    cout << v3 << endl;
+    cout << \"Dot: \" << dot << endl;
+    return 0;
+}\`, 'vector_friends.cpp')">⬇ Download Skeleton</button>
+                    <button class="collapsible">▼ Show Solution</button>
+                    <div class="collapsible-content">
+                        <div class="code-editor">
+#include <iostream>
+using namespace std;
+
+class Vector {
+private:
+    double x, y, z;
+public:
+    Vector(double x = 0, double y = 0, 
+           double z = 0) 
+        : x(x), y(y), z(z) {}
+    
+    friend Vector operator+(const Vector& a, 
+                           const Vector& b);
+    friend double operator*(const Vector& a, 
+                           const Vector& b);
+    friend ostream& operator<<(ostream& os, 
+                              const Vector& v);
+};
+
+Vector operator+(const Vector& a, 
+                const Vector& b) {
+    return Vector(a.x + b.x, a.y + b.y, 
+                 a.z + b.z);
+}
+
+double operator*(const Vector& a, 
+                const Vector& b) {
+    return a.x*b.x + a.y*b.y + a.z*b.z;
+}
+
+ostream& operator<<(ostream& os, 
+                   const Vector& v) {
+    os << "(" << v.x << ", " << v.y 
+       << ", " << v.z << ")";
+    return os;
+}
+
+int main() {
+    Vector v1(1, 2, 3);
+    Vector v2(4, 5, 6);
+    
+    Vector sum = v1 + v2;
+    double dot = v1 * v2;
+    
+    cout << v1 << " + " << v2 << " = " 
+         << sum << endl;
+    cout << v1 << " · " << v2 << " = " 
+         << dot << endl;
+    
+    return 0;
+}
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="section">
+                <div class="section-title">📝 Knowledge Check Quiz</div>
+                <div class="quiz-container">
+                    <button class="quiz-btn" onclick="initializeQuiz()">▶ Start Quiz</button>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <footer><p>COS110 OOP Study Website | November 2025</p></footer>
+
+    <script src="../../js/main.js"></script>
+    <script src="../../js/compiler.js"></script>
+    <script src="../../js/quiz.js"></script>
+
+    <script>
+        function initializeQuiz() {
+            const questions = [
+                {type: 'multiple-choice', question: 'Why must << be a friend or non-member?', options: ['No reason', 'Left operand is stream, not object', 'For efficiency', 'For security'], correctAnswer: 'B', explanation: 'Left operand is stream, so it cannot be a member of your class.'},
+                {type: 'true-false', question: 'Stream operators << and >> must be friends.', correctAnswer: 'true', explanation: 'Yes, because the left operand is not your object.'},
+                {type: 'multiple-choice', question: 'operator<< returns:', options: ['void', 'bool', 'reference to stream', 'object'], correctAnswer: 'C', explanation: 'Returns reference to stream for chaining.'},
+                {type: 'fill-in', question: 'operator>> takes non-const reference because:', context: 'it <span style="color: red;">_______</span> the object', hint: 'action', acceptableAnswers: ['modifies', 'changes', 'alters'], explanation: 'It modifies the object being read into.'},
+                {type: 'true-false', question: 'Friend binary operators treat both operands equally.', correctAnswer: 'true', explanation: 'Yes, both operands are parameters.'},
+                {type: 'multiple-choice', question: 'Friend function can access:', options: ['Public only', 'Public and private', 'Private only', 'Nothing'], correctAnswer: 'B', explanation: 'Friend functions have access to public and private members.'},
+                {type: 'true-false', question: 'Friendship is bidirectional.', correctAnswer: 'false', explanation: 'One-way: class grants friendship, not automatic reverse.'},
+                {type: 'multiple-choice', question: 'operator+ as friend takes how many parameters?', options: ['0', '1', '2', '3'], correctAnswer: 'C', explanation: 'Both operands are parameters for friend binary operators.'},
+                {type: 'true-false', question: 'Friend stream operators enable method chaining.', correctAnswer: 'true', explanation: 'Yes, returning stream reference allows chaining.'},
+                {type: 'multiple-choice', question: 'Which is better for symmetric operators?', options: ['Member', 'Friend', 'Static', 'Both same'], correctAnswer: 'B', explanation: 'Friends provide symmetry for binary operators.'},
+                {type: 'fill-in', question: 'Friend operator declared with:', context: '<span style="color: red;">_______</span> className;', hint: 'keyword', acceptableAnswers: ['friend', 'friend '], explanation: 'Use friend keyword inside class definition.'},
+                {type: 'true-false', question: 'Member operators and friend operators can coexist.', correctAnswer: 'true', explanation: 'Yes, they are different overloads.'},
+                {type: 'multiple-choice', question: 'operator>> signature includes:', options: ['const object', 'non-const object', 'const stream', 'nothing'], correctAnswer: 'B', explanation: 'Takes non-const reference to modify the object.'},
+                {type: 'true-false', question: 'Friend functions are class members.', correctAnswer: 'false', explanation: 'Friends are external functions with special access.'},
+                {type: 'multiple-choice', question: 'Comparison operators as friends allow:', options: ['Better syntax', 'Both operands const', 'Symmetry', 'All above'], correctAnswer: 'D', explanation: 'Friends provide all these benefits for comparisons.'},
+                {type: 'true-false', question: 'iostream functions use friend operators.', correctAnswer: 'true', explanation: 'Yes, << and >> are typically friends.'},
+                {type: 'multiple-choice', question: 'Friend arithmetic operators enable:', options: ['Implicit conversion on left', 'Implicit conversion on right', 'Both sides', 'Neither'], correctAnswer: 'C', explanation: 'Friends allow implicit conversions on both operands.'},
+                {type: 'fill-in', question: 'operator<< parameters:', context: 'ostream& <span style="color: red;">_______</span>, const MyClass& obj', hint: 'parameter name', acceptableAnswers: ['os', 'out'], explanation: 'Typically named os or out for output stream.'},
+                {type: 'true-false', question: 'Friend declarations end with semicolon.', correctAnswer: 'true', explanation: 'Yes, like function declarations.'},
+                {type: 'multiple-choice', question: 'Best practice for friend operators:', options: ['Use everywhere', 'Use for symmetric ops', 'Never use', 'Use for complex logic'], correctAnswer: 'B', explanation: 'Use friends for symmetric binary operators.'}
+            ];
+
+            window.quizSystem = new QuizSystem('Operator Friends', questions);
+            openQuizModal();
+        }
+
+        if (!document.getElementById('quizModal')) {
+            const modal = document.createElement('div');
+            modal.id = 'quizModal';
+            modal.className = 'quiz-modal';
+            modal.innerHTML = `<div class="quiz-modal-content"><div class="quiz-header"><div><div class="quiz-question-number">Quiz: Operator Friends</div><div class="quiz-progress">Question 1 of 20</div></div><button class="quiz-close" onclick="closeQuizModal()">✕</button></div><div class="quiz-questions-container"></div></div>`;
+            document.body.appendChild(modal);
+        }
+    </script>
+</body>
+</html>

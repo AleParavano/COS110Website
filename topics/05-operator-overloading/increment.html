@@ -1,0 +1,601 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Operator Increment/Decrement - COS110 OOP Study Website</title>
+    <link rel="stylesheet" href="../../css/style.css">
+</head>
+<body>
+    <nav class="navbar">
+        <a href="../../index.html" class="navbar-brand">📚 COS110 OOP</a>
+        <div class="navbar-search"><input type="text" placeholder="Search topics..."></div>
+    </nav>
+
+    <div class="container">
+        <aside class="sidebar">
+            <div class="sidebar-title">🔀 Operator Overloading</div>
+            <a href="../../topics/10-operator-references.html" class="sidebar-item">References</a>
+            <a href="../../topics/11-operator-increment.html" class="sidebar-item active">Increment/Decrement</a>
+        </aside>
+
+        <main class="main-content">
+            <h1>➕➖ Operator Overloading - Increment/Decrement</h1>
+
+            <section class="section">
+                <div class="section-title">📚 Explanation</div>
+                <div class="explanation">
+                    <h3 style="color: var(--primary);">Prefix vs Postfix Operators</h3>
+                    <p>C++ has two forms of increment and decrement: prefix (++i, --i) and postfix (i++, i--). They look the same but behave differently. Prefix returns a reference to the modified object. Postfix returns a copy of the original value.</p>
+
+                    <h3 style="color: var(--primary); margin-top: 20px;">Prefix Operator (++i)</h3>
+                    <p>Prefix increment modifies the object and returns a reference to it. The syntax is: Type& operator++() { ++member; return *this; }. This is more efficient than postfix because it doesn't create a temporary copy.</p>
+
+                    <h3 style="color: var(--primary); margin-top: 20px;">Postfix Operator (i++)</h3>
+                    <p>Postfix increment modifies the object but returns a copy of the original value. The syntax uses a dummy int parameter: Type operator++(int) { Type temp = *this; ++member; return temp; }. The int parameter distinguishes it from prefix.</p>
+
+                    <h3 style="color: var(--primary); margin-top: 20px;">Efficiency Considerations</h3>
+                    <p>Prefix is generally more efficient because it doesn't create a temporary object. In performance-critical code, prefer prefix operators. In loops with iterators, using ++i instead of i++ can be noticeable.</p>
+
+                    <h3 style="color: var(--primary); margin-top: 20px;">Combining with Other Operators</h3>
+                    <p>Increment and decrement operators can be combined with other operators and operations. Understanding their behavior is crucial for writing correct code, especially in complex expressions.</p>
+                </div>
+            </section>
+
+            <section class="section">
+                <div class="section-title">💻 Code Examples</div>
+
+                <div class="code-example">
+                    <div class="code-tabs">
+                        <button class="code-tab active" data-tab="simple1">Prefix vs Postfix</button>
+                        <button class="code-tab" data-tab="full1">Full Program</button>
+                    </div>
+                    <div data-tab-content="simple1" class="code-editor">
+class Counter {
+private:
+    int value;
+public:
+    Counter(int v = 0) : value(v) {}
+    
+    Counter& operator++() {  // Prefix
+        ++value;
+        return *this;
+    }
+    
+    Counter operator++(int) {  // Postfix
+        Counter temp = *this;
+        ++value;
+        return temp;
+    }
+};
+
+Counter c(5);
+Counter c2 = ++c;  // c2 = 6, c = 6
+Counter c3 = c++;  // c3 = 6, c = 7
+                    </div>
+                    <div data-tab-content="full1" style="display: none;">
+                        <textarea class="code-editor" id="code1">#include <iostream>
+using namespace std;
+
+class Counter {
+private:
+    int value;
+public:
+    Counter(int v = 0) : value(v) {}
+    
+    Counter& operator++() {
+        ++value;
+        cout << "Prefix: ";
+        return *this;
+    }
+    
+    Counter operator++(int) {
+        Counter temp = *this;
+        ++value;
+        cout << "Postfix: ";
+        return temp;
+    }
+    
+    Counter& operator--() {
+        --value;
+        cout << "Prefix: ";
+        return *this;
+    }
+    
+    Counter operator--(int) {
+        Counter temp = *this;
+        --value;
+        cout << "Postfix: ";
+        return temp;
+    }
+    
+    void display() const {
+        cout << "Value = " << value << endl;
+    }
+};
+
+int main() {
+    Counter c(5);
+    
+    cout << "Initial: ";
+    c.display();
+    
+    ++c;
+    c.display();
+    
+    c++;
+    c.display();
+    
+    --c;
+    c.display();
+    
+    c--;
+    c.display();
+    
+    return 0;
+}
+                        </textarea>
+                    </div>
+                    <div class="code-buttons">
+                        <button class="btn btn-primary" onclick="runCode(document.getElementById('code1'), document.getElementById('output1'))">▶ Run Code</button>
+                    </div>
+                    <div class="output-box" id="output1">Click "Run Code" to execute...</div>
+                </div>
+
+                <div class="code-example">
+                    <div class="code-tabs">
+                        <button class="code-tab active" data-tab="simple2">Iterator Pattern</button>
+                        <button class="code-tab" data-tab="full2">Full Program</button>
+                    </div>
+                    <div data-tab-content="simple2" class="code-editor">
+class Iterator {
+private:
+    int* ptr;
+public:
+    Iterator(int* p) : ptr(p) {}
+    
+    int& operator*() { return *ptr; }
+    
+    Iterator& operator++() {
+        ++ptr;
+        return *this;
+    }
+    
+    Iterator operator++(int) {
+        Iterator temp = *this;
+        ++ptr;
+        return temp;
+    }
+};
+
+int arr[] = {10, 20, 30};
+Iterator it(arr);
+cout << *it++ << endl;   // 10
+cout << *it << endl;     // 20
+                    </div>
+                    <div data-tab-content="full2" style="display: none;">
+                        <textarea class="code-editor" id="code2">#include <iostream>
+using namespace std;
+
+class SimpleIterator {
+private:
+    int* ptr;
+    int* end;
+public:
+    SimpleIterator(int* p, int* e) 
+        : ptr(p), end(e) {}
+    
+    int& operator*() { return *ptr; }
+    
+    SimpleIterator& operator++() {
+        ++ptr;
+        return *this;
+    }
+    
+    SimpleIterator operator++(int) {
+        SimpleIterator temp = *this;
+        ++ptr;
+        return temp;
+    }
+    
+    bool isValid() { return ptr < end; }
+};
+
+int main() {
+    int arr[] = {10, 20, 30, 40, 50};
+    int size = 5;
+    
+    SimpleIterator it(arr, arr + size);
+    
+    cout << "Iterating:" << endl;
+    while(it.isValid()) {
+        cout << *it++ << " ";
+    }
+    cout << endl;
+    
+    return 0;
+}
+                        </textarea>
+                    </div>
+                    <div class="code-buttons">
+                        <button class="btn btn-primary" onclick="runCode(document.getElementById('code2'), document.getElementById('output2'))">▶ Run Code</button>
+                    </div>
+                    <div class="output-box" id="output2">Click "Run Code" to execute...</div>
+                </div>
+
+                <div class="code-example">
+                    <div class="code-tabs">
+                        <button class="code-tab active" data-tab="simple3">Efficiency Comparison</button>
+                        <button class="code-tab" data-tab="full3">Full Program</button>
+                    </div>
+                    <div data-tab-content="simple3" class="code-editor">
+class Value {
+private:
+    int val;
+public:
+    Value(int v = 0) : val(v) {}
+    
+    Value& operator++() {
+        ++val;
+        return *this;
+    }
+    
+    Value operator++(int) {
+        Value temp = *this;
+        ++val;
+        return temp;
+    }
+};
+
+// Prefix more efficient in loop
+for(int i = 0; i < 1000000; i++) {
+    Value v;
+    ++v;  // Preferred
+}
+
+// Postfix creates temporary
+for(int i = 0; i < 1000000; i++) {
+    Value v;
+    v++;  // Less efficient
+}
+                    </div>
+                    <div data-tab-content="full3" style="display: none;">
+                        <textarea class="code-editor" id="code3">#include <iostream>
+#include <chrono>
+using namespace std;
+
+class Value {
+private:
+    int val;
+public:
+    Value(int v = 0) : val(v) {}
+    
+    Value& operator++() {
+        ++val;
+        return *this;
+    }
+    
+    Value operator++(int) {
+        Value temp = *this;
+        ++val;
+        return temp;
+    }
+};
+
+int main() {
+    const int ITERATIONS = 100000;
+    Value v;
+    
+    auto start = chrono::high_resolution_clock::now();
+    for(int i = 0; i < ITERATIONS; i++) {
+        ++v;
+    }
+    auto end = chrono::high_resolution_clock::now();
+    auto duration1 = chrono::duration_cast
+        <chrono::microseconds>(end - start);
+    
+    start = chrono::high_resolution_clock::now();
+    for(int i = 0; i < ITERATIONS; i++) {
+        v++;
+    }
+    end = chrono::high_resolution_clock::now();
+    auto duration2 = chrono::duration_cast
+        <chrono::microseconds>(end - start);
+    
+    cout << "Prefix++: " << duration1.count() 
+         << " microseconds" << endl;
+    cout << "Postfix++: " << duration2.count() 
+         << " microseconds" << endl;
+    
+    return 0;
+}
+                        </textarea>
+                    </div>
+                    <div class="code-buttons">
+                        <button class="btn btn-primary" onclick="runCode(document.getElementById('code3'), document.getElementById('output3'))">▶ Run Code</button>
+                    </div>
+                    <div class="output-box" id="output3">Click "Run Code" to execute...</div>
+                </div>
+            </section>
+
+            <section class="section">
+                <div class="section-title">✍️ Coding Activities</div>
+
+                <div class="activity">
+                    <div class="activity-title">⚡ Intermediate Challenge: Date Class with Operators</div>
+                    <p>Create a Date class with ++ and -- operators for incrementing/decrementing days.</p>
+                    <button class="btn btn-secondary" onclick="downloadCode(\`#include <iostream>
+using namespace std;
+
+class Date {
+private:
+    int day, month, year;
+public:
+    Date(int d = 1, int m = 1, int y = 2025) 
+        : day(d), month(m), year(y) {}
+    
+    // TODO: Prefix increment (next day)
+    // TODO: Postfix increment
+    // TODO: Prefix decrement (previous day)
+    // TODO: Postfix decrement
+    
+    void display() {
+        cout << day << \"/\" << month << \"/\" 
+             << year << endl;
+    }
+};
+
+int main() {
+    Date d(25, 12, 2024);
+    d.display();
+    ++d;
+    d.display();
+    d++;
+    d.display();
+    return 0;
+}\`, 'date_operators.cpp')">⬇ Download Skeleton</button>
+                    <button class="collapsible">▼ Show Solution</button>
+                    <div class="collapsible-content">
+                        <div class="code-editor">
+#include <iostream>
+using namespace std;
+
+class Date {
+private:
+    int day, month, year;
+    
+    bool isLeapYear(int y) {
+        return (y % 4 == 0 && y % 100 != 0) 
+               || (y % 400 == 0);
+    }
+    
+    int daysInMonth(int m, int y) {
+        if(m == 2) return isLeapYear(y) ? 29 : 28;
+        if(m == 4 || m == 6 || m == 9 || m == 11) 
+            return 30;
+        return 31;
+    }
+public:
+    Date(int d = 1, int m = 1, int y = 2025) 
+        : day(d), month(m), year(y) {}
+    
+    Date& operator++() {
+        day++;
+        if(day > daysInMonth(month, year)) {
+            day = 1;
+            month++;
+            if(month > 12) {
+                month = 1;
+                year++;
+            }
+        }
+        return *this;
+    }
+    
+    Date operator++(int) {
+        Date temp = *this;
+        ++(*this);
+        return temp;
+    }
+    
+    Date& operator--() {
+        day--;
+        if(day < 1) {
+            month--;
+            if(month < 1) {
+                month = 12;
+                year--;
+            }
+            day = daysInMonth(month, year);
+        }
+        return *this;
+    }
+    
+    Date operator--(int) {
+        Date temp = *this;
+        --(*this);
+        return temp;
+    }
+    
+    void display() {
+        cout << day << "/" << month << "/" 
+             << year << endl;
+    }
+};
+
+int main() {
+    Date d(25, 12, 2024);
+    cout << "Initial: ";
+    d.display();
+    
+    ++d;
+    cout << "After ++d: ";
+    d.display();
+    
+    Date d2 = d++;
+    cout << "After d++: ";
+    d.display();
+    
+    --d;
+    cout << "After --d: ";
+    d.display();
+    
+    return 0;
+}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="activity">
+                    <div class="activity-title">🔥 Advanced Challenge: Smart Pointer with Operators</div>
+                    <p>Create a simple SmartPointer class with ++ and -- for pointer arithmetic, and proper increment/decrement implementation.</p>
+                    <button class="btn btn-secondary" onclick="downloadCode(\`#include <iostream>
+using namespace std;
+
+template<typename T>
+class SmartPointer {
+private:
+    T* ptr;
+public:
+    SmartPointer(T* p) : ptr(p) {}
+    
+    T& operator*() { return *ptr; }
+    T* operator->() { return ptr; }
+    
+    // TODO: Prefix ++ (move to next element)
+    // TODO: Postfix ++ 
+    // TODO: Prefix -- (move to prev element)
+    // TODO: Postfix --
+    
+    ~SmartPointer() { delete[] ptr; }
+};
+
+int main() {
+    int* arr = new int[5]{10, 20, 30, 40, 50};
+    SmartPointer<int> ptr(arr);
+    
+    cout << *ptr << endl;
+    ++ptr;
+    cout << *ptr << endl;
+    
+    delete[] arr;
+    return 0;
+}\`, 'smart_pointer.cpp')">⬇ Download Skeleton</button>
+                    <button class="collapsible">▼ Show Solution</button>
+                    <div class="collapsible-content">
+                        <div class="code-editor">
+#include <iostream>
+using namespace std;
+
+template<typename T>
+class SmartPointer {
+private:
+    T* ptr;
+public:
+    SmartPointer(T* p) : ptr(p) {}
+    
+    T& operator*() { return *ptr; }
+    T* operator->() { return ptr; }
+    
+    SmartPointer& operator++() {
+        ++ptr;
+        return *this;
+    }
+    
+    SmartPointer operator++(int) {
+        SmartPointer temp = *this;
+        ++ptr;
+        return temp;
+    }
+    
+    SmartPointer& operator--() {
+        --ptr;
+        return *this;
+    }
+    
+    SmartPointer operator--(int) {
+        SmartPointer temp = *this;
+        --ptr;
+        return temp;
+    }
+};
+
+int main() {
+    int arr[] = {10, 20, 30, 40, 50};
+    SmartPointer<int> ptr(arr);
+    
+    cout << "Initial: " << *ptr << endl;
+    
+    ++ptr;
+    cout << "After ++ptr: " << *ptr << endl;
+    
+    ptr++;
+    cout << "After ptr++: " << *ptr << endl;
+    
+    --ptr;
+    cout << "After --ptr: " << *ptr << endl;
+    
+    ptr--;
+    cout << "After ptr--: " << *ptr << endl;
+    
+    return 0;
+}
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="section">
+                <div class="section-title">📝 Knowledge Check Quiz</div>
+                <div class="quiz-container">
+                    <button class="quiz-btn" onclick="initializeQuiz()">▶ Start Quiz</button>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <footer><p>COS110 OOP Study Website | November 2025</p></footer>
+
+    <script src="../../js/main.js"></script>
+    <script src="../../js/compiler.js"></script>
+    <script src="../../js/quiz.js"></script>
+
+    <script>
+        function initializeQuiz() {
+            const questions = [
+                {type: 'multiple-choice', question: 'What is the key difference between ++i and i++?', options: ['No difference', 'Return value', 'Efficiency', 'Both B and C'], correctAnswer: 'D', explanation: 'Prefix returns reference, postfix returns copy; postfix less efficient.'},
+                {type: 'true-false', question: 'Postfix operator creates a temporary object.', correctAnswer: 'true', explanation: 'Yes, to return the original value before modification.'},
+                {type: 'multiple-choice', question: 'Prefix operator returns:', options: ['void', 'value', 'reference to *this', 'copy'], correctAnswer: 'C', explanation: 'Prefix returns reference for efficiency and chaining.'},
+                {type: 'fill-in', question: 'Postfix operator parameter:', context: 'Type operator++(int), where int is <span style="color: red;">_______</span>', hint: 'dummy', acceptableAnswers: ['dummy', 'dummy parameter', 'unused'], explanation: 'The int parameter is unused; it distinguishes postfix from prefix.'},
+                {type: 'true-false', question: '++i is always more efficient than i++.', correctAnswer: 'true', explanation: 'Prefix avoids creating temporary, so it is faster.'},
+                {type: 'multiple-choice', question: 'In loops, which is preferred?', options: ['i++', '++i', 'Same', 'Depends'], correctAnswer: 'B', explanation: 'Always use ++i in loops for better performance.'},
+                {type: 'multiple-choice', question: 'Prefix operator cannot be:', options: ['Member function', 'Friend', 'Const', 'Static'], correctAnswer: 'B', explanation: 'Prefix must be member because it modifies and returns *this.'},
+                {type: 'true-false', question: 'i++ can be used in an expression like cout << i++.', correctAnswer: 'true', explanation: 'Yes, postfix returns the old value for use in expressions.'},
+                {type: 'fill-in', question: 'Postfix returns a <span style="color: red;">_______</span> of the object', hint: 'copy', acceptableAnswers: ['copy', 'temporary', 'clone'], explanation: 'Postfix returns a copy so you get the original value.'},
+                {type: 'multiple-choice', question: 'Why prefer prefix in for loops?', options: ['Readability', 'Efficiency', 'Syntax', 'None'], correctAnswer: 'B', explanation: 'Postfix creates unnecessary temporary objects.'},
+                {type: 'true-false', question: 'Decrement operators work similarly to increment.', correctAnswer: 'true', explanation: 'Yes, --i and i-- follow the same patterns.'},
+                {type: 'multiple-choice', question: 'Iterator++ likely uses:', options: ['Prefix only', 'Postfix only', 'Both', 'Neither'], correctAnswer: 'C', explanation: 'Both forms can be implemented for iterators.'},
+                {type: 'fill-in', question: 'Prefix++: Type& operator++()', context: 'Implementation hint: <span style="color: red;">_______</span>member; return *this;', hint: 'increment', acceptableAnswers: ['++', '++member'], explanation: 'Increment the member and return reference to self.'},
+                {type: 'true-false', question: 'Postfix operator is defined with a dummy int.', correctAnswer: 'true', explanation: 'Yes, operator++(int) distinguishes postfix from prefix.'},
+                {type: 'multiple-choice', question: 'Return type of postfix operator:', options: ['reference', 'pointer', 'value', 'void'], correctAnswer: 'C', explanation: 'Postfix returns by value (copy).'},
+                {type: 'true-false', question: 'You can chain postfix operators: a++ ++ is valid.', correctAnswer: 'false', explanation: 'Postfix returns a temporary rvalue; cannot chain.'},
+                {type: 'multiple-choice', question: 'You can chain prefix operators: ++(++a) is valid.', options: ['No', 'Yes', 'Sometimes', 'Never'], correctAnswer: 'B', explanation: 'Prefix returns reference, so chaining works.'},
+                {type: 'fill-in', question: 'In expression: int x = arr[i++], i is incremented <span style="color: red;">_______</span> it is used', hint: 'after', acceptableAnswers: ['after', 'after it is', 'after being'], explanation: 'Postfix increments after using the original value.'},
+                {type: 'true-false', question: 'Prefix and postfix have same precedence.', correctAnswer: 'true', explanation: 'Yes, they have equal precedence and right-to-left associativity.'},
+                {type: 'multiple-choice', question: 'Best practice for custom operators:', options: ['Use postfix always', 'Use prefix in loops', 'Use both identically', 'Never implement both'], correctAnswer: 'B', explanation: 'Implement both, but use prefix in performance-critical code.'}
+            ];
+
+            window.quizSystem = new QuizSystem('Operator Increment/Decrement', questions);
+            openQuizModal();
+        }
+
+        if (!document.getElementById('quizModal')) {
+            const modal = document.createElement('div');
+            modal.id = 'quizModal';
+            modal.className = 'quiz-modal';
+            modal.innerHTML = `<div class="quiz-modal-content"><div class="quiz-header"><div><div class="quiz-question-number">Quiz: Operator Increment/Decrement</div><div class="quiz-progress">Question 1 of 20</div></div><button class="quiz-close" onclick="closeQuizModal()">✕</button></div><div class="quiz-questions-container"></div></div>`;
+            document.body.appendChild(modal);
+        }
+    </script>
+</body>
+</html>

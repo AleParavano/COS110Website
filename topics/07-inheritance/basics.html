@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inheritance Basics - COS110 OOP Study Website</title>
+    <link rel="stylesheet" href="../../css/style.css">
+</head>
+<body>
+    <nav class="navbar">
+        <a href="../../index.html" class="navbar-brand">📚 COS110 OOP</a>
+        <div class="navbar-search"><input type="text" placeholder="Search topics..."></div>
+    </nav>
+
+    <div class="container">
+        <aside class="sidebar">
+            <div class="sidebar-title">🌳 Inheritance</div>
+            <a href="../../topics/14-inheritance-basics.html" class="sidebar-item active">Basics</a>
+            <a href="../../topics/15-inheritance-virtual.html" class="sidebar-item">Virtual Functions</a>
+        </aside>
+
+        <main class="main-content">
+            <h1>🌳 Inheritance - Basics</h1>
+
+            <section class="section">
+                <div class="section-title">📚 Explanation</div>
+                <div class="explanation">
+                    <h3 style="color: var(--primary);">What is Inheritance?</h3>
+                    <p>Inheritance allows a derived (child) class to inherit properties and methods from a base (parent) class. This promotes code reuse and establishes relationships between classes. The derived class can add new functionality and override inherited methods.</p>
+
+                    <h3 style="color: var(--primary); margin-top: 20px;">Base and Derived Classes</h3>
+                    <p>The base class defines common functionality. The derived class inherits from the base and adds specialization. Syntax: class Derived : public Base { }. The public keyword specifies the inheritance type.</p>
+
+                    <h3 style="color: var(--primary); margin-top: 20px;">Access Control in Inheritance</h3>
+                    <p>public inheritance: public members stay public, protected stay protected. private inheritance: all members become private. protected inheritance: public becomes protected. Most common is public inheritance.</p>
+
+                    <h3 style="color: var(--primary); margin-top: 20px;">Constructor and Destructor Chain</h3>
+                    <p>When a derived object is created, the base constructor runs first, then the derived constructor. When destroyed, the derived destructor runs first, then the base destructor. This ensures proper initialization and cleanup order.</p>
+
+                    <h3 style="color: var(--primary); margin-top: 20px;">Method Overriding</h3>
+                    <p>Override inherited methods by defining them in the derived class with the same signature. Without virtual, this hides the base method. With virtual, true polymorphic behavior occurs. Use override keyword to indicate intent.</p>
+                </div>
+            </section>
+
+            <section class="section">
+                <div class="section-title">💻 Code Examples</div>
+
+                <div class="code-example">
+                    <div class="code-tabs">
+                        <button class="code-tab active" data-tab="simple1">Basic Inheritance</button>
+                        <button class="code-tab" data-tab="full1">Full Program</button>
+                    </div>
+                    <div data-tab-content="simple1" class="code-editor">
+class Animal {
+protected:
+    string name;
+public:
+    Animal(string n) : name(n) {}
+    void speak() {
+        cout << name << " makes sound" << endl;
+    }
+};
+
+class Dog : public Animal {
+public:
+    Dog(string n) : Animal(n) {}
+    void speak() {
+        cout << name << " barks" << endl;
+    }
+};
+
+Dog d("Rex");
+d.speak();  // Rex barks
+                    </div>
+                    <div data-tab-content="full1" style="display: none;">
+                        <textarea class="code-editor" id="code1">#include <iostream>
+#include <string>
+using namespace std;
+
+class Animal {
+protected:
+    string name;
+    int age;
+public:
+    Animal(string n, int a) 
+        : name(n), age(a) {}
+    
+    void display() {
+        cout << "Name: " << name 
+             << ", Age: " << age << endl;
+    }
+    
+    void speak() {
+        cout << name << " makes a sound" << endl;
+    }
+};
+
+class Dog : public Animal {
+private:
+    string breed;
+public:
+    Dog(string n, int a, string b) 
+        : Animal(n, a), breed(b) {}
+    
+    void speak() {
+        cout << name << " barks!" << endl;
+    }
+    
+    void displayBreed() {
+        cout << "Breed: " << breed << endl;
+    }
+};
+
+int main() {
+    Dog d("Rex", 5, "Labrador");
+    d.display();
+    d.speak();
+    d.displayBreed();
+    return 0;
+}
+                        </textarea>
+                    </div>
+                    <div class="code-buttons">
+                        <button class="btn btn-primary" onclick="runCode(document.getElementById('code1'), document.getElementById('output1'))">▶ Run Code</button>
+                    </div>
+                    <div class="output-box" id="output1">Click "Run Code" to execute...</div>
+                </div>
+
+                <div class="code-example">
+                    <div class="code-tabs">
+                        <button class="code-tab active" data-tab="simple2">Constructor Chain</button>
+                        <button class="code-tab" data-tab="full2">Full Program</button>
+                    </div>
+                    <div data-tab-content="simple2" class="code-editor">
+class Base {
+public:
+    Base() { cout << "Base constructor" << endl; }
+    ~Base() { cout << "Base destructor" << endl; }
+};
+
+class Derived : public Base {
+public:
+    Derived() { cout << "Derived constructor" << endl; }
+    ~Derived() { cout << "Derived destructor" << endl; }
+};
+
+Derived d;
+// Output: Base -> Derived -> Derived -> Base
+                    </div>
+                    <div data-tab-content="full2" style="display: none;">
+                        <textarea class="code-editor" id="code2">#include <iostream>
+using namespace std;
+
+class Vehicle {
+protected:
+    string type;
+public:
+    Vehicle(string t) : type(t) {
+        cout << "Vehicle created: " << type << endl;
+    }
+    
+    ~Vehicle() {
+        cout << "Vehicle destroyed" << endl;
+    }
+};
+
+class Car : public Vehicle {
+private:
+    int doors;
+public:
+    Car(string t, int d) 
+        : Vehicle(t), doors(d) {
+        cout << "Car created with " << doors 
+             << " doors" << endl;
+    }
+    
+    ~Car() {
+        cout << "Car destroyed" << endl;
+    }
+};
+
+int main() {
+    cout << "Creating Car:" << endl;
+    {
+        Car c("Sedan", 4);
+    }
+    cout << "Car destroyed" << endl;
+    return 0;
+}
+                        </textarea>
+                    </div>
+                    <div class="code-buttons">
+                        <button class="btn btn-primary" onclick="runCode(document.getElementById('code2'), document.getElementById('output2'))">▶ Run Code</button>
+                    </div>
+                    <div class="output-box" id="output2">Click "Run Code" to execute...</div>
+                </div>
+
+                <div class="code-example">
+                    <div class="code-tabs">
+                        <button class="code-tab active" data-tab="simple3">Multi-level Inheritance</button>
+                        <button class="code-tab" data-tab="full3">Full Program</button>
+                    </div>
+                    <div data-tab-content="simple3" class="code-editor">
+class Animal { /* ... */ };
+class Mammal : public Animal { /* ... */ };
+class Dog : public Mammal { /* ... */ };
+
+Dog d;  // Inherits from Mammal and Animal
+                    </div>
+                    <div data-tab-content="full3" style="display: none;">
+                        <textarea class="code-editor" id="code3">#include <iostream>
+#include <string>
+using namespace std;
+
+class LivingThing {
+protected:
+    bool isAlive;
+public:
+    LivingThing() : isAlive(true) {
+        cout << "LivingThing created" << endl;
+    }
+};
+
+class Animal : public LivingThing {
+protected:
+    string diet;
+public:
+    Animal(string d) : LivingThing(), diet(d) {
+        cout << "Animal created, diet: " 
+             << diet << endl;
+    }
+};
+
+class Mammal : public Animal {
+protected:
+    int numLegs;
+public:
+    Mammal(string d, int legs) 
+        : Animal(d), numLegs(legs) {
+        cout << "Mammal created with " 
+             << numLegs << " legs" << endl;
+    }
+};
+
+class Dog : public Mammal {
+private:
+    string name;
+public:
+    Dog(string n) 
+        : Mammal("Meat", 4), name(n) {
+        cout << "Dog created: " << name << endl;
+    }
+};
+
+int main() {
+    Dog d("Rex");
+    return 0;
+}
+                        </textarea>
+                    </div>
+                    <div class="code-buttons">
+                        <button class="btn btn-primary" onclick="runCode(document.getElementById('code3'), document.getElementById('output3'))">▶ Run Code</button>
+                    </div>
+                    <div class="output-box" id="output3">Click "Run Code" to execute...</div>
+                </div>
+            </section>
+
+            <section class="section">
+                <div class="section-title">✍️ Coding Activities</div>
+
+                <div class="activity">
+                    <div class="activity-title">⚡ Intermediate Challenge: Shape Hierarchy</div>
+                    <p>Create Shape base class with Rectangle and Circle derived classes calculating area and perimeter.</p>
+                    <button class="btn btn-secondary" onclick="downloadCode(\`#include <iostream>
+#include <cmath>
+using namespace std;
+
+class Shape {
+protected:
+    string name;
+public:
+    Shape(string n) : name(n) {}
+    virtual void display() = 0;
+};
+
+// TODO: Rectangle class
+// TODO: Circle class
+
+int main() {
+    Rectangle r(5, 3);
+    Circle c(4);
+    r.display();
+    c.display();
+    return 0;
+}\`, 'shape_hierarchy.cpp')">⬇ Download Skeleton</button>
+                    <button class="collapsible">▼ Show Solution</button>
+                    <div class="collapsible-content">
+                        <div class="code-editor">
+#include <iostream>
+#include <cmath>
+using namespace std;
+
+class Shape {
+protected:
+    string name;
+public:
+    Shape(string n) : name(n) {}
+    virtual void display() = 0;
+    virtual double area() = 0;
+    virtual ~Shape() {}
+};
+
+class Rectangle : public Shape {
+private:
+    double width, height;
+public:
+    Rectangle(double w, double h) 
+        : Shape("Rectangle"), width(w), height(h) {}
+    
+    void display() override {
+        cout << name << ": " << area() << endl;
+    }
+    
+    double area() override {
+        return width * height;
+    }
+};
+
+class Circle : public Shape {
+private:
+    double radius;
+public:
+    Circle(double r) 
+        : Shape("Circle"), radius(r) {}
+    
+    void display() override {
+        cout << name << ": " << area() << endl;
+    }
+    
+    double area() override {
+        return 3.14159 * radius * radius;
+    }
+};
+
+int main() {
+    Rectangle r(5, 3);
+    Circle c(4);
+    r.display();
+    c.display();
+    return 0;
+}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="activity">
+                    <div class="activity-title">🔥 Advanced Challenge: Employee Hierarchy</div>
+                    <p>Create Employee base with Manager and Developer derived classes with specific bonuses and calculations.</p>
+                    <button class="btn btn-secondary" onclick="downloadCode(\`#include <iostream>
+using namespace std;
+
+class Employee {
+protected:
+    string name;
+    double salary;
+public:
+    Employee(string n, double s) 
+        : name(n), salary(s) {}
+    
+    virtual double calculateBonus() = 0;
+    virtual void display() = 0;
+    virtual ~Employee() {}
+};
+
+// TODO: Manager class (bonus = salary * 0.2)
+// TODO: Developer class (bonus = salary * 0.1)
+
+int main() {
+    Manager m(\"Alice\", 50000);
+    Developer d(\"Bob\", 40000);
+    m.display();
+    d.display();
+    return 0;
+}\`, 'employee_hierarchy.cpp')">⬇ Download Skeleton</button>
+                    <button class="collapsible">▼ Show Solution</button>
+                    <div class="collapsible-content">
+                        <div class="code-editor">
+#include <iostream>
+#include <string>
+using namespace std;
+
+class Employee {
+protected:
+    string name;
+    double salary;
+public:
+    Employee(string n, double s) 
+        : name(n), salary(s) {}
+    
+    virtual double calculateBonus() = 0;
+    virtual void display() = 0;
+    virtual ~Employee() {}
+};
+
+class Manager : public Employee {
+private:
+    int teamSize;
+public:
+    Manager(string n, double s, int ts = 0) 
+        : Employee(n, s), teamSize(ts) {}
+    
+    double calculateBonus() override {
+        return salary * 0.2;
+    }
+    
+    void display() override {
+        cout << "Manager: " << name 
+             << ", Salary: " << salary 
+             << ", Bonus: " << calculateBonus() 
+             << endl;
+    }
+};
+
+class Developer : public Employee {
+private:
+    string language;
+public:
+    Developer(string n, double s, 
+              string lang = "C++") 
+        : Employee(n, s), language(lang) {}
+    
+    double calculateBonus() override {
+        return salary * 0.1;
+    }
+    
+    void display() override {
+        cout << "Developer: " << name 
+             << ", Salary: " << salary 
+             << ", Bonus: " << calculateBonus() 
+             << ", Language: " << language 
+             << endl;
+    }
+};
+
+int main() {
+    Manager m("Alice", 50000, 5);
+    Developer d("Bob", 40000, "C++");
+    
+    m.display();
+    d.display();
+    
+    return 0;
+}
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="section">
+                <div class="section-title">📝 Knowledge Check Quiz</div>
+                <div class="quiz-container">
+                    <button class="quiz-btn" onclick="initializeQuiz()">▶ Start Quiz</button>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <footer><p>COS110 OOP Study Website | November 2025</p></footer>
+
+    <script src="../../js/main.js"></script>
+    <script src="../../js/compiler.js"></script>
+    <script src="../../js/quiz.js"></script>
+
+    <script>
+        function initializeQuiz() {
+            const questions = [
+                {type: 'multiple-choice', question: 'What is inheritance?', options: ['Copying code', 'Inheriting properties from base class', 'Creating objects', 'Memory allocation'], correctAnswer: 'B', explanation: 'Inheritance allows derived classes to inherit from base classes.'},
+                {type: 'true-false', question: 'Derived class inherits public members.', correctAnswer: 'true', explanation: 'Yes, public members are accessible in derived class.'},
+                {type: 'multiple-choice', question: 'Protected members are:', options: ['Private to all', 'Public to all', 'Accessible in derived', 'Inaccessible everywhere'], correctAnswer: 'C', explanation: 'Protected members are accessible in derived classes and friends.'},
+                {type: 'fill-in', question: 'Inheritance syntax:', context: 'class Derived : <span style="color: red;">_______</span> Base', hint: 'access', acceptableAnswers: ['public', 'public '], explanation: 'Use public keyword for inheritance type.'},
+                {type: 'true-false', question: 'Derived class can override base methods.', correctAnswer: 'true', explanation: 'Yes, override by redefining with same signature.'},
+                {type: 'multiple-choice', question: 'Constructor call order:', options: ['Derived then base', 'Base then derived', 'Simultaneous', 'Random'], correctAnswer: 'B', explanation: 'Base constructor runs first, then derived.'},
+                {type: 'multiple-choice', question: 'Destructor call order:', options: ['Derived then base', 'Base then derived', 'Simultaneous', 'Random'], correctAnswer: 'A', explanation: 'Derived destructor runs first, then base.'},
+                {type: 'true-false', question: 'Private inheritance makes all public private.', correctAnswer: 'true', explanation: 'Yes, private inheritance restricts access.'},
+                {type: 'multiple-choice', question: 'Multi-level inheritance example:', options: ['Animal -> Dog', 'Animal -> Mammal -> Dog', 'Both', 'Neither'], correctAnswer: 'C', explanation: 'Both single and multi-level inheritance exist.'},
+                {type: 'fill-in', question: 'Call base constructor:', context: 'Derived() : <span style="color: red;">_______</span>(args)', hint: 'Base', acceptableAnswers: ['Base', 'Base '], explanation: 'Use initializer list to call base constructor.'},
+                {type: 'true-false', question: 'Derived class can add new methods.', correctAnswer: 'true', explanation: 'Yes, derived can add specialized functionality.'},
+                {type: 'multiple-choice', question: 'Override keyword purpose:', options: ['Required', 'Documents intent', 'Enables virtual', 'None'], correctAnswer: 'B', explanation: 'override documents that method overrides base.'},
+                {type: 'true-false', question: 'Base members visible in derived.', correctAnswer: 'true', explanation: 'Yes, inherited members are part of derived.'},
+                {type: 'multiple-choice', question: 'Public inheritance means:', options: ['All public', 'IS-A relationship', 'Access preserved', 'All above'], correctAnswer: 'D', explanation: 'Public inheritance maintains IS-A relationship.'},
+                {type: 'fill-in', question: 'Access inherited private members:', context: 'Cannot directly, but <span style="color: red;">_______</span> methods can', hint: 'member', acceptableAnswers: ['member', 'member functions'], explanation: 'Member functions of base can access private.'},
+                {type: 'true-false', question: 'Protected inheritance uses protected keyword.', correctAnswer: 'true', explanation: 'Yes, syntax: class D : protected Base.'},
+                {type: 'multiple-choice', question: 'Inheritance enables:', options: ['Code reuse', 'Polymorphism', 'Relationships', 'All above'], correctAnswer: 'D', explanation: 'Inheritance provides all these benefits.'},
+                {type: 'true-false', question: 'Base destructors should be virtual.', correctAnswer: 'true', explanation: 'Yes, for proper cleanup of derived objects.'},
+                {type: 'multiple-choice', question: 'Derived is-a:', options: ['Same as base', 'Specialized base', 'Different type', 'None'], correctAnswer: 'B', explanation: 'Derived IS-A specialized version of base.'},
+                {type: 'true-false', question: 'You can cast derived to base pointer.', correctAnswer: 'true', explanation: 'Yes, derived pointers can be used as base pointers.'}
+            ];
+
+            window.quizSystem = new QuizSystem('Inheritance Basics', questions);
+            openQuizModal();
+        }
+
+        if (!document.getElementById('quizModal')) {
+            const modal = document.createElement('div');
+            modal.id = 'quizModal';
+            modal.className = 'quiz-modal';
+            modal.innerHTML = `<div class="quiz-modal-content"><div class="quiz-header"><div><div class="quiz-question-number">Quiz: Inheritance Basics</div><div class="quiz-progress">Question 1 of 20</div></div><button class="quiz-close" onclick="closeQuizModal()">✕</button></div><div class="quiz-questions-container"></div></div>`;
+            document.body.appendChild(modal);
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Copy Constructors - COS110 OOP Study Website</title>
+    <link rel="stylesheet" href="../../css/style.css">
+</head>
+<body>
+    <nav class="navbar">
+        <a href="../../index.html" class="navbar-brand">📚 COS110 OOP</a>
+        <div class="navbar-search"><input type="text" placeholder="Search topics..."></div>
+    </nav>
+
+    <div class="container">
+        <aside class="sidebar">
+            <div class="sidebar-title">🔧 Constructors</div>
+            <a href="../../topics/06-copy-constructors.html" class="sidebar-item active">Copy Constructors</a>
+            <a href="../../topics/07-assignment-operator.html" class="sidebar-item">Assignment Operator</a>
+        </aside>
+
+        <main class="main-content">
+            <h1>📋 Copy Constructors</h1>
+
+            <section class="section">
+                <div class="section-title">📚 Explanation</div>
+                <div class="explanation">
+                    <h3 style="color: var(--primary);">What is a Copy Constructor?</h3>
+                    <p>A copy constructor is a special constructor that creates a new object as a copy of an existing object. It takes a const reference to an object of the same class as a parameter. The copy constructor is called automatically when you initialize a new object with an existing object.</p>
+
+                    <h3 style="color: var(--primary); margin-top: 20px;">Deep vs Shallow Copy</h3>
+                    <p>A shallow copy duplicates only the member variables, which may include pointers. If two objects share the same dynamically allocated memory, deleting one will corrupt the other. A deep copy duplicates the actual data that pointers point to, ensuring independence between objects.</p>
+
+                    <h3 style="color: var(--primary); margin-top: 20px;">Default Copy Constructor</h3>
+                    <p>C++ provides a default copy constructor that performs a shallow copy. For classes without dynamic memory, this is usually sufficient. However, for classes managing dynamic memory, you must implement a custom copy constructor.</p>
+
+                    <h3 style="color: var(--primary); margin-top: 20px;">Rule of Three/Five/Zero</h3>
+                    <p>If you define a custom destructor, you should also define a custom copy constructor and copy assignment operator (Rule of Three). In modern C++, also consider move constructor and move assignment operator (Rule of Five).</p>
+
+                    <h3 style="color: var(--primary); margin-top: 20px;">When Copy Constructor is Called</h3>
+                    <p>Copy constructors are called when: initializing one object with another, passing objects by value to functions, or returning objects by value from functions.</p>
+                </div>
+            </section>
+
+            <section class="section">
+                <div class="section-title">💻 Code Examples</div>
+
+                <div class="code-example">
+                    <div class="code-tabs">
+                        <button class="code-tab active" data-tab="simple1">Simple Snippet</button>
+                        <button class="code-tab" data-tab="full1">Full Program</button>
+                    </div>
+                    <div data-tab-content="simple1" class="code-editor">
+class MyClass {
+public:
+    MyClass(int x) { /*...*/ }
+    MyClass(const MyClass& other) {
+        // Copy constructor
+    }
+};
+
+MyClass obj1(5);
+MyClass obj2 = obj1;  // Copy constructor called
+                    </div>
+                    <div data-tab-content="full1" style="display: none;">
+                        <textarea class="code-editor" id="code1">#include <iostream>
+using namespace std;
+
+class Number {
+private:
+    int value;
+public:
+    Number(int x) : value(x) {
+        cout << "Constructor called: " << value << endl;
+    }
+    
+    Number(const Number& other) : value(other.value) {
+        cout << "Copy constructor called: " << other.value << endl;
+    }
+    
+    void display() const {
+        cout << "Value: " << value << endl;
+    }
+};
+
+int main() {
+    Number n1(42);
+    Number n2 = n1;
+    Number n3(n1);
+    
+    n1.display();
+    n2.display();
+    n3.display();
+    
+    return 0;
+}
+                        </textarea>
+                    </div>
+                    <div class="code-buttons">
+                        <button class="btn btn-primary" onclick="runCode(document.getElementById('code1'), document.getElementById('output1'))">▶ Run Code</button>
+                        <button class="btn btn-secondary" onclick="downloadCode(document.getElementById('code1').value, 'copy_constructor.cpp')">⬇ Download</button>
+                    </div>
+                    <div class="output-box" id="output1">Click "Run Code" to execute...</div>
+                </div>
+
+                <div class="code-example">
+                    <div class="code-tabs">
+                        <button class="code-tab active" data-tab="simple2">Deep Copy</button>
+                        <button class="code-tab" data-tab="full2">Full Program</button>
+                    </div>
+                    <div data-tab-content="simple2" class="code-editor">
+class String {
+private:
+    char* data;
+public:
+    String(const String& other) {
+        data = new char[strlen(other.data) + 1];
+        strcpy(data, other.data);
+    }
+};
+                    </div>
+                    <div data-tab-content="full2" style="display: none;">
+                        <textarea class="code-editor" id="code2">#include <iostream>
+#include <cstring>
+using namespace std;
+
+class String {
+private:
+    char* data;
+public:
+    String(const char* s) {
+        data = new char[strlen(s) + 1];
+        strcpy(data, s);
+    }
+    
+    String(const String& other) {
+        cout << "Deep copy constructor" << endl;
+        data = new char[strlen(other.data) + 1];
+        strcpy(data, other.data);
+    }
+    
+    ~String() {
+        delete[] data;
+    }
+    
+    void display() const {
+        cout << "String: " << data << endl;
+    }
+};
+
+int main() {
+    String s1("Hello");
+    String s2 = s1;
+    
+    s1.display();
+    s2.display();
+    
+    return 0;
+}
+                        </textarea>
+                    </div>
+                    <div class="code-buttons">
+                        <button class="btn btn-primary" onclick="runCode(document.getElementById('code2'), document.getElementById('output2'))">▶ Run Code</button>
+                        <button class="btn btn-secondary" onclick="downloadCode(document.getElementById('code2').value, 'deep_copy.cpp')">⬇ Download</button>
+                    </div>
+                    <div class="output-box" id="output2">Click "Run Code" to execute...</div>
+                </div>
+
+                <div class="code-example">
+                    <div class="code-tabs">
+                        <button class="code-tab active" data-tab="simple3">Pass by Value</button>
+                        <button class="code-tab" data-tab="full3">Full Program</button>
+                    </div>
+                    <div data-tab-content="simple3" class="code-editor">
+void printObject(Number n) {
+    // Copy constructor called here
+    n.display();
+}
+
+Number obj(10);
+printObject(obj);  // Copy made automatically
+                    </div>
+                    <div data-tab-content="full3" style="display: none;">
+                        <textarea class="code-editor" id="code3">#include <iostream>
+using namespace std;
+
+class Number {
+private:
+    int value;
+public:
+    Number(int x) : value(x) {
+        cout << "Constructor: " << value << endl;
+    }
+    
+    Number(const Number& other) : value(other.value) {
+        cout << "Copy constructor for: " << value << endl;
+    }
+    
+    void display() const {
+        cout << "Value: " << value << endl;
+    }
+};
+
+void printNumber(Number n) {
+    cout << "Inside function: ";
+    n.display();
+}
+
+int main() {
+    cout << "Creating n1:" << endl;
+    Number n1(42);
+    
+    cout << "\nPassing to function:" << endl;
+    printNumber(n1);
+    
+    cout << "\nCreating n2 from n1:" << endl;
+    Number n2 = n1;
+    
+    return 0;
+}
+                        </textarea>
+                    </div>
+                    <div class="code-buttons">
+                        <button class="btn btn-primary" onclick="runCode(document.getElementById('code3'), document.getElementById('output3'))">▶ Run Code</button>
+                        <button class="btn btn-secondary" onclick="downloadCode(document.getElementById('code3').value, 'copy_by_value.cpp')">⬇ Download</button>
+                    </div>
+                    <div class="output-box" id="output3">Click "Run Code" to execute...</div>
+                </div>
+            </section>
+
+            <section class="section">
+                <div class="section-title">✍️ Coding Activities</div>
+
+                <div class="activity">
+                    <div class="activity-title">⚡ Intermediate Challenge: Array Class with Deep Copy</div>
+                    <p>Create an Array class that manages a dynamic array. Implement a copy constructor that performs a deep copy so each Array object has its own independent data.</p>
+                    <button class="btn btn-secondary" onclick="downloadCode(\`#include <iostream>
+using namespace std;
+
+class Array {
+private:
+    int* data;
+    int size;
+public:
+    Array(int s, int val = 0) : size(s) {
+        data = new int[size];
+        for(int i = 0; i < size; i++)
+            data[i] = val;
+    }
+    
+    // TODO: Implement copy constructor for deep copy
+    
+    ~Array() {
+        delete[] data;
+    }
+};
+
+int main() {
+    Array a1(5, 10);
+    Array a2 = a1;  // Deep copy
+    return 0;
+}\`, 'array_deep_copy.cpp')">⬇ Download Skeleton</button>
+                    <button class="collapsible">▼ Show Solution</button>
+                    <div class="collapsible-content">
+                        <div class="code-editor">
+#include <iostream>
+using namespace std;
+
+class Array {
+private:
+    int* data;
+    int size;
+public:
+    Array(int s, int val = 0) : size(s) {
+        data = new int[size];
+        for(int i = 0; i < size; i++)
+            data[i] = val;
+    }
+    
+    Array(const Array& other) : size(other.size) {
+        data = new int[size];
+        for(int i = 0; i < size; i++)
+            data[i] = other.data[i];
+    }
+    
+    ~Array() {
+        delete[] data;
+    }
+    
+    void display() const {
+        cout << "Array: ";
+        for(int i = 0; i < size; i++)
+            cout << data[i] << " ";
+        cout << endl;
+    }
+};
+
+int main() {
+    Array a1(5, 10);
+    a1.display();
+    
+    Array a2 = a1;
+    a2.display();
+    
+    return 0;
+}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="activity">
+                    <div class="activity-title">🔥 Advanced Challenge: Implementing Rule of Three</div>
+                    <p>Create a class with constructor, destructor, copy constructor, and copy assignment operator (Rule of Three). Demonstrate proper resource management.</p>
+                    <button class="btn btn-secondary" onclick="downloadCode(\`#include <iostream>
+#include <cstring>
+using namespace std;
+
+class MyString {
+private:
+    char* str;
+public:
+    MyString(const char* s) {
+        str = new char[strlen(s) + 1];
+        strcpy(str, s);
+    }
+    
+    // TODO: Destructor
+    // TODO: Copy constructor
+    // TODO: Copy assignment operator
+};
+
+int main() {
+    MyString s1(\"Hello\");
+    MyString s2 = s1;
+    MyString s3(\"\");
+    s3 = s1;
+    return 0;
+}\`, 'rule_of_three.cpp')">⬇ Download Skeleton</button>
+                    <button class="collapsible">▼ Show Solution</button>
+                    <div class="collapsible-content">
+                        <div class="code-editor">
+#include <iostream>
+#include <cstring>
+using namespace std;
+
+class MyString {
+private:
+    char* str;
+public:
+    MyString(const char* s) {
+        str = new char[strlen(s) + 1];
+        strcpy(str, s);
+    }
+    
+    ~MyString() {
+        delete[] str;
+    }
+    
+    MyString(const MyString& other) {
+        str = new char[strlen(other.str) + 1];
+        strcpy(str, other.str);
+    }
+    
+    MyString& operator=(const MyString& other) {
+        if(this != &other) {
+            delete[] str;
+            str = new char[strlen(other.str) + 1];
+            strcpy(str, other.str);
+        }
+        return *this;
+    }
+    
+    void display() const {
+        cout << "String: " << str << endl;
+    }
+};
+
+int main() {
+    MyString s1("Hello");
+    MyString s2 = s1;
+    MyString s3("World");
+    s3 = s1;
+    
+    s1.display();
+    s2.display();
+    s3.display();
+    
+    return 0;
+}
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="section">
+                <div class="section-title">📝 Knowledge Check Quiz</div>
+                <div class="quiz-container">
+                    <button class="quiz-btn" onclick="initializeQuiz()">▶ Start Quiz</button>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <footer><p>COS110 OOP Study Website | November 2025</p></footer>
+
+    <script src="../../js/main.js"></script>
+    <script src="../../js/compiler.js"></script>
+    <script src="../../js/quiz.js"></script>
+
+    <script>
+        function initializeQuiz() {
+            const questions = [
+                {type: 'multiple-choice', question: 'What is the parameter of a copy constructor?', options: ['An object', 'A const reference to an object', 'A pointer', 'An int'], correctAnswer: 'B', explanation: 'Copy constructor takes a const reference to avoid unnecessary copying.'},
+                {type: 'true-false', question: 'A shallow copy duplicates all data, including pointed-to data.', correctAnswer: 'false', explanation: 'A shallow copy only copies pointer values, not the data they point to.'},
+                {type: 'multiple-choice', question: 'When is the copy constructor called?', options: ['When deleting', 'When initializing one object with another', 'When comparing objects', 'Never automatically'], correctAnswer: 'B', explanation: 'Copy constructor is called during initialization and when passing by value.'},
+                {type: 'true-false', question: 'C++ automatically provides a default copy constructor.', correctAnswer: 'true', explanation: 'Yes, but it performs a shallow copy.'},
+                {type: 'fill-in', question: 'A copy constructor signature is:', context: 'ClassName(const <span style="color: red;">_______</span>&)', hint: 'class type', acceptableAnswers: ['ClassName', 'class'], explanation: 'ClassName(const ClassName& other) is the copy constructor signature.'},
+                {type: 'multiple-choice', question: 'What is the Rule of Three?', options: ['Three base classes', 'Destructor, copy constructor, assignment operator', 'Three inheritance levels', 'Three functions max'], correctAnswer: 'B', explanation: 'If you define destructor, also define copy constructor and assignment operator.'},
+                {type: 'true-false', question: 'A deep copy is necessary for classes with dynamic memory.', correctAnswer: 'true', explanation: 'Yes, to avoid multiple objects sharing the same memory.'},
+                {type: 'multiple-choice', question: 'What problem does shallow copy cause?', options: ['Memory leaks', 'Multiple deletion attempts', 'Both A and B', 'No problems'], correctAnswer: 'C', explanation: 'Both memory leaks and double deletion can occur with shallow copies.'},
+                {type: 'true-false', question: 'Passing objects by reference avoids calling the copy constructor.', correctAnswer: 'true', explanation: 'Yes, passing by reference avoids the copy entirely.'},
+                {type: 'fill-in', question: 'In a copy constructor, use new to allocate memory for:', context: 'Pointers pointing to <span style="color: red;">_______</span>', hint: 'dynamic data', acceptableAnswers: ['dynamic data', 'arrays', 'memory', 'pointer data'], explanation: 'Deep copy requires allocating new memory for all dynamic data.'},
+                {type: 'true-false', question: 'Shallow copy causes memory leaks.', correctAnswer: 'true', explanation: 'Yes, multiple objects sharing memory leads to double deletion.'},
+                {type: 'multiple-choice', question: 'When copy constructor is NOT called:', options: ['Object initialization', 'Pass by value', 'Return by value', 'Pass by reference'], correctAnswer: 'D', explanation: 'Pass by reference avoids calling copy constructor.'},
+                {type: 'true-false', question: 'Default copy constructor is always safe.', correctAnswer: 'false', explanation: 'Default performs shallow copy, unsafe for dynamic memory.'},
+                {type: 'multiple-choice', question: 'Rule of Three includes:', options: ['Destructor and constructor', 'Copy constructor and assignment', 'All above', 'Destructor only'], correctAnswer: 'C', explanation: 'If you define destructor, also define copy constructor and assignment operator.'},
+                {type: 'fill-in', question: 'Copy constructor parameter:', context: 'const <span style="color: red;">_______</span>& other', hint: 'class name', acceptableAnswers: ['ClassName', 'class'], explanation: 'Copy constructor takes const reference to same class.'},
+                {type: 'true-false', question: 'Copy constructor can modify source object.', correctAnswer: 'false', explanation: 'Source is const reference, cannot be modified.'},
+                {type: 'multiple-choice', question: 'Deep copy is necessary for classes with:', options: ['Pointers', 'Arrays', 'Dynamic memory', 'All above'], correctAnswer: 'D', explanation: 'Any class managing resources needs deep copy.'},
+                {type: 'true-false', question: 'Returning objects by value calls copy constructor.', correctAnswer: 'true', explanation: 'Yes, creating a copy for return value.'},
+                {type: 'multiple-choice', question: 'Best practice for function parameter is:', options: ['Pass by value', 'Pass by reference', 'Pass by const reference', 'Pass by pointer'], correctAnswer: 'C', explanation: 'Const reference avoids copying and prevents modification.'}
+            ];
+
+            window.quizSystem = new QuizSystem('Copy Constructors', questions);
+            openQuizModal();
+        }
+
+        if (!document.getElementById('quizModal')) {
+            const modal = document.createElement('div');
+            modal.id = 'quizModal';
+            modal.className = 'quiz-modal';
+            modal.innerHTML = `<div class="quiz-modal-content"><div class="quiz-header"><div><div class="quiz-question-number">Quiz: Copy Constructors</div><div class="quiz-progress">Question 1 of 20</div></div><button class="quiz-close" onclick="closeQuizModal()">✕</button></div><div class="quiz-questions-container"></div></div>`;
+            document.body.appendChild(modal);
+        }
+    </script>
+</body>
+</html>

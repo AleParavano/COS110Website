@@ -1,0 +1,607 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exception Hierarchies - COS110 OOP Study Website</title>
+    <link rel="stylesheet" href="../../css/style.css">
+</head>
+<body>
+    <nav class="navbar">
+        <a href="../../index.html" class="navbar-brand">📚 COS110 OOP</a>
+        <div class="navbar-search"><input type="text" placeholder="Search topics..."></div>
+    </nav>
+
+    <div class="container">
+        <aside class="sidebar">
+            <div class="sidebar-title">🚨 Exception Handling</div>
+            <a href="../../topics/12-exception-basics.html" class="sidebar-item">Basics</a>
+            <a href="../../topics/13-exception-hierarchies.html" class="sidebar-item active">Hierarchies</a>
+        </aside>
+
+        <main class="main-content">
+            <h1>🏗️ Exception Handling - Hierarchies</h1>
+
+            <section class="section">
+                <div class="section-title">📚 Explanation</div>
+                <div class="explanation">
+                    <h3 style="color: var(--primary);">Custom Exception Classes</h3>
+                    <p>Create custom exception classes by inheriting from std::exception. This allows you to define domain-specific exceptions with additional information and custom behavior. Custom exceptions make error handling clearer and more specific.</p>
+
+                    <h3 style="color: var(--primary); margin-top: 20px;">Exception Hierarchies</h3>
+                    <p>Organize exceptions in a hierarchy where specific exceptions inherit from more general ones. This allows catching broad categories with base class pointers while still supporting specific handling. Root is typically std::exception.</p>
+
+                    <h3 style="color: var(--primary); margin-top: 20px;">Polymorphic Exception Handling</h3>
+                    <p>Catch by base class reference to handle any derived exception. Use catch(const exception& e) to catch all standard exceptions. Catch specific exceptions first, then general ones, for proper exception dispatch.</p>
+
+                    <h3 style="color: var(--primary); margin-top: 20px;">Exception Specifications</h3>
+                    <p>Function signatures can specify which exceptions they throw using noexcept or throw specifications (deprecated in newer C++). noexcept(true) means the function won't throw. This documents expectations for callers.</p>
+
+                    <h3 style="color: var(--primary); margin-top: 20px;">Re-throwing Exceptions</h3>
+                    <p>Use throw; (without arguments) to re-throw the current exception. This is useful when partially handling an exception but wanting the caller to know about it. Preserves the original exception information.</p>
+                </div>
+            </section>
+
+            <section class="section">
+                <div class="section-title">💻 Code Examples</div>
+
+                <div class="code-example">
+                    <div class="code-tabs">
+                        <button class="code-tab active" data-tab="simple1">Custom Exception</button>
+                        <button class="code-tab" data-tab="full1">Full Program</button>
+                    </div>
+                    <div data-tab-content="simple1" class="code-editor">
+class MyException : public exception {
+private:
+    string message;
+public:
+    MyException(string msg) : message(msg) {}
+    
+    const char* what() const noexcept override {
+        return message.c_str();
+    }
+};
+
+try {
+    throw MyException("Custom error!");
+}
+catch(MyException& e) {
+    cout << e.what() << endl;
+}
+                    </div>
+                    <div data-tab-content="full1" style="display: none;">
+                        <textarea class="code-editor" id="code1">#include <iostream>
+#include <exception>
+#include <string>
+using namespace std;
+
+class FileException : public exception {
+private:
+    string message;
+public:
+    FileException(string msg) : message(msg) {}
+    
+    const char* what() const noexcept override {
+        return message.c_str();
+    }
+};
+
+class FileNotFound : public FileException {
+public:
+    FileNotFound(string fname) 
+        : FileException("File not found: " + fname) {}
+};
+
+void openFile(string filename) {
+    if(filename == "") {
+        throw FileNotFound("unknown");
+    }
+    cout << "File opened: " << filename << endl;
+}
+
+int main() {
+    try {
+        openFile("data.txt");
+        openFile("");
+    }
+    catch(FileNotFound& e) {
+        cout << "Specific: " << e.what() << endl;
+    }
+    catch(FileException& e) {
+        cout << "General: " << e.what() << endl;
+    }
+    
+    return 0;
+}
+                        </textarea>
+                    </div>
+                    <div class="code-buttons">
+                        <button class="btn btn-primary" onclick="runCode(document.getElementById('code1'), document.getElementById('output1'))">▶ Run Code</button>
+                    </div>
+                    <div class="output-box" id="output1">Click "Run Code" to execute...</div>
+                </div>
+
+                <div class="code-example">
+                    <div class="code-tabs">
+                        <button class="code-tab active" data-tab="simple2">Exception Hierarchy</button>
+                        <button class="code-tab" data-tab="full2">Full Program</button>
+                    </div>
+                    <div data-tab-content="simple2" class="code-editor">
+class AppException : public exception {};
+class ValidationError : public AppException {};
+class DatabaseError : public AppException {};
+class NetworkError : public AppException {};
+
+try {
+    // ... code
+}
+catch(ValidationError& e) { /* ... */ }
+catch(DatabaseError& e) { /* ... */ }
+catch(NetworkError& e) { /* ... */ }
+catch(AppException& e) { /* catch all app errors */ }
+                    </div>
+                    <div data-tab-content="full2" style="display: none;">
+                        <textarea class="code-editor" id="code2">#include <iostream>
+#include <exception>
+#include <string>
+using namespace std;
+
+class AppException : public exception {
+protected:
+    string msg;
+public:
+    AppException(string m) : msg(m) {}
+    const char* what() const noexcept override {
+        return msg.c_str();
+    }
+};
+
+class ValidationError : public AppException {
+public:
+    ValidationError(string field) 
+        : AppException("Validation error: " + field) {}
+};
+
+class DatabaseError : public AppException {
+public:
+    DatabaseError(string op) 
+        : AppException("Database error: " + op) {}
+};
+
+class NetworkError : public AppException {
+public:
+    NetworkError(string host) 
+        : AppException("Network error: " + host) {}
+};
+
+void validateInput(string input) {
+    if(input.empty()) {
+        throw ValidationError("input");
+    }
+}
+
+void queryDatabase(string query) {
+    throw DatabaseError("query");
+}
+
+int main() {
+    try {
+        validateInput("");
+    }
+    catch(ValidationError& e) {
+        cout << "Validation: " << e.what() << endl;
+    }
+    catch(AppException& e) {
+        cout << "App Error: " << e.what() << endl;
+    }
+    
+    try {
+        queryDatabase("SELECT *");
+    }
+    catch(DatabaseError& e) {
+        cout << "DB: " << e.what() << endl;
+    }
+    catch(AppException& e) {
+        cout << "App Error: " << e.what() << endl;
+    }
+    
+    return 0;
+}
+                        </textarea>
+                    </div>
+                    <div class="code-buttons">
+                        <button class="btn btn-primary" onclick="runCode(document.getElementById('code2'), document.getElementById('output2'))">▶ Run Code</button>
+                    </div>
+                    <div class="output-box" id="output2">Click "Run Code" to execute...</div>
+                </div>
+
+                <div class="code-example">
+                    <div class="code-tabs">
+                        <button class="code-tab active" data-tab="simple3">Polymorphic Catching</button>
+                        <button class="code-tab" data-tab="full3">Full Program</button>
+                    </div>
+                    <div data-tab-content="simple3" class="code-editor">
+try {
+    // code that throws exceptions
+}
+catch(const AppException& e) {
+    // Catches any AppException or derived
+    cout << e.what() << endl;
+}
+catch(const exception& e) {
+    // Catches standard exceptions
+    cout << e.what() << endl;
+}
+catch(...) {
+    // Catches anything else
+    cout << "Unknown" << endl;
+}
+                    </div>
+                    <div data-tab-content="full3" style="display: none;">
+                        <textarea class="code-editor" id="code3">#include <iostream>
+#include <exception>
+#include <stdexcept>
+#include <string>
+using namespace std;
+
+class AppException : public exception {
+protected:
+    string msg;
+public:
+    AppException(string m) : msg(m) {}
+    const char* what() const noexcept override {
+        return msg.c_str();
+    }
+};
+
+class SpecificError : public AppException {
+public:
+    SpecificError() : AppException("Specific") {}
+};
+
+int main() {
+    try {
+        int choice = 1;
+        if(choice == 1) {
+            throw SpecificError();
+        }
+        else if(choice == 2) {
+            throw runtime_error("Runtime");
+        }
+        else {
+            throw "raw exception";
+        }
+    }
+    catch(const SpecificError& e) {
+        cout << "Specific: " << e.what() << endl;
+    }
+    catch(const AppException& e) {
+        cout << "AppEx: " << e.what() << endl;
+    }
+    catch(const exception& e) {
+        cout << "Standard: " << e.what() << endl;
+    }
+    catch(...) {
+        cout << "Unknown" << endl;
+    }
+    
+    return 0;
+}
+                        </textarea>
+                    </div>
+                    <div class="code-buttons">
+                        <button class="btn btn-primary" onclick="runCode(document.getElementById('code3'), document.getElementById('output3'))">▶ Run Code</button>
+                    </div>
+                    <div class="output-box" id="output3">Click "Run Code" to execute...</div>
+                </div>
+            </section>
+
+            <section class="section">
+                <div class="section-title">✍️ Coding Activities</div>
+
+                <div class="activity">
+                    <div class="activity-title">⚡ Intermediate Challenge: Math Exception Hierarchy</div>
+                    <p>Create a MathException hierarchy with specific exceptions for division by zero, negative square root, and domain errors.</p>
+                    <button class="btn btn-secondary" onclick="downloadCode(\`#include <iostream>
+#include <exception>
+#include <cmath>
+using namespace std;
+
+class MathException : public exception {
+protected:
+    string msg;
+public:
+    MathException(string m) : msg(m) {}
+    const char* what() const noexcept override {
+        return msg.c_str();
+    }
+};
+
+// TODO: DivisionByZero exception
+// TODO: NegativeSquareRoot exception
+
+double safeDivide(double a, double b) {
+    // TODO: throw DivisionByZero
+    return a / b;
+}
+
+double safeSqrt(double x) {
+    // TODO: throw NegativeSquareRoot
+    return sqrt(x);
+}
+
+int main() {
+    try {
+        cout << safeDivide(10, 0) << endl;
+    }
+    catch(MathException& e) {
+        cout << e.what() << endl;
+    }
+    return 0;
+}\`, 'math_exceptions.cpp')">⬇ Download Skeleton</button>
+                    <button class="collapsible">▼ Show Solution</button>
+                    <div class="collapsible-content">
+                        <div class="code-editor">
+#include <iostream>
+#include <exception>
+#include <cmath>
+using namespace std;
+
+class MathException : public exception {
+protected:
+    string msg;
+public:
+    MathException(string m) : msg(m) {}
+    const char* what() const noexcept override {
+        return msg.c_str();
+    }
+};
+
+class DivisionByZero : public MathException {
+public:
+    DivisionByZero() 
+        : MathException("Division by zero") {}
+};
+
+class NegativeSquareRoot : public MathException {
+public:
+    NegativeSquareRoot(double x) 
+        : MathException("Cannot take sqrt of " + 
+                       to_string(x)) {}
+};
+
+double safeDivide(double a, double b) {
+    if(b == 0) {
+        throw DivisionByZero();
+    }
+    return a / b;
+}
+
+double safeSqrt(double x) {
+    if(x < 0) {
+        throw NegativeSquareRoot(x);
+    }
+    return sqrt(x);
+}
+
+int main() {
+    try {
+        cout << "10 / 2 = " << safeDivide(10, 2) 
+             << endl;
+        cout << "10 / 0 = " << safeDivide(10, 0) 
+             << endl;
+    }
+    catch(DivisionByZero& e) {
+        cout << "Error: " << e.what() << endl;
+    }
+    catch(MathException& e) {
+        cout << "Math Error: " << e.what() << endl;
+    }
+    
+    try {
+        cout << "sqrt(16) = " << safeSqrt(16) 
+             << endl;
+        cout << "sqrt(-4) = " << safeSqrt(-4) 
+             << endl;
+    }
+    catch(NegativeSquareRoot& e) {
+        cout << "Error: " << e.what() << endl;
+    }
+    catch(MathException& e) {
+        cout << "Math Error: " << e.what() << endl;
+    }
+    
+    return 0;
+}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="activity">
+                    <div class="activity-title">🔥 Advanced Challenge: Data Validation with Exceptions</div>
+                    <p>Create a comprehensive validation system with custom exception hierarchy for user input validation.</p>
+                    <button class="btn btn-secondary" onclick="downloadCode(\`#include <iostream>
+#include <exception>
+#include <string>
+#include <cctype>
+using namespace std;
+
+class ValidationException : public exception {
+protected:
+    string msg;
+public:
+    ValidationException(string m) : msg(m) {}
+    const char* what() const noexcept override {
+        return msg.c_str();
+    }
+};
+
+// TODO: EmptyFieldError
+// TODO: InvalidEmailError
+// TODO: WeakPasswordError
+
+void validateEmail(string email) {
+    // TODO: Check if email is valid
+    // TODO: Throw InvalidEmailError if not
+}
+
+void validatePassword(string pwd) {
+    // TODO: Check if password length >= 8
+    // TODO: Throw WeakPasswordError if not
+}
+
+int main() {
+    try {
+        validateEmail(\"invalid\");
+    }
+    catch(ValidationException& e) {
+        cout << e.what() << endl;
+    }
+    return 0;
+}\`, 'validation_exceptions.cpp')">⬇ Download Skeleton</button>
+                    <button class="collapsible">▼ Show Solution</button>
+                    <div class="collapsible-content">
+                        <div class="code-editor">
+#include <iostream>
+#include <exception>
+#include <string>
+using namespace std;
+
+class ValidationException : public exception {
+protected:
+    string msg;
+public:
+    ValidationException(string m) : msg(m) {}
+    const char* what() const noexcept override {
+        return msg.c_str();
+    }
+};
+
+class EmptyFieldError : public ValidationException {
+public:
+    EmptyFieldError(string field) 
+        : ValidationException("Field empty: " + field) {}
+};
+
+class InvalidEmailError : public ValidationException {
+public:
+    InvalidEmailError(string email) 
+        : ValidationException("Invalid email: " + email) {}
+};
+
+class WeakPasswordError : public ValidationException {
+public:
+    WeakPasswordError() 
+        : ValidationException("Password too weak") {}
+};
+
+void validateEmail(string email) {
+    if(email.empty()) {
+        throw EmptyFieldError("email");
+    }
+    if(email.find('@') == string::npos) {
+        throw InvalidEmailError(email);
+    }
+}
+
+void validatePassword(string pwd) {
+    if(pwd.empty()) {
+        throw EmptyFieldError("password");
+    }
+    if(pwd.length() < 8) {
+        throw WeakPasswordError();
+    }
+}
+
+int main() {
+    try {
+        validateEmail("");
+    }
+    catch(EmptyFieldError& e) {
+        cout << "Empty: " << e.what() << endl;
+    }
+    catch(ValidationException& e) {
+        cout << "Validation: " << e.what() << endl;
+    }
+    
+    try {
+        validateEmail("invalid");
+    }
+    catch(InvalidEmailError& e) {
+        cout << "Invalid: " << e.what() << endl;
+    }
+    catch(ValidationException& e) {
+        cout << "Validation: " << e.what() << endl;
+    }
+    
+    try {
+        validatePassword("abc");
+    }
+    catch(WeakPasswordError& e) {
+        cout << "Weak: " << e.what() << endl;
+    }
+    catch(ValidationException& e) {
+        cout << "Validation: " << e.what() << endl;
+    }
+    
+    return 0;
+}
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="section">
+                <div class="section-title">📝 Knowledge Check Quiz</div>
+                <div class="quiz-container">
+                    <button class="quiz-btn" onclick="initializeQuiz()">▶ Start Quiz</button>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <footer><p>COS110 OOP Study Website | November 2025</p></footer>
+
+    <script src="../../js/main.js"></script>
+    <script src="../../js/compiler.js"></script>
+    <script src="../../js/quiz.js"></script>
+
+    <script>
+        function initializeQuiz() {
+            const questions = [
+                {type: 'multiple-choice', question: 'Custom exceptions inherit from:', options: ['Error', 'Throwable', 'exception', 'BaseException'], correctAnswer: 'C', explanation: 'Custom exceptions inherit from std::exception.'},
+                {type: 'true-false', question: 'Custom exceptions must override what().', correctAnswer: 'true', explanation: 'Yes, override what() to return error message.'},
+                {type: 'multiple-choice', question: 'Exception hierarchy advantage:', options: ['Organization', 'Specific catching', 'Polymorphism', 'All above'], correctAnswer: 'D', explanation: 'Hierarchies provide all these benefits.'},
+                {type: 'fill-in', question: 'Custom exception override:', context: '<span style="color: red;">_______</span> char* what() const noexcept override', hint: 'const', acceptableAnswers: ['const', 'const '], explanation: 'Override what() with const and noexcept.'},
+                {type: 'true-false', question: 'Catch specific exceptions first.', correctAnswer: 'true', explanation: 'Yes, general catch blocks last.'},
+                {type: 'multiple-choice', question: 'Polymorphic catch uses:', options: ['Base class reference', 'Derived class', 'Both', 'Neither'], correctAnswer: 'A', explanation: 'Catch base class references for polymorphism.'},
+                {type: 'true-false', question: 'catch(exception& e) catches all standard exceptions.', correctAnswer: 'true', explanation: 'Yes, base class catches all derived types.'},
+                {type: 'multiple-choice', question: 'Re-throw uses:', options: ['throw new', 'throw;', 'throw exception', 'throw (...)'], correctAnswer: 'B', explanation: 'throw; with no arguments re-throws current exception.'},
+                {type: 'true-false', question: 'noexcept means function does not throw.', correctAnswer: 'true', explanation: 'Yes, noexcept(true) indicates no exceptions.'},
+                {type: 'fill-in', question: 'Inherit custom exception:', context: 'class MyEx : <span style="color: red;">_______</span> exception', hint: 'public', acceptableAnswers: ['public', 'public '], explanation: 'Inherit as public to preserve exception interface.'},
+                {type: 'multiple-choice', question: 'Exception specification:', options: ['Always required', 'Documents behavior', 'Enforced at runtime', 'Both B and C'], correctAnswer: 'D', explanation: 'Specifications document and can be enforced.'},
+                {type: 'true-false', question: 'Derived exceptions can have more specific messages.', correctAnswer: 'true', explanation: 'Yes, customize messages for specific errors.'},
+                {type: 'multiple-choice', question: 'When to re-throw:', options: ['Always', 'Partially handled', 'Log then re-throw', 'B and C'], correctAnswer: 'D', explanation: 'Re-throw when you log but caller needs to know.'},
+                {type: 'true-false', question: 'what() must be const and noexcept.', correctAnswer: 'true', explanation: 'Yes, standard requires const noexcept.'},
+                {type: 'multiple-choice', question: 'Exception hierarchy level:', options: ['Two levels max', 'Any depth', 'Three levels only', 'Four levels'], correctAnswer: 'B', explanation: 'Create hierarchies as deep as needed.'},
+                {type: 'fill-in', question: 'noexcept syntax:', context: 'void func() <span style="color: red;">_______</span>(true)', hint: 'keyword', acceptableAnswers: ['noexcept', 'noexcept '], explanation: 'noexcept(true) guarantees no exceptions.'},
+                {type: 'true-false', question: 'Catch can use auto keyword.', correctAnswer: 'false', explanation: 'Catch requires explicit type; auto not allowed.'},
+                {type: 'multiple-choice', question: 'Multiple inheritance for exceptions:', options: ['Good', 'Bad', 'Rarely needed', 'Never'], correctAnswer: 'C', explanation: 'Avoid multiple inheritance for exceptions.'},
+                {type: 'true-false', question: 'Stack unwinding calls destructors.', correctAnswer: 'true', explanation: 'Yes, all local objects destructed during unwinding.'},
+                {type: 'multiple-choice', question: 'Best practice: catch order:', options: ['General first', 'Specific first', 'Any order', 'No order'], correctAnswer: 'B', explanation: 'Always catch specific exceptions before general ones.'}
+            ];
+
+            window.quizSystem = new QuizSystem('Exception Hierarchies', questions);
+            openQuizModal();
+        }
+
+        if (!document.getElementById('quizModal')) {
+            const modal = document.createElement('div');
+            modal.id = 'quizModal';
+            modal.className = 'quiz-modal';
+            modal.innerHTML = `<div class="quiz-modal-content"><div class="quiz-header"><div><div class="quiz-question-number">Quiz: Exception Hierarchies</div><div class="quiz-progress">Question 1 of 20</div></div><button class="quiz-close" onclick="closeQuizModal()">✕</button></div><div class="quiz-questions-container"></div></div>`;
+            document.body.appendChild(modal);
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Operator References - COS110 OOP Study Website</title>
+    <link rel="stylesheet" href="../../css/style.css">
+</head>
+<body>
+    <nav class="navbar">
+        <a href="../../index.html" class="navbar-brand">📚 COS110 OOP</a>
+        <div class="navbar-search"><input type="text" placeholder="Search topics..."></div>
+    </nav>
+
+    <div class="container">
+        <aside class="sidebar">
+            <div class="sidebar-title">🔀 Operator Overloading</div>
+            <a href="../../topics/08-operator-overloading-basics.html" class="sidebar-item">Basics</a>
+            <a href="../../topics/09-operator-friends.html" class="sidebar-item">Friends</a>
+            <a href="../../topics/10-operator-references.html" class="sidebar-item active">References</a>
+        </aside>
+
+        <main class="main-content">
+            <h1>🔗 Operator Overloading - References & Chaining</h1>
+
+            <section class="section">
+                <div class="section-title">📚 Explanation</div>
+                <div class="explanation">
+                    <h3 style="color: var(--primary);">Return by Reference</h3>
+                    <p>Some operators should return references instead of copies. This improves efficiency by avoiding unnecessary object copying. However, you must ensure the returned reference refers to an object that outlives the function call.</p>
+
+                    <h3 style="color: var(--primary); margin-top: 20px;">Operator Chaining</h3>
+                    <p>Operator chaining allows multiple operations in a single expression, like a = b = c or a += b += c. This works when operators return references to objects that can be used as operands for the next operation.</p>
+
+                    <h3 style="color: var(--primary); margin-top: 20px;">Function Call Operator ()</h3>
+                    <p>The () operator allows objects to behave like functions. This enables function objects or functors, which are useful in algorithms and callbacks. The operator() can take any number of parameters.</p>
+
+                    <h3 style="color: var(--primary); margin-top: 20px;">Subscript Operator []</h3>
+                    <p>The [] operator allows array-like access to objects. It should return a reference to allow both reading and writing. This is essential for classes like vectors and matrices that represent collections.</p>
+
+                    <h3 style="color: var(--primary); margin-top: 20px;">Efficiency Considerations</h3>
+                    <p>Returning references is more efficient than returning copies because it avoids construction and destruction of temporary objects. However, care must be taken to ensure the referenced object remains valid.</p>
+                </div>
+            </section>
+
+            <section class="section">
+                <div class="section-title">💻 Code Examples</div>
+
+                <div class="code-example">
+                    <div class="code-tabs">
+                        <button class="code-tab active" data-tab="simple1">Return Reference</button>
+                        <button class="code-tab" data-tab="full1">Full Program</button>
+                    </div>
+                    <div data-tab-content="simple1" class="code-editor">
+class StringBuilder {
+private:
+    string text;
+public:
+    StringBuilder& append(const string& s) {
+        text += s;
+        return *this;
+    }
+    
+    StringBuilder& clear() {
+        text = "";
+        return *this;
+    }
+};
+
+StringBuilder sb;
+sb.append("Hello").append(" ").append("World");
+                    </div>
+                    <div data-tab-content="full1" style="display: none;">
+                        <textarea class="code-editor" id="code1">#include <iostream>
+#include <string>
+using namespace std;
+
+class StringBuilder {
+private:
+    string text;
+public:
+    StringBuilder& append(const string& s) {
+        text += s;
+        return *this;
+    }
+    
+    StringBuilder& appendLine(const string& s) {
+        text += s + "\n";
+        return *this;
+    }
+    
+    string getText() const {
+        return text;
+    }
+};
+
+int main() {
+    StringBuilder sb;
+    
+    sb.append("Line 1")
+      .append(" - continued")
+      .appendLine("")
+      .append("Line 2");
+    
+    cout << sb.getText();
+    
+    return 0;
+}
+                        </textarea>
+                    </div>
+                    <div class="code-buttons">
+                        <button class="btn btn-primary" onclick="runCode(document.getElementById('code1'), document.getElementById('output1'))">▶ Run Code</button>
+                    </div>
+                    <div class="output-box" id="output1">Click "Run Code" to execute...</div>
+                </div>
+
+                <div class="code-example">
+                    <div class="code-tabs">
+                        <button class="code-tab active" data-tab="simple2">Subscript Operator</button>
+                        <button class="code-tab" data-tab="full2">Full Program</button>
+                    </div>
+                    <div data-tab-content="simple2" class="code-editor">
+class IntArray {
+private:
+    int* data;
+    int size;
+public:
+    IntArray(int s) : size(s) {
+        data = new int[size];
+    }
+    
+    int& operator[](int index) {
+        return data[index];
+    }
+};
+
+IntArray arr(5);
+arr[0] = 10;
+arr[1] = 20;
+cout << arr[0] << endl;
+                    </div>
+                    <div data-tab-content="full2" style="display: none;">
+                        <textarea class="code-editor" id="code2">#include <iostream>
+using namespace std;
+
+class IntArray {
+private:
+    int* data;
+    int size;
+public:
+    IntArray(int s) : size(s) {
+        data = new int[size];
+        for(int i = 0; i < size; i++)
+            data[i] = 0;
+    }
+    
+    int& operator[](int index) {
+        return data[index];
+    }
+    
+    const int& operator[](int index) const {
+        return data[index];
+    }
+    
+    void display() const {
+        for(int i = 0; i < size; i++)
+            cout << data[i] << " ";
+        cout << endl;
+    }
+    
+    ~IntArray() { delete[] data; }
+};
+
+int main() {
+    IntArray arr(5);
+    
+    arr[0] = 10;
+    arr[1] = 20;
+    arr[2] = 30;
+    arr[3] = 40;
+    arr[4] = 50;
+    
+    cout << "Array: ";
+    arr.display();
+    
+    cout << "Element 2: " << arr[2] << endl;
+    
+    return 0;
+}
+                        </textarea>
+                    </div>
+                    <div class="code-buttons">
+                        <button class="btn btn-primary" onclick="runCode(document.getElementById('code2'), document.getElementById('output2'))">▶ Run Code</button>
+                    </div>
+                    <div class="output-box" id="output2">Click "Run Code" to execute...</div>
+                </div>
+
+                <div class="code-example">
+                    <div class="code-tabs">
+                        <button class="code-tab active" data-tab="simple3">Function Call Operator</button>
+                        <button class="code-tab" data-tab="full3">Full Program</button>
+                    </div>
+                    <div data-tab-content="simple3" class="code-editor">
+class Multiplier {
+private:
+    int factor;
+public:
+    Multiplier(int f) : factor(f) {}
+    
+    int operator()(int x) {
+        return x * factor;
+    }
+};
+
+Multiplier times3(3);
+cout << times3(5) << endl;  // 15
+cout << times3(10) << endl; // 30
+                    </div>
+                    <div data-tab-content="full3" style="display: none;">
+                        <textarea class="code-editor" id="code3">#include <iostream>
+#include <algorithm>
+#include <vector>
+using namespace std;
+
+class Multiplier {
+private:
+    int factor;
+public:
+    Multiplier(int f) : factor(f) {}
+    
+    int operator()(int x) const {
+        return x * factor;
+    }
+};
+
+class Adder {
+private:
+    int value;
+public:
+    Adder(int v) : value(v) {}
+    
+    int operator()(int x) const {
+        return x + value;
+    }
+};
+
+int main() {
+    Multiplier times3(3);
+    Adder plus10(10);
+    
+    cout << "times3(5) = " << times3(5) << endl;
+    cout << "times3(10) = " << times3(10) << endl;
+    
+    cout << "plus10(5) = " << plus10(5) << endl;
+    cout << "plus10(20) = " << plus10(20) << endl;
+    
+    vector<int> nums = {1, 2, 3, 4, 5};
+    transform(nums.begin(), nums.end(), 
+              nums.begin(), times3);
+    
+    cout << "After multiplying by 3: ";
+    for(int n : nums) cout << n << " ";
+    cout << endl;
+    
+    return 0;
+}
+                        </textarea>
+                    </div>
+                    <div class="code-buttons">
+                        <button class="btn btn-primary" onclick="runCode(document.getElementById('code3'), document.getElementById('output3'))">▶ Run Code</button>
+                    </div>
+                    <div class="output-box" id="output3">Click "Run Code" to execute...</div>
+                </div>
+            </section>
+
+            <section class="section">
+                <div class="section-title">✍️ Coding Activities</div>
+
+                <div class="activity">
+                    <div class="activity-title">⚡ Intermediate Challenge: Matrix with Subscript</div>
+                    <p>Create a 2x2 Matrix class with [] operator for element access and support chaining operations.</p>
+                    <button class="btn btn-secondary" onclick="downloadCode(\`#include <iostream>
+using namespace std;
+
+class Matrix {
+private:
+    double data[2][2];
+public:
+    Matrix() {
+        for(int i = 0; i < 2; i++)
+            for(int j = 0; j < 2; j++)
+                data[i][j] = 0;
+    }
+    
+    // TODO: Overload [] to return row
+    // TODO: Row should have its own [] operator
+    
+    void display() {
+        for(int i = 0; i < 2; i++) {
+            for(int j = 0; j < 2; j++)
+                cout << data[i][j] << \" \";
+            cout << endl;
+        }
+    }
+};
+
+int main() {
+    Matrix m;
+    m[0][0] = 1; m[0][1] = 2;
+    m[1][0] = 3; m[1][1] = 4;
+    m.display();
+    return 0;
+}\`, 'matrix_subscript.cpp')">⬇ Download Skeleton</button>
+                    <button class="collapsible">▼ Show Solution</button>
+                    <div class="collapsible-content">
+                        <div class="code-editor">
+#include <iostream>
+using namespace std;
+
+class MatrixRow {
+private:
+    double* row;
+public:
+    MatrixRow(double* r) : row(r) {}
+    
+    double& operator[](int col) {
+        return row[col];
+    }
+};
+
+class Matrix {
+private:
+    double data[2][2];
+public:
+    Matrix() {
+        for(int i = 0; i < 2; i++)
+            for(int j = 0; j < 2; j++)
+                data[i][j] = 0;
+    }
+    
+    MatrixRow operator[](int row) {
+        return MatrixRow(data[row]);
+    }
+    
+    void display() {
+        for(int i = 0; i < 2; i++) {
+            for(int j = 0; j < 2; j++)
+                cout << data[i][j] << " ";
+            cout << endl;
+        }
+    }
+};
+
+int main() {
+    Matrix m;
+    m[0][0] = 1; m[0][1] = 2;
+    m[1][0] = 3; m[1][1] = 4;
+    
+    cout << "Matrix:" << endl;
+    m.display();
+    
+    return 0;
+}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="activity">
+                    <div class="activity-title">🔥 Advanced Challenge: Function Object for Sorting</div>
+                    <p>Create a functor for comparing Person objects by different criteria (name, age) and use with sort.</p>
+                    <button class="btn btn-secondary" onclick="downloadCode(\`#include <iostream>
+#include <vector>
+#include <algorithm>
+#include <string>
+using namespace std;
+
+class Person {
+public:
+    string name;
+    int age;
+    Person(string n, int a) : name(n), age(a) {}
+};
+
+class SortByAge {
+public:
+    bool operator()(const Person& a, 
+                   const Person& b) const {
+        // TODO: Implement
+        return false;
+    }
+};
+
+class SortByName {
+public:
+    bool operator()(const Person& a, 
+                   const Person& b) const {
+        // TODO: Implement
+        return false;
+    }
+};
+
+int main() {
+    vector<Person> people = {
+        Person(\"Charlie\", 30),
+        Person(\"Alice\", 25),
+        Person(\"Bob\", 35)
+    };
+    
+    // TODO: Sort by age
+    // TODO: Sort by name
+    
+    return 0;
+}\`, 'function_object_sort.cpp')">⬇ Download Skeleton</button>
+                    <button class="collapsible">▼ Show Solution</button>
+                    <div class="collapsible-content">
+                        <div class="code-editor">
+#include <iostream>
+#include <vector>
+#include <algorithm>
+#include <string>
+using namespace std;
+
+class Person {
+public:
+    string name;
+    int age;
+    
+    Person(string n, int a) : name(n), age(a) {}
+    
+    void display() const {
+        cout << name << " (" << age << ")" << endl;
+    }
+};
+
+class SortByAge {
+public:
+    bool operator()(const Person& a, 
+                   const Person& b) const {
+        return a.age < b.age;
+    }
+};
+
+class SortByName {
+public:
+    bool operator()(const Person& a, 
+                   const Person& b) const {
+        return a.name < b.name;
+    }
+};
+
+int main() {
+    vector<Person> people = {
+        Person("Charlie", 30),
+        Person("Alice", 25),
+        Person("Bob", 35)
+    };
+    
+    cout << "Original:" << endl;
+    for(const auto& p : people) p.display();
+    
+    sort(people.begin(), people.end(), 
+         SortByAge());
+    cout << "\nSorted by age:" << endl;
+    for(const auto& p : people) p.display();
+    
+    sort(people.begin(), people.end(), 
+         SortByName());
+    cout << "\nSorted by name:" << endl;
+    for(const auto& p : people) p.display();
+    
+    return 0;
+}
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="section">
+                <div class="section-title">📝 Knowledge Check Quiz</div>
+                <div class="quiz-container">
+                    <button class="quiz-btn" onclick="initializeQuiz()">▶ Start Quiz</button>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <footer><p>COS110 OOP Study Website | November 2025</p></footer>
+
+    <script src="../../js/main.js"></script>
+    <script src="../../js/compiler.js"></script>
+    <script src="../../js/quiz.js"></script>
+
+    <script>
+        function initializeQuiz() {
+            const questions = [
+                {type: 'multiple-choice', question: 'Why return by reference?', options: ['Faster', 'Allows chaining', 'Saves memory', 'All above'], correctAnswer: 'D', explanation: 'Reference return provides all these benefits.'},
+                {type: 'true-false', question: 'You can always safely return local references.', correctAnswer: 'false', explanation: 'Never return references to local objects as they go out of scope.'},
+                {type: 'multiple-choice', question: 'Chaining works with operators that return:', options: ['void', 'value', 'reference', 'pointer'], correctAnswer: 'C', explanation: 'Operators must return reference to enable chaining.'},
+                {type: 'true-false', question: 'a = b = c works because = returns reference.', correctAnswer: 'true', explanation: 'Yes, returning reference from b=c allows assignment to a.'},
+                {type: 'fill-in', question: 'Subscript operator returns:', context: '<span style="color: red;">_______</span>& operator[](int)', hint: 'reference', acceptableAnswers: ['type', 'Type', 'int', 'int&'], explanation: 'Returns reference to allow reading and writing.'},
+                {type: 'true-false', question: 'Function object () can have multiple parameters.', correctAnswer: 'true', explanation: 'Yes, operator() can take any number of parameters.'},
+                {type: 'multiple-choice', question: 'What is a functor used for?', options: ['Function replacement', 'Callbacks', 'Algorithm predicates', 'All above'], correctAnswer: 'D', explanation: 'Functors have many uses in generic programming.'},
+                {type: 'fill-in', question: 'Function call operator:', context: 'ReturnType <span style="color: red;">_______</span>(Parameters)', hint: 'operator', acceptableAnswers: ['operator()', 'operator( )'], explanation: 'operator() allows objects to behave like functions.'},
+                {type: 'true-false', question: 'Subscript operator [] must be a member function.', correctAnswer: 'true', explanation: 'Yes, [] must be a member (cannot be friend).'},
+                {type: 'multiple-choice', question: 'const version of [] is for:', options: ['Reading only', 'Writing only', 'Both', 'Neither'], correctAnswer: 'A', explanation: 'const version is used on const objects for reading.'},
+                {type: 'true-false', question: 'You can return reference to *this from operators.', correctAnswer: 'true', explanation: 'Yes, this is common for assignment and compound operators.'},
+                {type: 'multiple-choice', question: 'Operator chaining example:', options: ['a + b + c', 'a = b = c', 'a += b += c', 'All above'], correctAnswer: 'D', explanation: 'All demonstrate chaining with proper return types.'},
+                {type: 'fill-in', question: 'Assignment returns:', context: '<span style="color: red;">_______</span>& operator=(const T&)', hint: 'type reference', acceptableAnswers: ['T&', 'Type&', 'MyClass&'], explanation: 'Assignment returns reference to *this.'},
+                {type: 'true-false', question: 'Functors are faster than function pointers.', correctAnswer: 'true', explanation: 'Yes, functor calls can be inlined by compilers.'},
+                {type: 'multiple-choice', question: 'operator() with no parameters returns:', options: ['void', 'any type', 'int', 'bool'], correctAnswer: 'B', explanation: 'Return type can be anything depending on use.'},
+                {type: 'true-false', question: 'std::sort uses comparison functors.', correctAnswer: 'true', explanation: 'Yes, you can pass custom comparison objects to sort.'},
+                {type: 'multiple-choice', question: 'Return by reference is efficient because:', options: ['No copying', 'Saves memory', 'Faster access', 'All above'], correctAnswer: 'A', explanation: 'Mainly because no temporary objects are created.'},
+                {type: 'fill-in', question: 'Safe reference return refers to:', context: '<span style="color: red;">_______</span>', hint: '*this or member', acceptableAnswers: ['*this', 'this', 'member', 'members'], explanation: 'Return reference to *this or class members.'},
+                {type: 'true-false', question: 'operator[] can be const for read-only access.', correctAnswer: 'true', explanation: 'Yes, provide both const and non-const versions.'},
+                {type: 'multiple-choice', question: 'Chaining prevents:', options: ['Memory leaks', 'Temporary creation', 'Efficiency loss', 'All above'], correctAnswer: 'D', explanation: 'Proper chaining with references avoids inefficiencies.'}
+            ];
+
+            window.quizSystem = new QuizSystem('Operator References', questions);
+            openQuizModal();
+        }
+
+        if (!document.getElementById('quizModal')) {
+            const modal = document.createElement('div');
+            modal.id = 'quizModal';
+            modal.className = 'quiz-modal';
+            modal.innerHTML = `<div class="quiz-modal-content"><div class="quiz-header"><div><div class="quiz-question-number">Quiz: Operator References</div><div class="quiz-progress">Question 1 of 20</div></div><button class="quiz-close" onclick="closeQuizModal()">✕</button></div><div class="quiz-questions-container"></div></div>`;
+            document.body.appendChild(modal);
+        }
+    </script>
+</body>
+</html>

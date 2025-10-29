@@ -1,0 +1,624 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Template Classes - COS110 OOP Study Website</title>
+    <link rel="stylesheet" href="../../css/style.css">
+</head>
+<body>
+    <nav class="navbar">
+        <a href="../../index.html" class="navbar-brand">📚 COS110 OOP</a>
+        <div class="navbar-search"><input type="text" placeholder="Search topics..."></div>
+    </nav>
+
+    <div class="container">
+        <aside class="sidebar">
+            <div class="sidebar-title">🎨 Templates</div>
+            <a href="../../topics/19-templates-classes.html" class="sidebar-item active">Classes</a>
+            <a href="../../topics/20-templates-functions.html" class="sidebar-item">Functions</a>
+        </aside>
+
+        <main class="main-content">
+            <h1>📦 Template Classes - Generic Programming</h1>
+
+            <section class="section">
+                <div class="section-title">📚 Explanation</div>
+                <div class="explanation">
+                    <h3 style="color: var(--primary);">What are Templates?</h3>
+                    <p>Templates are blueprints for generating code. Template classes allow you to write generic code that works with any data type. Instead of creating separate classes for Stack<int>, Stack<double>, Stack<string>, you define one template that generates them all at compile time.</p>
+
+                    <h3 style="color: var(--primary); margin-top: 20px;">Template Parameters</h3>
+                    <p>Template parameters are placeholders for types (or values). Syntax: template<typename T> or template<class T>. Inside the template, T represents the type. When you instantiate Stack<int>, T becomes int. Multiple parameters are supported: template<typename T, typename U>.</p>
+
+                    <h3 style="color: var(--primary); margin-top: 20px;">Template Instantiation</h3>
+                    <p>When you create Stack<int> s;, the compiler generates a version of Stack with T=int. Each distinct instantiation creates separate code. This is called implicit instantiation. Explicit instantiation is possible with template class declaration.</p>
+
+                    <h3 style="color: var(--primary); margin-top: 20px;">Member Functions in Templates</h3>
+                    <p>Member functions must be defined in the header file (not separate .cpp) because the compiler needs them to instantiate templates. Alternatively, use explicit instantiation. Each instantiation creates separate copies of all member functions.</p>
+
+                    <h3 style="color: var(--primary); margin-top: 20px;">Template Specialization</h3>
+                    <p>Provide specialized implementations for specific types. Syntax: template<> class Stack<bool> { /* special version */ }. This allows optimizations or special behavior for certain types while keeping generic version for others.</p>
+                </div>
+            </section>
+
+            <section class="section">
+                <div class="section-title">💻 Code Examples</div>
+
+                <div class="code-example">
+                    <div class="code-tabs">
+                        <button class="code-tab active" data-tab="simple1">Simple Template</button>
+                        <button class="code-tab" data-tab="full1">Full Program</button>
+                    </div>
+                    <div data-tab-content="simple1" class="code-editor">
+template<typename T>
+class Container {
+private:
+    T data;
+public:
+    Container(T val) : data(val) {}
+    T get() { return data; }
+    void set(T val) { data = val; }
+};
+
+Container<int> ci(42);
+Container<string> cs("hello");
+cout << ci.get() << endl;    // 42
+cout << cs.get() << endl;    // hello
+                    </div>
+                    <div data-tab-content="full1" style="display: none;">
+                        <textarea class="code-editor" id="code1">#include <iostream>
+#include <string>
+using namespace std;
+
+template<typename T>
+class Container {
+private:
+    T data;
+public:
+    Container(T val) : data(val) {}
+    
+    T get() const {
+        return data;
+    }
+    
+    void set(T val) {
+        data = val;
+    }
+    
+    void display() {
+        cout << "Value: " << data << endl;
+    }
+};
+
+int main() {
+    Container<int> intContainer(42);
+    Container<double> doubleContainer(3.14);
+    Container<string> stringContainer("Template");
+    
+    intContainer.display();
+    doubleContainer.display();
+    stringContainer.display();
+    
+    intContainer.set(100);
+    intContainer.display();
+    
+    return 0;
+}
+                        </textarea>
+                    </div>
+                    <div class="code-buttons">
+                        <button class="btn btn-primary" onclick="runCode(document.getElementById('code1'), document.getElementById('output1'))">▶ Run Code</button>
+                    </div>
+                    <div class="output-box" id="output1">Click "Run Code" to execute...</div>
+                </div>
+
+                <div class="code-example">
+                    <div class="code-tabs">
+                        <button class="code-tab active" data-tab="simple2">Template Stack</button>
+                        <button class="code-tab" data-tab="full2">Full Program</button>
+                    </div>
+                    <div data-tab-content="simple2" class="code-editor">
+template<typename T>
+class Stack {
+private:
+    T items[100];
+    int top;
+public:
+    Stack() : top(-1) {}
+    
+    void push(T val) {
+        items[++top] = val;
+    }
+    
+    T pop() {
+        return items[top--];
+    }
+    
+    bool isEmpty() {
+        return top == -1;
+    }
+};
+
+Stack<int> st;
+st.push(5);
+st.push(10);
+cout << st.pop() << endl;  // 10
+                    </div>
+                    <div data-tab-content="full2" style="display: none;">
+                        <textarea class="code-editor" id="code2">#include <iostream>
+using namespace std;
+
+template<typename T>
+class Stack {
+private:
+    static const int MAX = 100;
+    T items[MAX];
+    int top;
+public:
+    Stack() : top(-1) {}
+    
+    void push(T val) {
+        if(top < MAX - 1) {
+            items[++top] = val;
+            cout << "Pushed: " << val << endl;
+        }
+    }
+    
+    T pop() {
+        if(!isEmpty()) {
+            cout << "Popped: " << items[top] << endl;
+            return items[top--];
+        }
+        return T();
+    }
+    
+    bool isEmpty() const {
+        return top == -1;
+    }
+    
+    int size() const {
+        return top + 1;
+    }
+};
+
+int main() {
+    cout << "=== Integer Stack ===" << endl;
+    Stack<int> intStack;
+    intStack.push(10);
+    intStack.push(20);
+    intStack.push(30);
+    cout << "Size: " << intStack.size() << endl;
+    
+    cout << "\n=== Double Stack ===" << endl;
+    Stack<double> doubleStack;
+    doubleStack.push(3.14);
+    doubleStack.push(2.71);
+    cout << "Size: " << doubleStack.size() << endl;
+    doubleStack.pop();
+    doubleStack.pop();
+    
+    cout << "\n=== String Stack ===" << endl;
+    Stack<string> stringStack;
+    stringStack.push("Hello");
+    stringStack.push("World");
+    stringStack.pop();
+    
+    return 0;
+}
+                        </textarea>
+                    </div>
+                    <div class="code-buttons">
+                        <button class="btn btn-primary" onclick="runCode(document.getElementById('code2'), document.getElementById('output2'))">▶ Run Code</button>
+                    </div>
+                    <div class="output-box" id="output2">Click "Run Code" to execute...</div>
+                </div>
+
+                <div class="code-example">
+                    <div class="code-tabs">
+                        <button class="code-tab active" data-tab="simple3">Multiple Parameters</button>
+                        <button class="code-tab" data-tab="full3">Full Program</button>
+                    </div>
+                    <div data-tab-content="simple3" class="code-editor">
+template<typename K, typename V>
+class Pair {
+private:
+    K key;
+    V value;
+public:
+    Pair(K k, V v) : key(k), value(v) {}
+    K getKey() { return key; }
+    V getValue() { return value; }
+};
+
+Pair<string, int> p("age", 25);
+cout << p.getKey() << ": " << p.getValue() << endl;
+                    </div>
+                    <div data-tab-content="full3" style="display: none;">
+                        <textarea class="code-editor" id="code3">#include <iostream>
+#include <string>
+using namespace std;
+
+template<typename K, typename V>
+class Pair {
+private:
+    K key;
+    V value;
+public:
+    Pair(K k, V v) : key(k), value(v) {}
+    
+    K getKey() const { return key; }
+    V getValue() const { return value; }
+    
+    void display() {
+        cout << key << " -> " << value << endl;
+    }
+};
+
+template<typename T>
+class Array {
+private:
+    T items[10];
+    int size;
+public:
+    Array() : size(0) {}
+    
+    void add(T val) {
+        if(size < 10) {
+            items[size++] = val;
+        }
+    }
+    
+    void display() {
+        for(int i = 0; i < size; i++) {
+            cout << items[i] << " ";
+        }
+        cout << endl;
+    }
+};
+
+int main() {
+    cout << "=== Pairs ===" << endl;
+    Pair<string, int> p1("Alice", 25);
+    Pair<string, double> p2("Pi", 3.14159);
+    
+    p1.display();
+    p2.display();
+    
+    cout << "\n=== Arrays ===" << endl;
+    Array<int> intArr;
+    intArr.add(1);
+    intArr.add(2);
+    intArr.add(3);
+    cout << "Int Array: ";
+    intArr.display();
+    
+    Array<string> strArr;
+    strArr.add("one");
+    strArr.add("two");
+    strArr.add("three");
+    cout << "String Array: ";
+    strArr.display();
+    
+    return 0;
+}
+                        </textarea>
+                    </div>
+                    <div class="code-buttons">
+                        <button class="btn btn-primary" onclick="runCode(document.getElementById('code3'), document.getElementById('output3'))">▶ Run Code</button>
+                    </div>
+                    <div class="output-box" id="output3">Click "Run Code" to execute...</div>
+                </div>
+            </section>
+
+            <section class="section">
+                <div class="section-title">✍️ Coding Activities</div>
+
+                <div class="activity">
+                    <div class="activity-title">⚡ Intermediate Challenge: Generic Queue</div>
+                    <p>Create a template Queue class with enqueue, dequeue, and display methods.</p>
+                    <button class="btn btn-secondary" onclick="downloadCode(\`#include <iostream>
+using namespace std;
+
+template<typename T>
+class Queue {
+private:
+    struct Node {
+        T data;
+        Node* next;
+        Node(T val) : data(val), next(nullptr) {}
+    };
+    Node* front;
+    Node* rear;
+    
+public:
+    Queue() : front(nullptr), rear(nullptr) {}
+    
+    // TODO: enqueue(T val)
+    // TODO: T dequeue()
+    // TODO: bool isEmpty()
+    
+    ~Queue() {
+        while(!isEmpty()) {
+            dequeue();
+        }
+    }
+};
+
+int main() {
+    Queue<int> q;
+    q.enqueue(1);
+    q.enqueue(2);
+    cout << q.dequeue() << endl;
+    return 0;
+}\`, 'generic_queue.cpp')">⬇ Download Skeleton</button>
+                    <button class="collapsible">▼ Show Solution</button>
+                    <div class="collapsible-content">
+                        <div class="code-editor">
+#include <iostream>
+using namespace std;
+
+template<typename T>
+class Queue {
+private:
+    struct Node {
+        T data;
+        Node* next;
+        Node(T val) : data(val), next(nullptr) {}
+    };
+    Node* front;
+    Node* rear;
+    
+public:
+    Queue() : front(nullptr), rear(nullptr) {}
+    
+    void enqueue(T val) {
+        Node* newNode = new Node(val);
+        if(isEmpty()) {
+            front = rear = newNode;
+        } else {
+            rear->next = newNode;
+            rear = newNode;
+        }
+        cout << "Enqueued: " << val << endl;
+    }
+    
+    T dequeue() {
+        if(isEmpty()) {
+            cout << "Queue empty" << endl;
+            return T();
+        }
+        Node* temp = front;
+        T val = temp->data;
+        front = front->next;
+        if(front == nullptr) {
+            rear = nullptr;
+        }
+        cout << "Dequeued: " << val << endl;
+        delete temp;
+        return val;
+    }
+    
+    bool isEmpty() const {
+        return front == nullptr;
+    }
+    
+    ~Queue() {
+        while(!isEmpty()) {
+            dequeue();
+        }
+    }
+};
+
+int main() {
+    cout << "=== Int Queue ===" << endl;
+    Queue<int> intQ;
+    intQ.enqueue(10);
+    intQ.enqueue(20);
+    intQ.enqueue(30);
+    intQ.dequeue();
+    intQ.dequeue();
+    
+    cout << "\n=== String Queue ===" << endl;
+    Queue<string> strQ;
+    strQ.enqueue("First");
+    strQ.enqueue("Second");
+    strQ.dequeue();
+    
+    return 0;
+}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="activity">
+                    <div class="activity-title">🔥 Advanced Challenge: Template Pair & Dictionary</div>
+                    <p>Create generic Pair and Dictionary classes with template parameter combinations.</p>
+                    <button class="btn btn-secondary" onclick="downloadCode(\`#include <iostream>
+#include <string>
+using namespace std;
+
+template<typename K, typename V>
+class Dictionary {
+private:
+    struct Entry {
+        K key;
+        V value;
+        Entry(K k, V v) : key(k), value(v) {}
+    };
+    Entry* entries[100];
+    int count;
+    
+public:
+    Dictionary() : count(0) {}
+    
+    // TODO: void add(K key, V value)
+    // TODO: V get(K key)
+    // TODO: bool contains(K key)
+    
+    void display() {
+        cout << \"Dictionary (\" << count << \" entries):\" << endl;
+        for(int i = 0; i < count; i++) {
+            cout << \"  \" << entries[i]->key 
+                 << \" -> \" << entries[i]->value << endl;
+        }
+    }
+};
+
+int main() {
+    Dictionary<string, int> d;
+    d.add(\"Alice\", 25);
+    d.add(\"Bob\", 30);
+    d.display();
+    return 0;
+}\`, 'template_dictionary.cpp')">⬇ Download Skeleton</button>
+                    <button class="collapsible">▼ Show Solution</button>
+                    <div class="collapsible-content">
+                        <div class="code-editor">
+#include <iostream>
+#include <string>
+using namespace std;
+
+template<typename K, typename V>
+class Dictionary {
+private:
+    struct Entry {
+        K key;
+        V value;
+        Entry(K k, V v) : key(k), value(v) {}
+    };
+    Entry* entries[100];
+    int count;
+    
+public:
+    Dictionary() : count(0) {}
+    
+    void add(K key, V value) {
+        if(!contains(key)) {
+            entries[count++] = 
+                new Entry(key, value);
+            cout << "Added: " << key << " -> " 
+                 << value << endl;
+        }
+    }
+    
+    V get(K key) {
+        for(int i = 0; i < count; i++) {
+            if(entries[i]->key == key) {
+                return entries[i]->value;
+            }
+        }
+        return V();
+    }
+    
+    bool contains(K key) {
+        for(int i = 0; i < count; i++) {
+            if(entries[i]->key == key) {
+                return true;
+            }
+        }
+        return false;
+    }
+    
+    void display() {
+        cout << "Dictionary (" << count 
+             << " entries):" << endl;
+        for(int i = 0; i < count; i++) {
+            cout << "  " << entries[i]->key 
+                 << " -> " << entries[i]->value 
+                 << endl;
+        }
+    }
+    
+    ~Dictionary() {
+        for(int i = 0; i < count; i++) {
+            delete entries[i];
+        }
+    }
+};
+
+int main() {
+    Dictionary<string, int> ages;
+    ages.add("Alice", 25);
+    ages.add("Bob", 30);
+    ages.add("Charlie", 28);
+    
+    cout << "All entries:" << endl;
+    ages.display();
+    
+    cout << "\nLookup Alice: " << ages.get("Alice") 
+         << endl;
+    cout << "Contains Bob: " << ages.contains("Bob") 
+         << endl;
+    
+    cout << "\n" << endl;
+    
+    Dictionary<int, string> codes;
+    codes.add(100, "OK");
+    codes.add(404, "Not Found");
+    codes.add(500, "Server Error");
+    
+    codes.display();
+    cout << "Code 404: " << codes.get(404) << endl;
+    
+    return 0;
+}
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="section">
+                <div class="section-title">📝 Knowledge Check Quiz</div>
+                <div class="quiz-container">
+                    <button class="quiz-btn" onclick="initializeQuiz()">▶ Start Quiz</button>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <footer><p>COS110 OOP Study Website | November 2025</p></footer>
+
+    <script src="../../js/main.js"></script>
+    <script src="../../js/compiler.js"></script>
+    <script src="../../js/quiz.js"></script>
+
+    <script>
+        function initializeQuiz() {
+            const questions = [
+                {type: 'multiple-choice', question: 'What is a template?', options: ['Inheritance', 'Generic blueprint', 'Pointer type', 'None'], correctAnswer: 'B', explanation: 'Templates are compile-time blueprints for generic code.'},
+                {type: 'true-false', question: 'Templates work with any type.', correctAnswer: 'true', explanation: 'Yes, templates generate code for each type used.'},
+                {type: 'fill-in', question: 'Template declaration:', context: '<span style="color: red;">_______</span><typename T>', hint: 'template', acceptableAnswers: ['template', 'template '], explanation: 'Use template keyword to declare templates.'},
+                {type: 'multiple-choice', question: 'T in template<typename T> represents:', options: ['Fixed type', 'Placeholder', 'Template', 'Function'], correctAnswer: 'B', explanation: 'T is a placeholder for any type.'},
+                {type: 'true-false', question: 'Template instantiation happens at compile time.', correctAnswer: 'true', explanation: 'Yes, compiler generates code for each instantiation.'},
+                {type: 'multiple-choice', question: 'Member functions must be:', options: ['Compiled separately', 'In header file', 'In .cpp', 'Global'], correctAnswer: 'B', explanation: 'Template member functions go in header for instantiation.'},
+                {type: 'fill-in', question: 'Instantiate Stack<int>:', context: '<span style="color: red;">_______</span><int> s;', hint: 'Stack', acceptableAnswers: ['Stack', 'Stack '], explanation: 'Use type in angle brackets to instantiate.'},
+                {type: 'true-false', question: 'Each instantiation creates separate code.', correctAnswer: 'true', explanation: 'Yes, Stack<int> and Stack<double> are different types.'},
+                {type: 'multiple-choice', question: 'Multiple template parameters:', options: ['Not allowed', 'Allowed', 'One only', 'Limited'], correctAnswer: 'B', explanation: 'Can have multiple parameters: template<typename T, typename U>.'},
+                {type: 'fill-in', question: 'Two parameters:', context: 'template<typename T, <span style="color: red;">_______</span> U>', hint: 'typename', acceptableAnswers: ['typename', 'typename '], explanation: 'Each parameter needs typename keyword.'},
+                {type: 'true-false', question: 'Template specialization is possible.', correctAnswer: 'true', explanation: 'Yes, provide specialized implementations for specific types.'},
+                {type: 'multiple-choice', question: 'Template specialization:', options: ['Required', 'Optional', 'Forbidden', 'Rarely used'], correctAnswer: 'B', explanation: 'Specialization allows optimizations for specific types.'},
+                {type: 'true-false', question: 'Stack<int> and Stack<double> are same type.', correctAnswer: 'false', explanation: 'No, each is a distinct type.'},
+                {type: 'fill-in', question: 'Default initialization of T:', context: 'return <span style="color: red;">_______</span>();', hint: 'T', acceptableAnswers: ['T', 'T()'], explanation: 'T() creates default value for type T.'},
+                {type: 'multiple-choice', question: 'Template inheritance possible:', options: ['No', 'Yes', 'Maybe', 'Rarely'], correctAnswer: 'B', explanation: 'Can inherit from or create derived template classes.'},
+                {type: 'true-false', question: 'Templates increase code size.', correctAnswer: 'true', explanation: 'Yes, separate instantiation for each type.'},
+                {type: 'multiple-choice', question: 'typename vs class in templates:', options: ['Different', 'Same', 'Rarely class', 'Context dependent'], correctAnswer: 'B', explanation: 'typename and class are equivalent in template context.'},
+                {type: 'true-false', question: 'Can specialize specific member functions.', correctAnswer: 'true', explanation: 'Yes, can specialize methods without full class.'},
+                {type: 'multiple-choice', question: 'Template code duplication:', options: ['Avoided', 'Unavoidable', 'Minimal', 'Depends'], correctAnswer: 'B', explanation: 'Each instantiation creates separate code.'},
+                {type: 'true-false', question: 'Templates provide type safety.', correctAnswer: 'true', explanation: 'Yes, type checking happens at compile time.'}
+            ];
+
+            window.quizSystem = new QuizSystem('Template Classes', questions);
+            openQuizModal();
+        }
+
+        if (!document.getElementById('quizModal')) {
+            const modal = document.createElement('div');
+            modal.id = 'quizModal';
+            modal.className = 'quiz-modal';
+            modal.innerHTML = `<div class="quiz-modal-content"><div class="quiz-header"><div><div class="quiz-question-number">Quiz: Template Classes</div><div class="quiz-progress">Question 1 of 20</div></div><button class="quiz-close" onclick="closeQuizModal()">✕</button></div><div class="quiz-questions-container"></div></div>`;
+            document.body.appendChild(modal);
+        }
+    </script>
+</body>
+</html>

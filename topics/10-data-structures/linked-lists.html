@@ -1,0 +1,758 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Linked Lists - COS110 OOP Study Website</title>
+    <link rel="stylesheet" href="../../css/style.css">
+</head>
+<body>
+    <nav class="navbar">
+        <a href="../../index.html" class="navbar-brand">📚 COS110 OOP</a>
+        <div class="navbar-search"><input type="text" placeholder="Search topics..."></div>
+    </nav>
+
+    <div class="container">
+        <aside class="sidebar">
+            <div class="sidebar-title">📊 Data Structures</div>
+            <a href="../../topics/21-data-structures-linked-lists.html" class="sidebar-item active">Linked Lists</a>
+            <a href="../../topics/22-data-structures-doubly-linked.html" class="sidebar-item">Doubly Linked</a>
+            <a href="../../topics/23-data-structures-circular.html" class="sidebar-item">Circular Lists</a>
+            <a href="../../topics/24-data-structures-stacks.html" class="sidebar-item">Stacks</a>
+            <a href="../../topics/25-data-structures-queues.html" class="sidebar-item">Queues</a>
+            <a href="../../topics/26-data-structures-stl.html" class="sidebar-item">STL</a>
+        </aside>
+
+        <main class="main-content">
+            <h1>🔗 Linked Lists - Fundamentals</h1>
+
+            <section class="section">
+                <div class="section-title">📚 Explanation</div>
+                <div class="explanation">
+                    <h3 style="color: var(--primary);">What is a Linked List?</h3>
+                    <p>A linked list is a dynamic data structure consisting of nodes connected by pointers. Each node contains data and a pointer to the next node. Unlike arrays, linked lists don't require contiguous memory and can grow or shrink dynamically. The first node is called the head, and the last node points to nullptr.</p>
+
+                    <h3 style="color: var(--primary); margin-top: 20px;">Node Structure</h3>
+                    <p>Each node typically contains a data member and a next pointer. Syntax: struct Node { int data; Node* next; }. Nodes are usually created dynamically with new. The head pointer tracks the beginning of the list. If the list is empty, head is nullptr.</p>
+
+                    <h3 style="color: var(--primary); margin-top: 20px;">Insertion Operations</h3>
+                    <p>Insert at beginning: create new node, set its next to current head, update head. Insert at end: traverse to last node, set its next to new node. Insert at position: find predecessor, insert between nodes. Each operation requires careful pointer manipulation.</p>
+
+                    <h3 style="color: var(--primary); margin-top: 20px;">Deletion Operations</h3>
+                    <p>Delete from beginning: update head to head->next, delete old head. Delete from end: traverse to predecessor of last node, update its next to nullptr. Delete position: find predecessor, update its next, delete node. Must handle edge cases carefully.</p>
+
+                    <h3 style="color: var(--primary); margin-top: 20px;">Traversal and Search</h3>
+                    <p>Traverse using a pointer that starts at head and follows next pointers until nullptr. Search compares each node's data with target. Common operations: display list, find element, count nodes, reverse list. Traversal time is O(n).</p>
+                </div>
+            </section>
+
+            <section class="section">
+                <div class="section-title">💻 Code Examples</div>
+
+                <div class="code-example">
+                    <div class="code-tabs">
+                        <button class="code-tab active" data-tab="simple1">Basic Linked List</button>
+                        <button class="code-tab" data-tab="full1">Full Program</button>
+                    </div>
+                    <div data-tab-content="simple1" class="code-editor">
+struct Node {
+    int data;
+    Node* next;
+    Node(int val) : data(val), next(nullptr) {}
+};
+
+class LinkedList {
+private:
+    Node* head;
+public:
+    LinkedList() : head(nullptr) {}
+    
+    void insertAtBegin(int val) {
+        Node* newNode = new Node(val);
+        newNode->next = head;
+        head = newNode;
+    }
+    
+    void display() {
+        Node* curr = head;
+        while(curr != nullptr) {
+            cout << curr->data << " -> ";
+            curr = curr->next;
+        }
+        cout << "NULL" << endl;
+    }
+};
+
+LinkedList list;
+list.insertAtBegin(3);
+list.insertAtBegin(2);
+list.insertAtBegin(1);
+list.display();  // 1 -> 2 -> 3 -> NULL
+                    </div>
+                    <div data-tab-content="full1" style="display: none;">
+                        <textarea class="code-editor" id="code1">#include <iostream>
+using namespace std;
+
+struct Node {
+    int data;
+    Node* next;
+    Node(int val) : data(val), next(nullptr) {
+        cout << "Node created: " << val << endl;
+    }
+};
+
+class LinkedList {
+private:
+    Node* head;
+public:
+    LinkedList() : head(nullptr) {
+        cout << "List created" << endl;
+    }
+    
+    void insertAtBegin(int val) {
+        Node* newNode = new Node(val);
+        newNode->next = head;
+        head = newNode;
+    }
+    
+    void insertAtEnd(int val) {
+        Node* newNode = new Node(val);
+        if(head == nullptr) {
+            head = newNode;
+            return;
+        }
+        Node* curr = head;
+        while(curr->next != nullptr) {
+            curr = curr->next;
+        }
+        curr->next = newNode;
+    }
+    
+    void display() {
+        cout << "List: ";
+        Node* curr = head;
+        while(curr != nullptr) {
+            cout << curr->data << " -> ";
+            curr = curr->next;
+        }
+        cout << "NULL" << endl;
+    }
+    
+    ~LinkedList() {
+        Node* curr = head;
+        while(curr != nullptr) {
+            Node* temp = curr;
+            curr = curr->next;
+            delete temp;
+        }
+        cout << "List destroyed" << endl;
+    }
+};
+
+int main() {
+    LinkedList list;
+    
+    cout << "\n=== Insert at End ===" << endl;
+    list.insertAtEnd(10);
+    list.insertAtEnd(20);
+    list.insertAtEnd(30);
+    list.display();
+    
+    cout << "\n=== Insert at Begin ===" << endl;
+    list.insertAtBegin(5);
+    list.insertAtBegin(1);
+    list.display();
+    
+    return 0;
+}
+                        </textarea>
+                    </div>
+                    <div class="code-buttons">
+                        <button class="btn btn-primary" onclick="runCode(document.getElementById('code1'), document.getElementById('output1'))">▶ Run Code</button>
+                    </div>
+                    <div class="output-box" id="output1">Click "Run Code" to execute...</div>
+                </div>
+
+                <div class="code-example">
+                    <div class="code-tabs">
+                        <button class="code-tab active" data-tab="simple2">Deletion</button>
+                        <button class="code-tab" data-tab="full2">Full Program</button>
+                    </div>
+                    <div data-tab-content="simple2" class="code-editor">
+void deleteFromBegin() {
+    if(head == nullptr) return;
+    Node* temp = head;
+    head = head->next;
+    delete temp;
+}
+
+void deleteFromEnd() {
+    if(head == nullptr) return;
+    if(head->next == nullptr) {
+        delete head;
+        head = nullptr;
+        return;
+    }
+    Node* curr = head;
+    while(curr->next->next != nullptr) {
+        curr = curr->next;
+    }
+    delete curr->next;
+    curr->next = nullptr;
+}
+                    </div>
+                    <div data-tab-content="full2" style="display: none;">
+                        <textarea class="code-editor" id="code2">#include <iostream>
+using namespace std;
+
+struct Node {
+    int data;
+    Node* next;
+    Node(int val) : data(val), next(nullptr) {}
+};
+
+class LinkedList {
+private:
+    Node* head;
+public:
+    LinkedList() : head(nullptr) {}
+    
+    void insert(int val) {
+        Node* newNode = new Node(val);
+        if(head == nullptr) {
+            head = newNode;
+            return;
+        }
+        Node* curr = head;
+        while(curr->next != nullptr) {
+            curr = curr->next;
+        }
+        curr->next = newNode;
+    }
+    
+    void deleteFromBegin() {
+        if(head == nullptr) {
+            cout << "List empty" << endl;
+            return;
+        }
+        cout << "Deleting: " << head->data << endl;
+        Node* temp = head;
+        head = head->next;
+        delete temp;
+    }
+    
+    void deleteFromEnd() {
+        if(head == nullptr) {
+            cout << "List empty" << endl;
+            return;
+        }
+        if(head->next == nullptr) {
+            cout << "Deleting: " << head->data << endl;
+            delete head;
+            head = nullptr;
+            return;
+        }
+        Node* curr = head;
+        while(curr->next->next != nullptr) {
+            curr = curr->next;
+        }
+        cout << "Deleting: " << curr->next->data << endl;
+        delete curr->next;
+        curr->next = nullptr;
+    }
+    
+    void display() {
+        cout << "List: ";
+        Node* curr = head;
+        while(curr != nullptr) {
+            cout << curr->data << " -> ";
+            curr = curr->next;
+        }
+        cout << "NULL" << endl;
+    }
+    
+    ~LinkedList() {
+        while(head != nullptr) {
+            deleteFromBegin();
+        }
+    }
+};
+
+int main() {
+    LinkedList list;
+    
+    cout << "=== Inserting ===" << endl;
+    for(int i = 10; i <= 50; i += 10) {
+        list.insert(i);
+    }
+    list.display();
+    
+    cout << "\n=== Delete from Begin ===" << endl;
+    list.deleteFromBegin();
+    list.display();
+    
+    cout << "\n=== Delete from End ===" << endl;
+    list.deleteFromEnd();
+    list.display();
+    
+    return 0;
+}
+                        </textarea>
+                    </div>
+                    <div class="code-buttons">
+                        <button class="btn btn-primary" onclick="runCode(document.getElementById('code2'), document.getElementById('output2'))">▶ Run Code</button>
+                    </div>
+                    <div class="output-box" id="output2">Click "Run Code" to execute...</div>
+                </div>
+
+                <div class="code-example">
+                    <div class="code-tabs">
+                        <button class="code-tab active" data-tab="simple3">Search & Count</button>
+                        <button class="code-tab" data-tab="full3">Full Program</button>
+                    </div>
+                    <div data-tab-content="simple3" class="code-editor">
+bool search(int key) {
+    Node* curr = head;
+    while(curr != nullptr) {
+        if(curr->data == key) return true;
+        curr = curr->next;
+    }
+    return false;
+}
+
+int count() {
+    int cnt = 0;
+    Node* curr = head;
+    while(curr != nullptr) {
+        cnt++;
+        curr = curr->next;
+    }
+    return cnt;
+}
+
+list.search(25);  // true or false
+cout << "Size: " << list.count() << endl;
+                    </div>
+                    <div data-tab-content="full3" style="display: none;">
+                        <textarea class="code-editor" id="code3">#include <iostream>
+using namespace std;
+
+struct Node {
+    int data;
+    Node* next;
+    Node(int val) : data(val), next(nullptr) {}
+};
+
+class LinkedList {
+private:
+    Node* head;
+public:
+    LinkedList() : head(nullptr) {}
+    
+    void insert(int val) {
+        Node* newNode = new Node(val);
+        if(head == nullptr) {
+            head = newNode;
+            return;
+        }
+        Node* curr = head;
+        while(curr->next != nullptr) {
+            curr = curr->next;
+        }
+        curr->next = newNode;
+    }
+    
+    bool search(int key) {
+        Node* curr = head;
+        while(curr != nullptr) {
+            if(curr->data == key) {
+                return true;
+            }
+            curr = curr->next;
+        }
+        return false;
+    }
+    
+    int count() {
+        int cnt = 0;
+        Node* curr = head;
+        while(curr != nullptr) {
+            cnt++;
+            curr = curr->next;
+        }
+        return cnt;
+    }
+    
+    void display() {
+        cout << "List: ";
+        Node* curr = head;
+        while(curr != nullptr) {
+            cout << curr->data << " -> ";
+            curr = curr->next;
+        }
+        cout << "NULL" << endl;
+    }
+    
+    ~LinkedList() {
+        Node* curr = head;
+        while(curr != nullptr) {
+            Node* temp = curr;
+            curr = curr->next;
+            delete temp;
+        }
+    }
+};
+
+int main() {
+    LinkedList list;
+    
+    cout << "=== Building List ===" << endl;
+    for(int i = 1; i <= 5; i++) {
+        list.insert(i * 10);
+    }
+    list.display();
+    
+    cout << "\n=== Search Operations ===" << endl;
+    cout << "Search 30: " 
+         << (list.search(30) ? "Found" : "Not found") << endl;
+    cout << "Search 99: " 
+         << (list.search(99) ? "Found" : "Not found") << endl;
+    cout << "Search 10: " 
+         << (list.search(10) ? "Found" : "Not found") << endl;
+    
+    cout << "\n=== Count ===" << endl;
+    cout << "List size: " << list.count() << endl;
+    
+    return 0;
+}
+                        </textarea>
+                    </div>
+                    <div class="code-buttons">
+                        <button class="btn btn-primary" onclick="runCode(document.getElementById('code3'), document.getElementById('output3'))">▶ Run Code</button>
+                    </div>
+                    <div class="output-box" id="output3">Click "Run Code" to execute...</div>
+                </div>
+            </section>
+
+            <section class="section">
+                <div class="section-title">✍️ Coding Activities</div>
+
+                <div class="activity">
+                    <div class="activity-title">⚡ Intermediate Challenge: Insert at Position</div>
+                    <p>Add method to insert at specific position in linked list.</p>
+                    <button class="btn btn-secondary" onclick="downloadCode(\`#include <iostream>
+using namespace std;
+
+struct Node {
+    int data;
+    Node* next;
+    Node(int val) : data(val), next(nullptr) {}
+};
+
+class LinkedList {
+private:
+    Node* head;
+public:
+    LinkedList() : head(nullptr) {}
+    
+    void insert(int val) { /* existing */ }
+    
+    // TODO: void insertAt(int pos, int val)
+    
+    void display() { /* existing */ }
+};
+
+int main() {
+    LinkedList list;
+    list.insert(10);
+    list.insert(20);
+    list.insert(40);
+    list.insertAt(2, 30);
+    return 0;
+}\`, 'linked_list_insert_pos.cpp')">⬇ Download Skeleton</button>
+                    <button class="collapsible">▼ Show Solution</button>
+                    <div class="collapsible-content">
+                        <div class="code-editor">
+#include <iostream>
+using namespace std;
+
+struct Node {
+    int data;
+    Node* next;
+    Node(int val) : data(val), next(nullptr) {}
+};
+
+class LinkedList {
+private:
+    Node* head;
+public:
+    LinkedList() : head(nullptr) {}
+    
+    void insert(int val) {
+        Node* newNode = new Node(val);
+        if(head == nullptr) {
+            head = newNode;
+            return;
+        }
+        Node* curr = head;
+        while(curr->next != nullptr) {
+            curr = curr->next;
+        }
+        curr->next = newNode;
+    }
+    
+    void insertAt(int pos, int val) {
+        if(pos < 1) {
+            cout << "Invalid position" << endl;
+            return;
+        }
+        
+        Node* newNode = new Node(val);
+        
+        if(pos == 1) {
+            newNode->next = head;
+            head = newNode;
+            return;
+        }
+        
+        Node* curr = head;
+        for(int i = 1; i < pos - 1 && curr != nullptr; i++) {
+            curr = curr->next;
+        }
+        
+        if(curr == nullptr) {
+            cout << "Position out of range" << endl;
+            return;
+        }
+        
+        newNode->next = curr->next;
+        curr->next = newNode;
+    }
+    
+    void display() {
+        cout << "List: ";
+        Node* curr = head;
+        while(curr != nullptr) {
+            cout << curr->data << " -> ";
+            curr = curr->next;
+        }
+        cout << "NULL" << endl;
+    }
+    
+    ~LinkedList() {
+        Node* curr = head;
+        while(curr != nullptr) {
+            Node* temp = curr;
+            curr = curr->next;
+            delete temp;
+        }
+    }
+};
+
+int main() {
+    LinkedList list;
+    
+    cout << "=== Initial List ===" << endl;
+    list.insert(10);
+    list.insert(20);
+    list.insert(40);
+    list.display();
+    
+    cout << "\n=== Insert 30 at position 3 ===" << endl;
+    list.insertAt(3, 30);
+    list.display();
+    
+    cout << "\n=== Insert 5 at position 1 ===" << endl;
+    list.insertAt(1, 5);
+    list.display();
+    
+    cout << "\n=== Insert 50 at end ===" << endl;
+    list.insertAt(6, 50);
+    list.display();
+    
+    return 0;
+}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="activity">
+                    <div class="activity-title">🔥 Advanced Challenge: Reverse Linked List</div>
+                    <p>Implement method to reverse entire linked list in-place.</p>
+                    <button class="btn btn-secondary" onclick="downloadCode(\`#include <iostream>
+using namespace std;
+
+struct Node {
+    int data;
+    Node* next;
+    Node(int val) : data(val), next(nullptr) {}
+};
+
+class LinkedList {
+private:
+    Node* head;
+public:
+    LinkedList() : head(nullptr) {}
+    
+    void insert(int val) { /* existing */ }
+    
+    // TODO: void reverse()
+    // Use three pointers: prev, curr, next
+    
+    void display() { /* existing */ }
+};
+
+int main() {
+    LinkedList list;
+    list.insert(1);
+    list.insert(2);
+    list.insert(3);
+    list.display();
+    list.reverse();
+    list.display();
+    return 0;
+}\`, 'linked_list_reverse.cpp')">⬇ Download Skeleton</button>
+                    <button class="collapsible">▼ Show Solution</button>
+                    <div class="collapsible-content">
+                        <div class="code-editor">
+#include <iostream>
+using namespace std;
+
+struct Node {
+    int data;
+    Node* next;
+    Node(int val) : data(val), next(nullptr) {}
+};
+
+class LinkedList {
+private:
+    Node* head;
+public:
+    LinkedList() : head(nullptr) {}
+    
+    void insert(int val) {
+        Node* newNode = new Node(val);
+        if(head == nullptr) {
+            head = newNode;
+            return;
+        }
+        Node* curr = head;
+        while(curr->next != nullptr) {
+            curr = curr->next;
+        }
+        curr->next = newNode;
+    }
+    
+    void reverse() {
+        Node* prev = nullptr;
+        Node* curr = head;
+        Node* next = nullptr;
+        
+        while(curr != nullptr) {
+            next = curr->next;
+            curr->next = prev;
+            prev = curr;
+            curr = next;
+        }
+        
+        head = prev;
+    }
+    
+    void display() {
+        cout << "List: ";
+        Node* curr = head;
+        while(curr != nullptr) {
+            cout << curr->data << " -> ";
+            curr = curr->next;
+        }
+        cout << "NULL" << endl;
+    }
+    
+    ~LinkedList() {
+        Node* curr = head;
+        while(curr != nullptr) {
+            Node* temp = curr;
+            curr = curr->next;
+            delete temp;
+        }
+    }
+};
+
+int main() {
+    LinkedList list;
+    
+    cout << "=== Building List ===" << endl;
+    for(int i = 1; i <= 5; i++) {
+        list.insert(i);
+    }
+    list.display();
+    
+    cout << "\n=== After Reverse ===" << endl;
+    list.reverse();
+    list.display();
+    
+    cout << "\n=== Reverse Again ===" << endl;
+    list.reverse();
+    list.display();
+    
+    return 0;
+}
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="section">
+                <div class="section-title">📝 Knowledge Check Quiz</div>
+                <div class="quiz-container">
+                    <button class="quiz-btn" onclick="initializeQuiz()">▶ Start Quiz</button>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <footer><p>COS110 OOP Study Website | November 2025</p></footer>
+
+    <script src="../../js/main.js"></script>
+    <script src="../../js/compiler.js"></script>
+    <script src="../../js/quiz.js"></script>
+
+    <script>
+        function initializeQuiz() {
+            const questions = [
+                {type: 'multiple-choice', question: 'Linked list structure:', options: ['Array-based', 'Pointer-based', 'Hybrid', 'Stack-based'], correctAnswer: 'B', explanation: 'Linked lists use pointers to connect nodes.'},
+                {type: 'true-false', question: 'Linked lists require contiguous memory.', correctAnswer: 'false', explanation: 'No, nodes can be scattered in memory.'},
+                {type: 'fill-in', question: 'Each node contains:', context: 'data and <span style="color: red;">_______</span> pointer', hint: 'next', acceptableAnswers: ['next', 'next '], explanation: 'Each node has data and next pointer.'},
+                {type: 'true-false', question: 'Head is the first node.', correctAnswer: 'true', explanation: 'Yes, head points to the beginning.'},
+                {type: 'multiple-choice', question: 'Last node next is:', options: ['nullptr', 'head', 'last', 'undefined'], correctAnswer: 'A', explanation: 'Last node next pointer is nullptr.'},
+                {type: 'true-false', question: 'Can insert at any position.', correctAnswer: 'true', explanation: 'Yes, linked lists allow insertion anywhere.'},
+                {type: 'multiple-choice', question: 'Insert at beginning time:', options: ['O(1)', 'O(n)', 'O(log n)', 'O(n²)'], correctAnswer: 'A', explanation: 'Insert at beginning is constant time.'},
+                {type: 'true-false', question: 'Insert at end requires traversal.', correctAnswer: 'true', explanation: 'Yes, must find last node first.'},
+                {type: 'fill-in', question: 'Create new node:', context: 'Node* newNode = <span style="color: red;">_______</span> Node(val);', hint: 'new', acceptableAnswers: ['new', 'new '], explanation: 'Use new keyword for dynamic allocation.'},
+                {type: 'true-false', question: 'Must delete nodes to free memory.', correctAnswer: 'true', explanation: 'Yes, avoid memory leaks.'},
+                {type: 'multiple-choice', question: 'Search time complexity:', options: ['O(1)', 'O(n)', 'O(log n)', 'O(n²)'], correctAnswer: 'B', explanation: 'Search requires traversal, O(n).'},
+                {type: 'true-false', question: 'Can access any node in O(1).', correctAnswer: 'false', explanation: 'No, must traverse from beginning.'},
+                {type: 'multiple-choice', question: 'Delete from beginning:', options: ['Complex', 'O(1)', 'O(n)', 'Impossible'], correctAnswer: 'B', explanation: 'Delete at beginning is constant time.'},
+                {type: 'fill-in', question: 'Delete node from pointer:', context: '<span style="color: red;">_______</span> curr;', hint: 'delete', acceptableAnswers: ['delete', 'delete '], explanation: 'Use delete keyword to free memory.'},
+                {type: 'true-false', question: 'Null check needed when traversing.', correctAnswer: 'true', explanation: 'Yes, check curr != nullptr.'},
+                {type: 'multiple-choice', question: 'Traversal pattern:', options: ['Random access', 'Sequential', 'Indexed', 'None'], correctAnswer: 'B', explanation: 'Must traverse sequentially.'},
+                {type: 'true-false', question: 'Linked list is FIFO structure.', correctAnswer: 'false', explanation: 'No, that is queue. Linked list is generic.'},
+                {type: 'multiple-choice', question: 'Advantage over arrays:', options: ['Dynamic size', 'Fast access', 'Simple', 'Memory efficient'], correctAnswer: 'A', explanation: 'Main advantage is dynamic resizing.'},
+                {type: 'true-false', question: 'Can reverse linked list.', correctAnswer: 'true', explanation: 'Yes, using three pointers.'},
+                {type: 'multiple-choice', question: 'Node struct contains:', options: ['Data only', 'Pointer only', 'Both', 'Neither'], correctAnswer: 'C', explanation: 'Node has both data and pointer.'}
+            ];
+
+            window.quizSystem = new QuizSystem('Linked Lists', questions);
+            openQuizModal();
+        }
+
+        if (!document.getElementById('quizModal')) {
+            const modal = document.createElement('div');
+            modal.id = 'quizModal';
+            modal.className = 'quiz-modal';
+            modal.innerHTML = `<div class="quiz-modal-content"><div class="quiz-header"><div><div class="quiz-question-number">Quiz: Linked Lists</div><div class="quiz-progress">Question 1 of 20</div></div><button class="quiz-close" onclick="closeQuizModal()">✕</button></div><div class="quiz-questions-container"></div></div>`;
+            document.body.appendChild(modal);
+        }
+    </script>
+</body>
+</html>

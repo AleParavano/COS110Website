@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exception Handling Basics - COS110 OOP Study Website</title>
+    <link rel="stylesheet" href="../../css/style.css">
+</head>
+<body>
+    <nav class="navbar">
+        <a href="../../index.html" class="navbar-brand">📚 COS110 OOP</a>
+        <div class="navbar-search"><input type="text" placeholder="Search topics..."></div>
+    </nav>
+
+    <div class="container">
+        <aside class="sidebar">
+            <div class="sidebar-title">🚨 Exception Handling</div>
+            <a href="../../topics/12-exception-basics.html" class="sidebar-item active">Basics</a>
+            <a href="../../topics/13-exception-hierarchies.html" class="sidebar-item">Hierarchies</a>
+        </aside>
+
+        <main class="main-content">
+            <h1>🚨 Exception Handling - Basics</h1>
+
+            <section class="section">
+                <div class="section-title">📚 Explanation</div>
+                <div class="explanation">
+                    <h3 style="color: var(--primary);">What Are Exceptions?</h3>
+                    <p>Exceptions are runtime errors or abnormal conditions that disrupt normal program flow. Instead of returning error codes, exceptions provide a clean way to handle errors. When an error occurs, an exception is thrown, and execution jumps to a catch block that handles it.</p>
+
+                    <h3 style="color: var(--primary); margin-top: 20px;">Try-Catch Blocks</h3>
+                    <p>The try block contains code that might throw an exception. The catch block handles the exception if one is thrown. Code in the try block executes normally until an exception occurs, then control transfers to the appropriate catch block.</p>
+
+                    <h3 style="color: var(--primary); margin-top: 20px;">Throwing Exceptions</h3>
+                    <p>Use the throw keyword to throw an exception. You can throw any type: built-in types, strings, or custom exception objects. When throw is executed, the program looks for a matching catch block. If not found, the program terminates.</p>
+
+                    <h3 style="color: var(--primary); margin-top: 20px;">Standard Exceptions</h3>
+                    <p>C++ provides standard exception classes like std::exception, std::runtime_error, std::invalid_argument, and std::out_of_range. These inherit from std::exception and can be caught using polymorphism.</p>
+
+                    <h3 style="color: var(--primary); margin-top: 20px;">Exception Safety</h3>
+                    <p>Exception-safe code ensures that when an exception is thrown, the program is left in a valid state. Resources are properly cleaned up using RAII (Resource Acquisition Is Initialization). Destructors are called as the stack unwinds.</p>
+                </div>
+            </section>
+
+            <section class="section">
+                <div class="section-title">💻 Code Examples</div>
+
+                <div class="code-example">
+                    <div class="code-tabs">
+                        <button class="code-tab active" data-tab="simple1">Simple Try-Catch</button>
+                        <button class="code-tab" data-tab="full1">Full Program</button>
+                    </div>
+                    <div data-tab-content="simple1" class="code-editor">
+try {
+    int x = 10, y = 0;
+    if(y == 0) {
+        throw runtime_error("Division by zero");
+    }
+    int result = x / y;
+}
+catch(runtime_error& e) {
+    cout << "Error: " << e.what() << endl;
+}
+catch(...) {
+    cout << "Unknown error" << endl;
+}
+                    </div>
+                    <div data-tab-content="full1" style="display: none;">
+                        <textarea class="code-editor" id="code1">#include <iostream>
+#include <stdexcept>
+using namespace std;
+
+int divide(int a, int b) {
+    if(b == 0) {
+        throw runtime_error("Division by zero!");
+    }
+    return a / b;
+}
+
+int main() {
+    try {
+        int x = 20, y = 0;
+        int result = divide(x, y);
+        cout << "Result: " << result << endl;
+    }
+    catch(runtime_error& e) {
+        cout << "Caught error: " << e.what() << endl;
+    }
+    catch(exception& e) {
+        cout << "General exception: " << e.what() << endl;
+    }
+    catch(...) {
+        cout << "Unknown exception caught" << endl;
+    }
+    
+    cout << "Program continues..." << endl;
+    return 0;
+}
+                        </textarea>
+                    </div>
+                    <div class="code-buttons">
+                        <button class="btn btn-primary" onclick="runCode(document.getElementById('code1'), document.getElementById('output1'))">▶ Run Code</button>
+                    </div>
+                    <div class="output-box" id="output1">Click "Run Code" to execute...</div>
+                </div>
+
+                <div class="code-example">
+                    <div class="code-tabs">
+                        <button class="code-tab active" data-tab="simple2">Multiple Catches</button>
+                        <button class="code-tab" data-tab="full2">Full Program</button>
+                    </div>
+                    <div data-tab-content="simple2" class="code-editor">
+try {
+    // ... code that might throw
+}
+catch(invalid_argument& e) {
+    cout << "Invalid argument: " << e.what() << endl;
+}
+catch(out_of_range& e) {
+    cout << "Out of range: " << e.what() << endl;
+}
+catch(runtime_error& e) {
+    cout << "Runtime error: " << e.what() << endl;
+}
+catch(exception& e) {
+    cout << "General exception: " << e.what() << endl;
+}
+                    </div>
+                    <div data-tab-content="full2" style="display: none;">
+                        <textarea class="code-editor" id="code2">#include <iostream>
+#include <stdexcept>
+#include <string>
+using namespace std;
+
+int getArrayElement(int arr[], int size, 
+                    int index) {
+    if(index < 0 || index >= size) {
+        throw out_of_range("Index out of bounds");
+    }
+    return arr[index];
+}
+
+int main() {
+    int arr[] = {10, 20, 30, 40, 50};
+    int size = 5;
+    
+    try {
+        cout << getArrayElement(arr, size, 2) 
+             << endl;
+        cout << getArrayElement(arr, size, 10) 
+             << endl;
+    }
+    catch(out_of_range& e) {
+        cout << "Error: " << e.what() << endl;
+    }
+    catch(exception& e) {
+        cout << "Exception: " << e.what() << endl;
+    }
+    
+    return 0;
+}
+                        </textarea>
+                    </div>
+                    <div class="code-buttons">
+                        <button class="btn btn-primary" onclick="runCode(document.getElementById('code2'), document.getElementById('output2'))">▶ Run Code</button>
+                    </div>
+                    <div class="output-box" id="output2">Click "Run Code" to execute...</div>
+                </div>
+
+                <div class="code-example">
+                    <div class="code-tabs">
+                        <button class="code-tab active" data-tab="simple3">RAII Pattern</button>
+                        <button class="code-tab" data-tab="full3">Full Program</button>
+                    </div>
+                    <div data-tab-content="simple3" class="code-editor">
+class Resource {
+public:
+    Resource() { cout << "Acquired" << endl; }
+    ~Resource() { cout << "Released" << endl; }
+};
+
+try {
+    Resource r;
+    throw runtime_error("Error!");
+    // Destructor called on exception
+}
+catch(runtime_error& e) {
+    cout << "Caught: " << e.what() << endl;
+}
+                    </div>
+                    <div data-tab-content="full3" style="display: none;">
+                        <textarea class="code-editor" id="code3">#include <iostream>
+#include <stdexcept>
+using namespace std;
+
+class FileHandle {
+private:
+    string filename;
+public:
+    FileHandle(string fname) : filename(fname) {
+        cout << "Opening file: " << filename << endl;
+    }
+    
+    ~FileHandle() {
+        cout << "Closing file: " << filename << endl;
+    }
+    
+    void read() {
+        throw runtime_error("Read error!");
+    }
+};
+
+int main() {
+    try {
+        FileHandle file("data.txt");
+        cout << "File opened successfully" << endl;
+        file.read();
+        cout << "Reading complete" << endl;
+    }
+    catch(runtime_error& e) {
+        cout << "Exception: " << e.what() << endl;
+    }
+    
+    cout << "Destructor called automatically" << endl;
+    return 0;
+}
+                        </textarea>
+                    </div>
+                    <div class="code-buttons">
+                        <button class="btn btn-primary" onclick="runCode(document.getElementById('code3'), document.getElementById('output3'))">▶ Run Code</button>
+                    </div>
+                    <div class="output-box" id="output3">Click "Run Code" to execute...</div>
+                </div>
+            </section>
+
+            <section class="section">
+                <div class="section-title">✍️ Coding Activities</div>
+
+                <div class="activity">
+                    <div class="activity-title">⚡ Intermediate Challenge: Bank Account with Validation</div>
+                    <p>Create a BankAccount class that throws exceptions for invalid operations (negative deposits, insufficient funds).</p>
+                    <button class="btn btn-secondary" onclick="downloadCode(\`#include <iostream>
+#include <stdexcept>
+using namespace std;
+
+class BankAccount {
+private:
+    double balance;
+public:
+    BankAccount(double initial = 0) 
+        : balance(initial) {}
+    
+    void deposit(double amount) {
+        // TODO: Throw invalid_argument if negative
+        balance += amount;
+    }
+    
+    void withdraw(double amount) {
+        // TODO: Throw invalid_argument if negative
+        // TODO: Throw runtime_error if insufficient
+        balance -= amount;
+    }
+    
+    double getBalance() { return balance; }
+};
+
+int main() {
+    try {
+        BankAccount acc(1000);
+        acc.deposit(-100);  // Should throw
+    }
+    catch(invalid_argument& e) {
+        cout << e.what() << endl;
+    }
+    return 0;
+}\`, 'bank_account.cpp')">⬇ Download Skeleton</button>
+                    <button class="collapsible">▼ Show Solution</button>
+                    <div class="collapsible-content">
+                        <div class="code-editor">
+#include <iostream>
+#include <stdexcept>
+using namespace std;
+
+class BankAccount {
+private:
+    double balance;
+public:
+    BankAccount(double initial = 0) 
+        : balance(initial) {}
+    
+    void deposit(double amount) {
+        if(amount < 0) {
+            throw invalid_argument(
+                "Deposit amount cannot be negative");
+        }
+        balance += amount;
+        cout << "Deposited: " << amount << endl;
+    }
+    
+    void withdraw(double amount) {
+        if(amount < 0) {
+            throw invalid_argument(
+                "Withdrawal amount cannot be negative");
+        }
+        if(amount > balance) {
+            throw runtime_error(
+                "Insufficient funds");
+        }
+        balance -= amount;
+        cout << "Withdrew: " << amount << endl;
+    }
+    
+    double getBalance() { return balance; }
+};
+
+int main() {
+    try {
+        BankAccount acc(1000);
+        cout << "Initial balance: " 
+             << acc.getBalance() << endl;
+        
+        acc.deposit(500);
+        acc.withdraw(300);
+        cout << "Final balance: " 
+             << acc.getBalance() << endl;
+        
+        acc.deposit(-100);
+    }
+    catch(invalid_argument& e) {
+        cout << "Invalid: " << e.what() << endl;
+    }
+    catch(runtime_error& e) {
+        cout << "Error: " << e.what() << endl;
+    }
+    
+    return 0;
+}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="activity">
+                    <div class="activity-title">🔥 Advanced Challenge: Calculator with Exception Handling</div>
+                    <p>Create a Calculator class with operations that throw appropriate exceptions for invalid inputs.</p>
+                    <button class="btn btn-secondary" onclick="downloadCode(\`#include <iostream>
+#include <stdexcept>
+#include <cmath>
+using namespace std;
+
+class Calculator {
+public:
+    double add(double a, double b) { return a + b; }
+    
+    double subtract(double a, double b) { 
+        return a - b; 
+    }
+    
+    double divide(double a, double b) {
+        // TODO: Throw runtime_error if b == 0
+        return a / b;
+    }
+    
+    double squareRoot(double a) {
+        // TODO: Throw invalid_argument if a < 0
+        return sqrt(a);
+    }
+};
+
+int main() {
+    Calculator calc;
+    
+    try {
+        cout << calc.divide(10, 0) << endl;
+    }
+    catch(runtime_error& e) {
+        cout << e.what() << endl;
+    }
+    
+    try {
+        cout << calc.squareRoot(-5) << endl;
+    }
+    catch(invalid_argument& e) {
+        cout << e.what() << endl;
+    }
+    
+    return 0;
+}\`, 'calculator_exceptions.cpp')">⬇ Download Skeleton</button>
+                    <button class="collapsible">▼ Show Solution</button>
+                    <div class="collapsible-content">
+                        <div class="code-editor">
+#include <iostream>
+#include <stdexcept>
+#include <cmath>
+using namespace std;
+
+class Calculator {
+public:
+    double add(double a, double b) { 
+        return a + b; 
+    }
+    
+    double subtract(double a, double b) { 
+        return a - b; 
+    }
+    
+    double divide(double a, double b) {
+        if(b == 0) {
+            throw runtime_error(
+                "Division by zero");
+        }
+        return a / b;
+    }
+    
+    double multiply(double a, double b) { 
+        return a * b; 
+    }
+    
+    double squareRoot(double a) {
+        if(a < 0) {
+            throw invalid_argument(
+                "Cannot take sqrt of negative");
+        }
+        return sqrt(a);
+    }
+    
+    double power(double a, int b) {
+        if(b < 0 && a == 0) {
+            throw runtime_error(
+                "Cannot raise 0 to negative power");
+        }
+        return pow(a, b);
+    }
+};
+
+int main() {
+    Calculator calc;
+    
+    try {
+        cout << "5 + 3 = " << calc.add(5, 3) 
+             << endl;
+        cout << "10 / 2 = " << calc.divide(10, 2) 
+             << endl;
+        cout << "10 / 0 = " << calc.divide(10, 0) 
+             << endl;
+    }
+    catch(runtime_error& e) {
+        cout << "Error: " << e.what() << endl;
+    }
+    
+    try {
+        cout << "sqrt(16) = " << calc.squareRoot(16) 
+             << endl;
+        cout << "sqrt(-5) = " << calc.squareRoot(-5) 
+             << endl;
+    }
+    catch(invalid_argument& e) {
+        cout << "Error: " << e.what() << endl;
+    }
+    
+    return 0;
+}
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="section">
+                <div class="section-title">📝 Knowledge Check Quiz</div>
+                <div class="quiz-container">
+                    <button class="quiz-btn" onclick="initializeQuiz()">▶ Start Quiz</button>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <footer><p>COS110 OOP Study Website | November 2025</p></footer>
+
+    <script src="../../js/main.js"></script>
+    <script src="../../js/compiler.js"></script>
+    <script src="../../js/quiz.js"></script>
+
+    <script>
+        function initializeQuiz() {
+            const questions = [
+                {type: 'multiple-choice', question: 'What is an exception?', options: ['A compile error', 'Runtime error or abnormal condition', 'A warning', 'None'], correctAnswer: 'B', explanation: 'Exceptions represent runtime errors that disrupt normal flow.'},
+                {type: 'true-false', question: 'Try block contains code that might throw exceptions.', correctAnswer: 'true', explanation: 'Yes, code that could cause errors goes in try.'},
+                {type: 'multiple-choice', question: 'What happens after throw?', options: ['Program exits', 'Catches to matching handler', 'Continues normally', 'Undefined'], correctAnswer: 'B', explanation: 'Control transfers to matching catch block.'},
+                {type: 'fill-in', question: 'Catch block syntax:', context: '<span style="color: red;">_______</span>(ExceptionType& e)', hint: 'keyword', acceptableAnswers: ['catch', 'catch '], explanation: 'Use catch keyword to handle exceptions.'},
+                {type: 'true-false', question: 'You can have multiple catch blocks.', correctAnswer: 'true', explanation: 'Yes, for different exception types.'},
+                {type: 'multiple-choice', question: 'What does catch(...) catch?', options: ['Only exceptions', 'Any exception', 'Nothing', 'Only runtime_error'], correctAnswer: 'B', explanation: 'catch(...) catches all exceptions.'},
+                {type: 'multiple-choice', question: 'Standard exception base class:', options: ['Error', 'Exception', 'std::exception', 'Throwable'], correctAnswer: 'C', explanation: 'std::exception is the base for standard exceptions.'},
+                {type: 'true-false', question: 'Throw can only throw exception objects.', correctAnswer: 'false', explanation: 'You can throw any type: int, string, objects, etc.'},
+                {type: 'fill-in', question: 'To throw an exception:', context: '<span style="color: red;">_______</span> ExceptionType(message);', hint: 'keyword', acceptableAnswers: ['throw', 'throw '], explanation: 'Use throw keyword to raise exception.'},
+                {type: 'multiple-choice', question: 'What is std::what()?', options: ['Member of exception', 'Returns error message', 'Both A and B', 'None'], correctAnswer: 'C', explanation: 'what() is a member function returning the error message.'},
+                {type: 'true-false', question: 'RAII ensures resources are cleaned up.', correctAnswer: 'true', explanation: 'Yes, destructors run during stack unwinding.'},
+                {type: 'multiple-choice', question: 'Stack unwinding:', options: ['Cleans up local objects', 'Calls destructors', 'On exception throw', 'All above'], correctAnswer: 'D', explanation: 'Stack unwinding does all three automatically.'},
+                {type: 'fill-in', question: 'Exception hierarchy base:', context: '<span style="color: red;">_______</span>::exception', hint: 'namespace', acceptableAnswers: ['std', 'std '], explanation: 'std::exception is in std namespace.'},
+                {type: 'true-false', question: 'If exception not caught, program terminates.', correctAnswer: 'true', explanation: 'Yes, unhandled exceptions terminate the program.'},
+                {type: 'multiple-choice', question: 'Which is more Specific?', options: ['std::exception', 'std::runtime_error', 'Same', 'Neither'], correctAnswer: 'B', explanation: 'runtime_error is derived from exception.'},
+                {type: 'true-false', question: 'Try block catches errors without throw.', correctAnswer: 'false', explanation: 'Try only catches if something is actually thrown.'},
+                {type: 'multiple-choice', question: 'Code after catch block:', options: ['Always skipped', 'Executes if caught', 'Never executes', 'Depends'], correctAnswer: 'B', explanation: 'Execution continues after catch block if exception handled.'},
+                {type: 'fill-in', question: 'Standard exception for invalid argument:', context: '<span style="color: red;">_______</span>_argument', hint: 'std::', acceptableAnswers: ['std::invalid', 'invalid'], explanation: 'std::invalid_argument for invalid function arguments.'},
+                {type: 'true-false', question: 'Catch catches by reference.', correctAnswer: 'true', explanation: 'Yes, catch(Type& e) is standard practice.'},
+                {type: 'multiple-choice', question: 'Best practice for exception order:', options: ['General to specific', 'Specific to general', 'Any order', 'Alphabetical'], correctAnswer: 'B', explanation: 'Catch more specific exceptions first.'}
+            ];
+
+            window.quizSystem = new QuizSystem('Exception Handling Basics', questions);
+            openQuizModal();
+        }
+
+        if (!document.getElementById('quizModal')) {
+            const modal = document.createElement('div');
+            modal.id = 'quizModal';
+            modal.className = 'quiz-modal';
+            modal.innerHTML = `<div class="quiz-modal-content"><div class="quiz-header"><div><div class="quiz-question-number">Quiz: Exception Handling Basics</div><div class="quiz-progress">Question 1 of 20</div></div><button class="quiz-close" onclick="closeQuizModal()">✕</button></div><div class="quiz-questions-container"></div></div>`;
+            document.body.appendChild(modal);
+        }
+    </script>
+</body>
+</html>

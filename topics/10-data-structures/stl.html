@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>STL - COS110 OOP Study Website</title>
+    <link rel="stylesheet" href="../../css/style.css">
+</head>
+<body>
+    <nav class="navbar">
+        <a href="../../index.html" class="navbar-brand">📚 COS110 OOP</a>
+        <div class="navbar-search"><input type="text" placeholder="Search topics..."></div>
+    </nav>
+
+    <div class="container">
+        <aside class="sidebar">
+            <div class="sidebar-title">📊 Data Structures</div>
+            <a href="../../topics/21-data-structures-linked-lists.html" class="sidebar-item">Linked Lists</a>
+            <a href="../../topics/22-data-structures-doubly-linked.html" class="sidebar-item">Doubly Linked</a>
+            <a href="../../topics/23-data-structures-circular.html" class="sidebar-item">Circular Lists</a>
+            <a href="../../topics/24-data-structures-stacks.html" class="sidebar-item">Stacks</a>
+            <a href="../../topics/25-data-structures-queues.html" class="sidebar-item">Queues</a>
+            <a href="../../topics/26-data-structures-stl.html" class="sidebar-item active">STL</a>
+        </aside>
+
+        <main class="main-content">
+            <h1>📦 Standard Template Library (STL)</h1>
+
+            <section class="section">
+                <div class="section-title">📚 Explanation</div>
+                <div class="explanation">
+                    <h3 style="color: var(--primary);">What is STL?</h3>
+                    <p>The Standard Template Library (STL) is a collection of template classes and functions providing common data structures and algorithms. It's part of the C++ Standard Library and eliminates need for manual implementation. STL includes containers (vector, list, stack, queue, map), iterators, and algorithms (sort, find, transform).</p>
+
+                    <h3 style="color: var(--primary); margin-top: 20px;">STL Containers</h3>
+                    <p>Sequence containers: vector (dynamic array), list (linked list), deque (double-ended queue). Associative containers: set (unique sorted), map (key-value pairs), multiset, multimap. Container adapters: stack, queue, priority_queue. Each has different performance characteristics for operations.</p>
+
+                    <h3 style="color: var(--primary); margin-top: 20px;">Iterators</h3>
+                    <p>Iterators are pointer-like objects enabling element access and traversal. Types: input (read-only), output (write-only), forward, bidirectional, random-access. Algorithms work with iterators making them container-independent. Learn iterator operations: ++, --, *, ->, begin(), end().</p>
+
+                    <h3 style="color: var(--primary); margin-top: 20px;">STL Algorithms</h3>
+                    <p>Sort, search, transform, count, find, replace operations work with ranges defined by iterators. Non-modifying algorithms: find, count, all_of. Modifying algorithms: sort, reverse, unique, random_shuffle. Numeric algorithms: accumulate, inner_product. Functional and powerful.</p>
+
+                    <h3 style="color: var(--primary); margin-top: 20px;">When to Use STL</h3>
+                    <p>STL is optimized, well-tested, and maintained. Use for most data structure needs instead of implementing from scratch. Exceptions: educational purpose, very specific requirements, embedded systems with strict constraints. STL provides 80% of needed functionality with minimal code.</p>
+                </div>
+            </section>
+
+            <section class="section">
+                <div class="section-title">💻 Code Examples</div>
+
+                <div class="code-example">
+                    <div class="code-tabs">
+                        <button class="code-tab active" data-tab="simple1">Vector Operations</button>
+                        <button class="code-tab" data-tab="full1">Full Program</button>
+                    </div>
+                    <div data-tab-content="simple1" class="code-editor">
+#include <vector>
+using namespace std;
+
+vector<int> v;
+v.push_back(10);
+v.push_back(20);
+v.push_back(30);
+
+for(int val : v) {
+    cout << val << " ";
+}
+
+v.pop_back();
+v[0] = 100;
+cout << "Size: " << v.size() << endl;
+                    </div>
+                    <div data-tab-content="full1" style="display: none;">
+                        <textarea class="code-editor" id="code1">#include <iostream>
+#include <vector>
+#include <algorithm>
+using namespace std;
+
+int main() {
+    cout << "=== Vector ===" << endl;
+    vector<int> v;
+    
+    v.push_back(30);
+    v.push_back(10);
+    v.push_back(50);
+    v.push_back(20);
+    v.push_back(40);
+    
+    cout << "Original: ";
+    for(int val : v) cout << val << " ";
+    cout << endl;
+    
+    cout << "Size: " << v.size() << endl;
+    cout << "Front: " << v.front() << endl;
+    cout << "Back: " << v.back() << endl;
+    
+    cout << "\n=== Operations ===" << endl;
+    sort(v.begin(), v.end());
+    cout << "After sort: ";
+    for(int val : v) cout << val << " ";
+    cout << endl;
+    
+    auto it = find(v.begin(), v.end(), 30);
+    if(it != v.end()) {
+        cout << "Found 30 at position " 
+             << (it - v.begin()) << endl;
+    }
+    
+    return 0;
+}
+                        </textarea>
+                    </div>
+                    <div class="code-buttons">
+                        <button class="btn btn-primary" onclick="runCode(document.getElementById('code1'), document.getElementById('output1'))">▶ Run Code</button>
+                    </div>
+                    <div class="output-box" id="output1">Click "Run Code" to execute...</div>
+                </div>
+
+                <div class="code-example">
+                    <div class="code-tabs">
+                        <button class="code-tab active" data-tab="simple2">Map & Set</button>
+                        <button class="code-tab" data-tab="full2">Full Program</button>
+                    </div>
+                    <div data-tab-content="simple2" class="code-editor">
+#include <map>
+#include <set>
+using namespace std;
+
+map<string, int> ages;
+ages["Alice"] = 25;
+ages["Bob"] = 30;
+cout << ages["Alice"] << endl;
+
+set<int> unique_nums;
+unique_nums.insert(5);
+unique_nums.insert(3);
+unique_nums.insert(5);  // Duplicate
+for(int n : unique_nums) {
+    cout << n << " ";  // 3 5 (sorted)
+}
+                    </div>
+                    <div data-tab-content="full2" style="display: none;">
+                        <textarea class="code-editor" id="code2">#include <iostream>
+#include <map>
+#include <set>
+#include <string>
+using namespace std;
+
+int main() {
+    cout << "=== Map (Key-Value) ===" << endl;
+    map<string, int> scores;
+    scores["Alice"] = 95;
+    scores["Bob"] = 87;
+    scores["Charlie"] = 92;
+    scores["Alice"] = 98;  // Update
+    
+    cout << "Scores:" << endl;
+    for(auto& p : scores) {
+        cout << p.first << ": " 
+             << p.second << endl;
+    }
+    
+    cout << "\n=== Set (Unique Sorted) ===" << endl;
+    set<int> numbers;
+    numbers.insert(50);
+    numbers.insert(30);
+    numbers.insert(70);
+    numbers.insert(30);  // Duplicate ignored
+    numbers.insert(10);
+    
+    cout << "Unique numbers: ";
+    for(int n : numbers) {
+        cout << n << " ";
+    }
+    cout << endl;
+    
+    cout << "\n=== Operations ===" << endl;
+    cout << "Contains 30: " 
+         << (numbers.find(30) != numbers.end() 
+             ? "Yes" : "No") << endl;
+    cout << "Size: " << numbers.size() << endl;
+    
+    return 0;
+}
+                        </textarea>
+                    </div>
+                    <div class="code-buttons">
+                        <button class="btn btn-primary" onclick="runCode(document.getElementById('code2'), document.getElementById('output2'))">▶ Run Code</button>
+                    </div>
+                    <div class="output-box" id="output2">Click "Run Code" to execute...</div>
+                </div>
+
+                <div class="code-example">
+                    <div class="code-tabs">
+                        <button class="code-tab active" data-tab="simple3">STL Algorithms</button>
+                        <button class="code-tab" data-tab="full3">Full Program</button>
+                    </div>
+                    <div data-tab-content="simple3" class="code-editor">
+#include <vector>
+#include <algorithm>
+using namespace std;
+
+vector<int> v = {3,1,4,1,5,9,2,6};
+
+sort(v.begin(), v.end());
+reverse(v.begin(), v.end());
+
+auto it = find(v.begin(), v.end(), 5);
+int count = count(v.begin(), v.end(), 1);
+
+fill(v.begin(), v.end(), 0);
+                    </div>
+                    <div data-tab-content="full3" style="display: none;">
+                        <textarea class="code-editor" id="code3">#include <iostream>
+#include <vector>
+#include <algorithm>
+#include <numeric>
+using namespace std;
+
+int main() {
+    vector<int> v = {3,1,4,1,5,9,2,6,5};
+    
+    cout << "Original: ";
+    for(int n : v) cout << n << " ";
+    cout << endl;
+    
+    cout << "\n=== Searching ===" << endl;
+    auto it = find(v.begin(), v.end(), 5);
+    if(it != v.end()) {
+        cout << "Found 5 at position " 
+             << (it - v.begin()) << endl;
+    }
+    
+    cout << "\n=== Counting ===" << endl;
+    int freq5 = count(v.begin(), v.end(), 5);
+    cout << "Count of 5: " << freq5 << endl;
+    
+    cout << "\n=== Sorting ===" << endl;
+    sort(v.begin(), v.end());
+    for(int n : v) cout << n << " ";
+    cout << endl;
+    
+    cout << "\n=== Sum ===" << endl;
+    int sum = accumulate(v.begin(), v.end(), 0);
+    cout << "Sum: " << sum << endl;
+    
+    cout << "\n=== Reverse ===" << endl;
+    reverse(v.begin(), v.end());
+    for(int n : v) cout << n << " ";
+    cout << endl;
+    
+    cout << "\n=== Min/Max ===" << endl;
+    cout << "Min: " << *min_element(v.begin(), v.end()) 
+         << endl;
+    cout << "Max: " << *max_element(v.begin(), v.end()) 
+         << endl;
+    
+    return 0;
+}
+                        </textarea>
+                    </div>
+                    <div class="code-buttons">
+                        <button class="btn btn-primary" onclick="runCode(document.getElementById('code3'), document.getElementById('output3'))">▶ Run Code</button>
+                    </div>
+                    <div class="output-box" id="output3">Click "Run Code" to execute...</div>
+                </div>
+            </section>
+
+            <section class="section">
+                <div class="section-title">✍️ Coding Activities</div>
+
+                <div class="activity">
+                    <div class="activity-title">⚡ Intermediate Challenge: Word Frequency Counter</div>
+                    <p>Use STL map to count word frequencies from input text.</p>
+                    <button class="btn btn-secondary" onclick="downloadCode(\`#include <iostream>
+#include <map>
+#include <string>
+using namespace std;
+
+int main() {
+    map<string, int> wordCount;
+    string word;
+    
+    cout << \"Enter words (empty to stop):\" << endl;
+    while(cin >> word && !word.empty()) {
+        wordCount[word]++;
+    }
+    
+    // TODO: Display sorted by frequency
+    
+    return 0;
+}\`, 'word_frequency.cpp')">⬇ Download Skeleton</button>
+                    <button class="collapsible">▼ Show Solution</button>
+                    <div class="collapsible-content">
+                        <div class="code-editor">
+#include <iostream>
+#include <map>
+#include <vector>
+#include <string>
+#include <algorithm>
+using namespace std;
+
+int main() {
+    map<string, int> wordCount;
+    string word;
+    
+    cout << "Enter words (type 'end' to finish):" << endl;
+    while(cin >> word && word != "end") {
+        wordCount[word]++;
+    }
+    
+    cout << "\n=== Word Frequencies ===" << endl;
+    cout << "Total unique words: " 
+         << wordCount.size() << endl << endl;
+    
+    vector<pair<string, int>> freq;
+    for(auto& p : wordCount) {
+        freq.push_back(p);
+    }
+    
+    sort(freq.begin(), freq.end(),
+         [](const auto& a, const auto& b) {
+             return a.second > b.second;
+         });
+    
+    for(auto& p : freq) {
+        cout << p.first << ": " 
+             << p.second << endl;
+    }
+    
+    return 0;
+}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="activity">
+                    <div class="activity-title">🔥 Advanced Challenge: Contact Manager</div>
+                    <p>Build contact management system using STL map and string for names/phone numbers.</p>
+                    <button class="btn btn-secondary" onclick="downloadCode(\`#include <iostream>
+#include <map>
+#include <string>
+using namespace std;
+
+int main() {
+    map<string, string> contacts;
+    int choice;
+    string name, phone;
+    
+    do {
+        cout << \"1.Add 2.Search 3.List 4.Delete 0.Exit\" << endl;
+        cin >> choice;
+        
+        // TODO: Implement menu options
+        
+    } while(choice != 0);
+    
+    return 0;
+}\`, 'contact_manager.cpp')">⬇ Download Skeleton</button>
+                    <button class="collapsible">▼ Show Solution</button>
+                    <div class="collapsible-content">
+                        <div class="code-editor">
+#include <iostream>
+#include <map>
+#include <string>
+using namespace std;
+
+int main() {
+    map<string, string> contacts;
+    int choice;
+    string name, phone;
+    
+    while(true) {
+        cout << "\n=== Contact Manager ===" << endl;
+        cout << "1. Add Contact" << endl;
+        cout << "2. Search Contact" << endl;
+        cout << "3. List All" << endl;
+        cout << "4. Delete Contact" << endl;
+        cout << "0. Exit" << endl;
+        cout << "Choice: ";
+        cin >> choice;
+        cin.ignore();
+        
+        if(choice == 1) {
+            cout << "Name: ";
+            getline(cin, name);
+            cout << "Phone: ";
+            getline(cin, phone);
+            contacts[name] = phone;
+            cout << "Added!" << endl;
+        }
+        else if(choice == 2) {
+            cout << "Search name: ";
+            getline(cin, name);
+            auto it = contacts.find(name);
+            if(it != contacts.end()) {
+                cout << it->first << ": " 
+                     << it->second << endl;
+            } else {
+                cout << "Not found" << endl;
+            }
+        }
+        else if(choice == 3) {
+            cout << "\nAll Contacts:" << endl;
+            for(auto& p : contacts) {
+                cout << p.first << ": " 
+                     << p.second << endl;
+            }
+        }
+        else if(choice == 4) {
+            cout << "Name to delete: ";
+            getline(cin, name);
+            if(contacts.erase(name)) {
+                cout << "Deleted!" << endl;
+            } else {
+                cout << "Not found" << endl;
+            }
+        }
+        else if(choice == 0) {
+            cout << "Goodbye!" << endl;
+            break;
+        }
+        else {
+            cout << "Invalid choice" << endl;
+        }
+    }
+    
+    return 0;
+}
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="section">
+                <div class="section-title">📝 Knowledge Check Quiz</div>
+                <div class="quiz-container">
+                    <button class="quiz-btn" onclick="initializeQuiz()">▶ Start Quiz</button>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <footer><p>COS110 OOP Study Website | November 2025</p></footer>
+
+    <script src="../../js/main.js"></script>
+    <script src="../../js/compiler.js"></script>
+    <script src="../../js/quiz.js"></script>
+
+    <script>
+        function initializeQuiz() {
+            const questions = [
+                {type: 'multiple-choice', question: 'STL stands for:', options: ['Standard Type Library', 'Standard Template Library', 'Simple Text List', 'Static Type Library'], correctAnswer: 'B', explanation: 'STL is Standard Template Library.'},
+                {type: 'true-false', question: 'STL provides built-in data structures.', correctAnswer: 'true', explanation: 'Yes, no need to implement manually.'},
+                {type: 'fill-in', question: 'Main STL container:', context: '<span style="color: red;">_______</span><int>', hint: 'vector', acceptableAnswers: ['vector', 'vector '], explanation: 'Vector is most common STL container.'},
+                {type: 'multiple-choice', question: 'Vector is:', options: ['Linked list', 'Array-based', 'Stack', 'Set'], correctAnswer: 'B', explanation: 'Vector is dynamic array.'},
+                {type: 'true-false', question: 'Map stores unique keys.', correctAnswer: 'true', explanation: 'Yes, duplicate keys update values.'},
+                {type: 'multiple-choice', question: 'Set stores:', options: ['Duplicates', 'Sorted', 'Random', 'Ordered'], correctAnswer: 'B', explanation: 'Set stores unique sorted elements.'},
+                {type: 'fill-in', question: 'Access vector element:', context: 'v<span style="color: red;">_______</span>5<span style="color: red;">_______</span>', hint: '[ ]', acceptableAnswers: ['[', ']'], explanation: 'Use brackets for indexing.'},
+                {type: 'true-false', question: 'Iterators work with containers.', correctAnswer: 'true', explanation: 'Yes, for traversal and algorithms.'},
+                {type: 'multiple-choice', question: 'find() returns:', options: ['Element', 'Index', 'Iterator', 'Boolean'], correctAnswer: 'C', explanation: 'find() returns iterator.'},
+                {type: 'true-false', question: 'sort() from algorithm header.', correctAnswer: 'true', explanation: 'Yes, #include <algorithm>.'},
+                {type: 'fill-in', question: 'List dequeue at both ends:', context: '<span style="color: red;">_______</span>', hint: 'deque', acceptableAnswers: ['deque', 'deque '], explanation: 'Deque allows both end operations.'},
+                {type: 'multiple-choice', question: 'Stack from STL:', options: ['Container', 'Adapter', 'Algorithm', 'Iterator'], correctAnswer: 'B', explanation: 'Stack is container adapter.'},
+                {type: 'true-false', question: 'Queue FIFO in STL.', correctAnswer: 'true', explanation: 'Yes, queue adapter is FIFO.'},
+                {type: 'fill-in', question: 'Sort elements:', context: 'sort(v.<span style="color: red;">_______</span>(), v.end());', hint: 'begin', acceptableAnswers: ['begin', 'begin '], explanation: 'Use begin() for start iterator.'},
+                {type: 'multiple-choice', question: 'Count elements:', options: ['count()', 'size()', 'length()', 'capacity()'], correctAnswer: 'B', explanation: 'size() for container size.'},
+                {type: 'true-false', question: 'Vector push_back is O(1).', correctAnswer: 'true', explanation: 'Yes, amortized O(1).'},
+                {type: 'multiple-choice', question: 'Map iteration order:', options: ['Insertion', 'Sorted', 'Random', 'Depends'], correctAnswer: 'B', explanation: 'Map iterates in key order.'},
+                {type: 'true-false', question: 'STL is part of Standard Library.', correctAnswer: 'true', explanation: 'Yes, standard C++ feature.'},
+                {type: 'fill-in', question: 'Check iterator validity:', context: 'if(it <span style="color: red;">_______</span> v.end())', hint: '!=', acceptableAnswers: ['!=', '!= '], explanation: 'Compare with end() iterator.'},
+                {type: 'multiple-choice', question: 'When to use STL:', options: ['Always', 'Learning', 'Simple projects', 'General use'], correctAnswer: 'D', explanation: 'Use STL for most general purposes.'}
+            ];
+
+            window.quizSystem = new QuizSystem('STL', questions);
+            openQuizModal();
+        }
+
+        if (!document.getElementById('quizModal')) {
+            const modal = document.createElement('div');
+            modal.id = 'quizModal';
+            modal.className = 'quiz-modal';
+            modal.innerHTML = `<div class="quiz-modal-content"><div class="quiz-header"><div><div class="quiz-question-number">Quiz: STL</div><div class="quiz-progress">Question 1 of 20</div></div><button class="quiz-close" onclick="closeQuizModal()">✕</button></div><div class="quiz-questions-container"></div></div>`;
+            document.body.appendChild(modal);
+        }
+    </script>
+</body>
+</html>
