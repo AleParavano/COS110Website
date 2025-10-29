@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Classes Advanced - COS110 OOP Study Website</title>
+    <link rel="stylesheet" href="../../css/style.css">
+</head>
+<body>
+    <nav class="navbar">
+        <a href="../../index.html" class="navbar-brand">📚 COS110 OOP</a>
+        <div class="navbar-search"><input type="text" placeholder="Search topics..."></div>
+    </nav>
+
+    <div class="container">
+        <aside class="sidebar">
+            <div class="sidebar-title">🏗️ Classes & Objects</div>
+            <a href="basics.html" class="sidebar-item">Classes Basics</a>
+            <a href="advanced.html" class="sidebar-item active">Classes Advanced</a>
+            <a href="more.html" class="sidebar-item">Classes More</a>
+        </aside>
+
+        <main class="main-content">
+            <h1>🔧 Classes and Objects - Advanced</h1>
+
+            <section class="section">
+                <div class="section-title">📚 Explanation</div>
+                <div class="explanation">
+                    <h3 style="color: var(--primary);">Static Members</h3>
+                    <p>Static data members belong to the class, not to individual objects. All objects of the class share the same static data. Static member functions can only access static members and don't need an object to be called. Use the scope resolution operator (::) to access them.</p>
+
+                    <h3 style="color: var(--primary); margin-top: 20px;">Const Objects and Functions</h3>
+                    <p>A const object cannot modify its data members. A const member function promises not to modify the object. These constraints help prevent accidental modifications and make code safer.</p>
+
+                    <h3 style="color: var(--primary); margin-top: 20px;">Initialization Lists</h3>
+                    <p>Initialization lists initialize member variables before the constructor body executes. They're especially important for const members, references, and base classes, as these must be initialized before the constructor body runs.</p>
+
+                    <h3 style="color: var(--primary); margin-top: 20px;">Getter and Setter Functions</h3>
+                    <p>Getter functions return the value of private members. Setter functions allow controlled modification of private members. This provides encapsulation while allowing external access in a controlled manner.</p>
+
+                    <h3 style="color: var(--primary); margin-top: 20px;">Friend Functions</h3>
+                    <p>A friend function is not a member of a class but has access to its private members. Friendship is declared inside the class using the friend keyword. It breaks encapsulation, so use carefully.</p>
+                </div>
+            </section>
+
+            <section class="section">
+                <div class="section-title">💻 Code Examples</div>
+
+                <div class="code-example">
+                    <div class="code-tabs">
+                        <button class="code-tab active" data-tab="simple1">Static Members</button>
+                        <button class="code-tab" data-tab="full1">Full Program</button>
+                    </div>
+                    <div data-tab-content="simple1" class="code-editor">
+class Counter {
+private:
+    static int count;
+public:
+    Counter() { count++; }
+    static int getCount() { return count; }
+};
+
+int Counter::count = 0;
+Counter c1, c2, c3;
+cout << Counter::getCount() << endl; // 3
+                    </div>
+                    <div data-tab-content="full1" style="display: none;">
+                        <textarea class="code-editor" id="code1">#include <iostream>
+using namespace std;
+
+class Counter {
+private:
+    static int count;
+    
+public:
+    Counter() { 
+        count++;
+        cout << "Object " << count << " created" << endl;
+    }
+    
+    ~Counter() { 
+        cout << "Object deleted" << endl;
+    }
+    
+    static int getCount() { 
+        return count; 
+    }
+};
+
+int Counter::count = 0;
+
+int main() {
+    cout << "Initial count: " << Counter::getCount() << endl;
+    
+    Counter c1;
+    Counter c2;
+    Counter c3;
+    
+    cout << "Total objects: " << Counter::getCount() << endl;
+    
+    return 0;
+}
+                        </textarea>
+                    </div>
+                    <div class="code-buttons">
+                        <button class="btn btn-primary" onclick="runCode(document.getElementById('code1'), document.getElementById('output1'))">▶ Run Code</button>
+                        <button class="btn btn-secondary" onclick="downloadCode(document.getElementById('code1').value, 'static.cpp')">⬇ Download</button>
+                    </div>
+                    <div class="output-box" id="output1">Click "Run Code" to execute...</div>
+                </div>
+
+                <div class="code-example">
+                    <div class="code-tabs">
+                        <button class="code-tab active" data-tab="simple2">Initialization List</button>
+                        <button class="code-tab" data-tab="full2">Full Program</button>
+                    </div>
+                    <div data-tab-content="simple2" class="code-editor">
+class Point {
+private:
+    const int id;
+    double x, y;
+public:
+    Point(int i, double px, double py) 
+        : id(i), x(px), y(py) {}
+    
+    void display() {
+        cout << "Point " << id << ": (" << x << ", " << y << ")" << endl;
+    }
+};
+                    </div>
+                    <div data-tab-content="full2" style="display: none;">
+                        <textarea class="code-editor" id="code2">#include <iostream>
+using namespace std;
+
+class Point {
+private:
+    const int id;
+    double x, y;
+    
+public:
+    Point(int i, double px, double py) 
+        : id(i), x(px), y(py) {
+        cout << "Point " << id << " created" << endl;
+    }
+    
+    void display() const {
+        cout << "Point " << id << ": (" << x << ", " << y << ")" << endl;
+    }
+    
+    double distance() const {
+        return sqrt(x*x + y*y);
+    }
+};
+
+int main() {
+    Point p1(1, 3.0, 4.0);
+    Point p2(2, 5.0, 12.0);
+    
+    p1.display();
+    p2.display();
+    
+    cout << "Distance from origin: " << p1.distance() << endl;
+    
+    return 0;
+}
+                        </textarea>
+                    </div>
+                    <div class="code-buttons">
+                        <button class="btn btn-primary" onclick="runCode(document.getElementById('code2'), document.getElementById('output2'))">▶ Run Code</button>
+                        <button class="btn btn-secondary" onclick="downloadCode(document.getElementById('code2').value, 'point.cpp')">⬇ Download</button>
+                    </div>
+                    <div class="output-box" id="output2">Click "Run Code" to execute...</div>
+                </div>
+
+                <div class="code-example">
+                    <div class="code-tabs">
+                        <button class="code-tab active" data-tab="simple3">Friend Function</button>
+                        <button class="code-tab" data-tab="full3">Full Program</button>
+                    </div>
+                    <div data-tab-content="simple3" class="code-editor">
+class Complex {
+private:
+    double real, imag;
+public:
+    Complex(double r=0, double i=0) 
+        : real(r), imag(i) {}
+    friend Complex add(Complex, Complex);
+};
+
+Complex add(Complex a, Complex b) {
+    return Complex(a.real+b.real, a.imag+b.imag);
+}
+                    </div>
+                    <div data-tab-content="full3" style="display: none;">
+                        <textarea class="code-editor" id="code3">#include <iostream>
+using namespace std;
+
+class Complex {
+private:
+    double real, imag;
+    
+public:
+    Complex(double r=0, double i=0) 
+        : real(r), imag(i) {}
+    
+    friend Complex add(Complex, Complex);
+    friend void display(Complex);
+};
+
+Complex add(Complex a, Complex b) {
+    return Complex(a.real + b.real, a.imag + b.imag);
+}
+
+void display(Complex c) {
+    cout << c.real << " + " << c.imag << "i" << endl;
+}
+
+int main() {
+    Complex c1(3, 4);
+    Complex c2(1, 2);
+    
+    cout << "c1 = ";
+    display(c1);
+    cout << "c2 = ";
+    display(c2);
+    
+    Complex c3 = add(c1, c2);
+    cout << "c1 + c2 = ";
+    display(c3);
+    
+    return 0;
+}
+                        </textarea>
+                    </div>
+                    <div class="code-buttons">
+                        <button class="btn btn-primary" onclick="runCode(document.getElementById('code3'), document.getElementById('output3'))">▶ Run Code</button>
+                        <button class="btn btn-secondary" onclick="downloadCode(document.getElementById('code3').value, 'complex.cpp')">⬇ Download</button>
+                    </div>
+                    <div class="output-box" id="output3">Click "Run Code" to execute...</div>
+                </div>
+            </section>
+
+            <section class="section">
+                <div class="section-title">✍️ Coding Activities</div>
+
+                <div class="activity">
+                    <div class="activity-title">⚡ Intermediate Challenge: Employee Class with Static Member</div>
+                    <p>Create an Employee class that tracks the total number of employees using a static member. Each employee should have an ID, name, and salary.</p>
+                    <button class="btn btn-secondary" onclick="downloadCode(`#include <iostream>
+#include <string>
+using namespace std;
+
+class Employee {
+    // TODO: Add private members (id, name, salary, and static count)
+    
+public:
+    // TODO: Constructor that increments count
+    // TODO: Destructor that decrements count
+    // TODO: Static function to get total employees
+    // TODO: Display function
+};
+
+int main() {
+    Employee e1(1, "Alice", 50000);
+    Employee e2(2, "Bob", 60000);
+    // TODO: Display total employees
+    return 0;
+}`, 'employee.cpp')">⬇ Download Skeleton</button>
+                    <button class="collapsible">▼ Show Solution</button>
+                    <div class="collapsible-content">
+                        <div class="code-editor">
+#include <iostream>
+#include <string>
+using namespace std;
+
+class Employee {
+private:
+    int id;
+    string name;
+    double salary;
+    static int totalEmployees;
+    
+public:
+    Employee(int i, string n, double s) 
+        : id(i), name(n), salary(s) {
+        totalEmployees++;
+    }
+    
+    ~Employee() {
+        totalEmployees--;
+    }
+    
+    static int getTotalEmployees() {
+        return totalEmployees;
+    }
+    
+    void display() const {
+        cout << "ID: " << id << ", Name: " << name << ", Salary: " << salary << endl;
+    }
+};
+
+int Employee::totalEmployees = 0;
+
+int main() {
+    Employee e1(1, "Alice", 50000);
+    Employee e2(2, "Bob", 60000);
+    
+    e1.display();
+    e2.display();
+    cout << "Total employees: " << Employee::getTotalEmployees() << endl;
+    
+    return 0;
+}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="activity">
+                    <div class="activity-title">🔥 Advanced Challenge: Matrix Class with Operations</div>
+                    <p>Create a 2x2 Matrix class with methods to add, multiply, and display matrices. Use friend functions for matrix operations.</p>
+                    <button class="btn btn-secondary" onclick="downloadCode(`#include <iostream>
+using namespace std;
+
+class Matrix {
+private:
+    double data[2][2];
+    
+public:
+    // TODO: Constructor
+    // TODO: Friend functions for add and multiply
+    // TODO: Display function
+};
+
+int main() {
+    Matrix m1, m2;
+    // TODO: Initialize matrices
+    // TODO: Perform operations
+    return 0;
+}`, 'matrix.cpp')">⬇ Download Skeleton</button>
+                    <button class="collapsible">▼ Show Solution</button>
+                    <div class="collapsible-content">
+                        <div class="code-editor">
+#include <iostream>
+using namespace std;
+
+class Matrix {
+private:
+    double data[2][2];
+    
+public:
+    Matrix() {
+        for(int i = 0; i < 2; i++)
+            for(int j = 0; j < 2; j++)
+                data[i][j] = 0;
+    }
+    
+    void set(int i, int j, double val) {
+        data[i][j] = val;
+    }
+    
+    friend Matrix add(Matrix a, Matrix b);
+    friend void display(Matrix m);
+};
+
+Matrix add(Matrix a, Matrix b) {
+    Matrix result;
+    for(int i = 0; i < 2; i++)
+        for(int j = 0; j < 2; j++)
+            result.data[i][j] = a.data[i][j] + b.data[i][j];
+    return result;
+}
+
+void display(Matrix m) {
+    for(int i = 0; i < 2; i++) {
+        for(int j = 0; j < 2; j++) {
+            cout << m.data[i][j] << " ";
+        }
+        cout << endl;
+    }
+}
+
+int main() {
+    Matrix m1, m2;
+    m1.set(0, 0, 1); m1.set(0, 1, 2);
+    m1.set(1, 0, 3); m1.set(1, 1, 4);
+    
+    m2.set(0, 0, 5); m2.set(0, 1, 6);
+    m2.set(1, 0, 7); m2.set(1, 1, 8);
+    
+    cout << "Matrix 1:" << endl;
+    display(m1);
+    cout << "Matrix 2:" << endl;
+    display(m2);
+    
+    Matrix result = add(m1, m2);
+    cout << "Sum:" << endl;
+    display(result);
+    
+    return 0;
+}
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="section">
+                <div class="section-title">📝 Knowledge Check Quiz</div>
+                <div class="quiz-container">
+                    <button class="quiz-btn" onclick="initializeQuiz()">▶ Start Quiz</button>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <footer><p>COS110 OOP Study Website | November 2025</p></footer>
+
+    <script src="../../js/main.js"></script>
+    <script src="../../js/compiler.js"></script>
+    <script src="../../js/quiz.js"></script>
+
+    <script>
+        function initializeQuiz() {
+            const questions = [
+                {type: 'multiple-choice', question: 'What are static members?', options: ['Members that change frequently', 'Members shared by all objects', 'Members that are constant', 'Members that are private'], correctAnswer: 'B', explanation: 'Static members belong to the class and are shared by all objects.'},
+                {type: 'true-false', question: 'Static functions can access non-static members.', correctAnswer: 'false', explanation: 'Static functions can only access static members and don\'t have access to this.'},
+                {type: 'multiple-choice', question: 'How do you access a static member?', options: ['Through an object', 'Using the scope resolution operator (::)', 'Both methods work', 'Through a pointer'], correctAnswer: 'B', explanation: 'Use ClassName::staticMember to access static members.'},
+                {type: 'true-false', question: 'An initialization list can initialize const members.', correctAnswer: 'true', explanation: 'Yes, const members must be initialized in the initialization list.'},
+                {type: 'multiple-choice', question: 'What does the friend keyword do?', options: ['Makes a function a member', 'Allows access to private members', 'Creates a copy', 'Deletes the class'], correctAnswer: 'B', explanation: 'friend allows non-member functions to access private members.'},
+                {type: 'true-false', question: 'Friend functions are members of the class.', correctAnswer: 'false', explanation: 'Friend functions are not members; they are external functions with special access.'},
+                {type: 'multiple-choice', question: 'What is a const member function?', options: ['A static function', 'A function that returns const', 'A function that cannot modify the object', 'A function with const parameters'], correctAnswer: 'C', explanation: 'const member functions promise not to modify object data.'},
+                {type: 'true-false', question: 'You can call a const function on a non-const object.', correctAnswer: 'true', explanation: 'Yes, const functions can be called on both const and non-const objects.'},
+                {type: 'fill-in', question: 'Static members are defined outside the class using:', context: 'type ClassName::<span style="color: red;">_______</span> = value;', hint: 'member name', acceptableAnswers: ['memberName', 'member'], explanation: 'Use the scope resolution operator to define static members outside the class.'},
+                {type: 'multiple-choice', question: 'What is the initialization list used for?', options: ['Initializing arrays', 'Initializing member variables before constructor body', 'Initializing function parameters', 'Initializing static members'], correctAnswer: 'B', explanation: 'The initialization list initializes members before the constructor body executes.'}
+            ];
+
+            window.quizSystem = new QuizSystem('Classes Advanced', questions);
+            openQuizModal();
+        }
+
+        if (!document.getElementById('quizModal')) {
+            const modal = document.createElement('div');
+            modal.id = 'quizModal';
+            modal.className = 'quiz-modal';
+            modal.innerHTML = `<div class="quiz-modal-content"><div class="quiz-header"><div><div class="quiz-question-number">Quiz: Classes Advanced</div><div class="quiz-progress">Question 1 of 10</div></div><button class="quiz-close" onclick="closeQuizModal()">✕</button></div><div class="quiz-questions-container"></div></div>`;
+            document.body.appendChild(modal);
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pointers Part 1 - COS110 OOP Study Website</title>
+    <link rel="stylesheet" href="../../css/style.css">
+</head>
+<body>
+    <nav class="navbar">
+        <a href="../../index.html" class="navbar-brand">📚 COS110 OOP</a>
+        <div class="navbar-search"><input type="text" placeholder="Search topics..."></div>
+    </nav>
+
+    <div class="container">
+        <aside class="sidebar">
+            <div class="sidebar-title">📌 Foundations</div>
+            <a href="part1.html" class="sidebar-item active">Pointers Part 1</a>
+            <a href="part2.html" class="sidebar-item">Pointers Part 2</a>
+            <div class="sidebar-title">🏗️ Classes & Objects</div>
+            <a href="../02-classes/basics.html" class="sidebar-item">Classes Basics</a>
+        </aside>
+
+        <main class="main-content">
+            <h1>🔍 Understanding Pointers - Part 1</h1>
+
+            <section class="section">
+                <div class="section-title">📚 Explanation</div>
+                <div class="explanation">
+                    <h3 style="color: var(--primary); margin-bottom: 15px;">What is a Pointer?</h3>
+                    <p>A pointer is a variable that stores the memory address of another variable. Instead of holding the actual value, a pointer holds the location in memory where that value is stored. This is one of the most powerful features of C++, enabling dynamic memory management, efficient data passing, and the construction of complex data structures like linked lists, trees, and graphs.</p>
+
+                    <h3 style="color: var(--primary); margin-bottom: 15px; margin-top: 20px;">Why Use Pointers?</h3>
+                    <ul>
+                        <li><strong>Dynamic Memory Allocation:</strong> Create variables during runtime using new and delete</li>
+                        <li><strong>Efficient Parameter Passing:</strong> Pass large objects by reference instead of copying</li>
+                        <li><strong>Building Complex Structures:</strong> Create linked lists, trees, and graphs</li>
+                        <li><strong>Polymorphism:</strong> Use base class pointers to access derived class objects</li>
+                        <li><strong>Function Pointers:</strong> Treat functions as first-class data</li>
+                    </ul>
+
+                    <h3 style="color: var(--primary); margin-bottom: 15px; margin-top: 20px;">The & and * Operators</h3>
+                    <p><strong>The & operator (address-of):</strong> Gives you the memory address of a variable. If you have an int x, then &x gives the address where x is stored.</p>
+                    <p><strong>The * operator (dereference):</strong> Accesses the value at a memory address. If ptr points to x, then *ptr gives you the value of x.</p>
+
+                    <h3 style="color: var(--primary); margin-bottom: 15px; margin-top: 20px;">Declaring Pointers</h3>
+                    <ul>
+                        <li><code>int* ptr;</code> - pointer to integer</li>
+                        <li><code>double* ptr;</code> - pointer to double</li>
+                        <li><code>char* ptr;</code> - pointer to character</li>
+                        <li><code>int** pptr;</code> - pointer to a pointer to integer</li>
+                    </ul>
+
+                    <h3 style="color: var(--primary); margin-bottom: 15px; margin-top: 20px;">Key Concepts</h3>
+                    <p>Every variable occupies memory with three key properties: an address (where it is), a value (what it contains), and a type (what kind of data it is). Pointers allow us to work with addresses rather than just values, giving us powerful capabilities for dynamic memory management and complex data structures.</p>
+                </div>
+            </section>
+
+            <section class="section">
+                <div class="section-title">💻 Code Examples</div>
+
+                <div class="code-example">
+                    <div class="code-tabs">
+                        <button class="code-tab active" data-tab="simple1">Simple Snippet</button>
+                        <button class="code-tab" data-tab="full1">Full Program</button>
+                    </div>
+                    <div data-tab-content="simple1" class="code-editor">
+int x = 42;
+int* ptr = &x;
+cout << x << endl;      // Output: 42
+cout << ptr << endl;    // Output: 0x... (memory address)
+cout << *ptr << endl;   // Output: 42 (dereference)
+                    </div>
+                    <div data-tab-content="full1" style="display: none;">
+                        <textarea class="code-editor" id="code1">#include <iostream>
+using namespace std;
+
+int main() {
+    int x = 42;
+    int* ptr = &x;
+    
+    cout << "Value of x: " << x << endl;
+    cout << "Address of x: " << &x << endl;
+    cout << "Pointer ptr holds: " << ptr << endl;
+    cout << "Value via *ptr: " << *ptr << endl;
+    
+    *ptr = 100;
+    cout << "After *ptr = 100, x = " << x << endl;
+    
+    return 0;
+}
+                        </textarea>
+                    </div>
+                    <div class="code-buttons">
+                        <button class="btn btn-primary" onclick="runCode(document.getElementById('code1'), document.getElementById('output1'))">▶ Run Code</button>
+                        <button class="btn btn-secondary" onclick="downloadCode(document.getElementById('code1').value, 'pointers1.cpp')">⬇ Download</button>
+                    </div>
+                    <div class="output-box" id="output1">Click "Run Code" to execute...</div>
+                </div>
+
+                <div class="code-example">
+                    <div class="code-tabs">
+                        <button class="code-tab active" data-tab="simple2">Simple Snippet</button>
+                        <button class="code-tab" data-tab="full2">Full Program</button>
+                    </div>
+                    <div data-tab-content="simple2" class="code-editor">
+int arr[3] = {10, 20, 30};
+int* p = arr;
+cout << *p << endl;      // Output: 10
+cout << *(p+1) << endl;  // Output: 20
+cout << *(p+2) << endl;  // Output: 30
+                    </div>
+                    <div data-tab-content="full2" style="display: none;">
+                        <textarea class="code-editor" id="code2">#include <iostream>
+using namespace std;
+
+int main() {
+    int arr[5] = {10, 20, 30, 40, 50};
+    int* ptr = arr;
+    
+    cout << "Array elements via pointer arithmetic:" << endl;
+    for(int i = 0; i < 5; i++) {
+        cout << "Element " << i << ": " << *(ptr + i) << endl;
+    }
+    
+    cout << "\nUsing pointer incrementation:" << endl;
+    ptr = arr;
+    for(int i = 0; i < 5; i++) {
+        cout << "Value: " << *ptr << endl;
+        ptr++;
+    }
+    
+    return 0;
+}
+                        </textarea>
+                    </div>
+                    <div class="code-buttons">
+                        <button class="btn btn-primary" onclick="runCode(document.getElementById('code2'), document.getElementById('output2'))">▶ Run Code</button>
+                        <button class="btn btn-secondary" onclick="downloadCode(document.getElementById('code2').value, 'pointers2.cpp')">⬇ Download</button>
+                    </div>
+                    <div class="output-box" id="output2">Click "Run Code" to execute...</div>
+                </div>
+
+                <div class="code-example">
+                    <div class="code-tabs">
+                        <button class="code-tab active" data-tab="simple3">Simple Snippet</button>
+                        <button class="code-tab" data-tab="full3">Full Program</button>
+                    </div>
+                    <div data-tab-content="simple3" class="code-editor">
+int x = 42;
+int* ptr = &x;
+int** pptr = &ptr;
+
+cout << x << endl;      // Output: 42
+cout << *ptr << endl;   // Output: 42
+cout << **pptr << endl; // Output: 42
+                    </div>
+                    <div data-tab-content="full3" style="display: none;">
+                        <textarea class="code-editor" id="code3">#include <iostream>
+using namespace std;
+
+int main() {
+    int x = 42;
+    int* ptr = &x;
+    int** pptr = &ptr;
+    
+    cout << "Original value: " << x << endl;
+    cout << "Via *ptr: " << *ptr << endl;
+    cout << "Via **pptr: " << **pptr << endl;
+    
+    cout << "\nAddresses:" << endl;
+    cout << "Address of x: " << &x << endl;
+    cout << "ptr holds: " << ptr << endl;
+    cout << "Address of ptr: " << &ptr << endl;
+    cout << "pptr holds: " << pptr << endl;
+    
+    **pptr = 100;
+    cout << "\nAfter **pptr = 100:" << endl;
+    cout << "x = " << x << endl;
+    
+    return 0;
+}
+                        </textarea>
+                    </div>
+                    <div class="code-buttons">
+                        <button class="btn btn-primary" onclick="runCode(document.getElementById('code3'), document.getElementById('output3'))">▶ Run Code</button>
+                        <button class="btn btn-secondary" onclick="downloadCode(document.getElementById('code3').value, 'pointers3.cpp')">⬇ Download</button>
+                    </div>
+                    <div class="output-box" id="output3">Click "Run Code" to execute...</div>
+                </div>
+            </section>
+
+            <section class="section">
+                <div class="section-title">✍️ Coding Activities</div>
+
+                <div class="activity">
+                    <div class="activity-title">⚡ Intermediate Challenge: Swap Values Using Pointers</div>
+                    <p>Write a function that takes two pointers to integers and swaps the values they point to. The original variables should be modified through the pointers.</p>
+                    <button class="btn btn-secondary" onclick="downloadCode(`#include <iostream>
+using namespace std;
+
+void swap(int* a, int* b) {
+    // TODO: Implement swap function
+}
+
+int main() {
+    int x = 10, y = 20;
+    cout << "Before: x = " << x << ", y = " << y << endl;
+    
+    swap(&x, &y);
+    
+    cout << "After: x = " << x << ", y = " << y << endl;
+    return 0;
+}`, 'swap_activity.cpp')">⬇ Download Skeleton</button>
+                    <button class="collapsible">▼ Show Solution</button>
+                    <div class="collapsible-content">
+                        <div class="code-editor">
+#include <iostream>
+using namespace std;
+
+void swap(int* a, int* b) {
+    int temp = *a;
+    *a = *b;
+    *b = temp;
+}
+
+int main() {
+    int x = 10, y = 20;
+    cout << "Before: x = " << x << ", y = " << y << endl;
+    
+    swap(&x, &y);
+    
+    cout << "After: x = " << x << ", y = " << y << endl;
+    return 0;
+}
+                        </div>
+                        <p style="margin-top: 15px;"><strong>Explanation:</strong> This solution uses a temporary variable to hold one value while we overwrite it. We then restore the original value to the second pointer.</p>
+                    </div>
+                </div>
+
+                <div class="activity">
+                    <div class="activity-title">🔥 Advanced Challenge: Array Manipulation with Pointers</div>
+                    <p>Write functions to: (1) Find the maximum value in an array using pointer arithmetic, (2) Reverse an array in-place using pointers, (3) Sum all elements using pointer traversal.</p>
+                    <button class="btn btn-secondary" onclick="downloadCode(`#include <iostream>
+using namespace std;
+
+int findMax(int* arr, int size) {
+    // TODO: Find maximum using pointer arithmetic
+    return 0;
+}
+
+void reverseArray(int* arr, int size) {
+    // TODO: Reverse array using pointers
+}
+
+int sumArray(int* arr, int size) {
+    // TODO: Sum array using pointer traversal
+    return 0;
+}
+
+int main() {
+    int arr[5] = {3, 1, 4, 1, 5};
+    
+    cout << "Max: " << findMax(arr, 5) << endl;
+    cout << "Sum: " << sumArray(arr, 5) << endl;
+    
+    reverseArray(arr, 5);
+    cout << "Reversed: ";
+    for(int i = 0; i < 5; i++) cout << arr[i] << " ";
+    
+    return 0;
+}`, 'array_pointers.cpp')">⬇ Download Skeleton</button>
+                    <button class="collapsible">▼ Show Solution</button>
+                    <div class="collapsible-content">
+                        <div class="code-editor">
+#include <iostream>
+using namespace std;
+
+int findMax(int* arr, int size) {
+    int maxVal = *arr;
+    for(int* p = arr; p < arr + size; p++) {
+        if(*p > maxVal) maxVal = *p;
+    }
+    return maxVal;
+}
+
+void reverseArray(int* arr, int size) {
+    int* left = arr;
+    int* right = arr + size - 1;
+    
+    while(left < right) {
+        int temp = *left;
+        *left = *right;
+        *right = temp;
+        left++;
+        right--;
+    }
+}
+
+int sumArray(int* arr, int size) {
+    int sum = 0;
+    for(int* p = arr; p < arr + size; p++) {
+        sum += *p;
+    }
+    return sum;
+}
+
+int main() {
+    int arr[5] = {3, 1, 4, 1, 5};
+    
+    cout << "Max: " << findMax(arr, 5) << endl;
+    cout << "Sum: " << sumArray(arr, 5) << endl;
+    
+    reverseArray(arr, 5);
+    cout << "Reversed: ";
+    for(int i = 0; i < 5; i++) cout << arr[i] << " ";
+    
+    return 0;
+}
+                        </div>
+                        <p style="margin-top: 15px;"><strong>Explanation:</strong> This solution demonstrates pointer arithmetic and manipulation. We iterate through arrays using pointers and perform multiple array operations efficiently.</p>
+                    </div>
+                </div>
+            </section>
+
+            <section class="section">
+                <div class="section-title">📝 Knowledge Check Quiz</div>
+                <div class="quiz-container">
+                    <p>Test your understanding of pointers with this interactive quiz.</p>
+                    <button class="quiz-btn" onclick="initializeQuiz()">▶ Start Quiz</button>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <footer><p>COS110 OOP Study Website | November 2025</p></footer>
+
+    <script src="../../js/main.js"></script>
+    <script src="../../js/compiler.js"></script>
+    <script src="../../js/quiz.js"></script>
+
+    <script>
+        function initializeQuiz() {
+            const questions = [
+                {type: 'multiple-choice', question: 'What does the & operator do?', options: ['Multiplies two values', 'Returns the memory address of a variable', 'Performs bitwise AND', 'Declares a reference'], correctAnswer: 'B', explanation: 'The & operator is the address-of operator. It returns the memory address where a variable is stored.'},
+                {type: 'true-false', question: 'A pointer to int (int*) can store the address of a double variable without casting.', correctAnswer: 'false', explanation: 'Pointers are type-specific. An int* can only store addresses of int variables.'},
+                {type: 'fill-in', question: 'A pointer to integer is declared as:', context: '<span style="color: red;">_______</span> ptr;', hint: 'Format: type*', acceptableAnswers: ['int*', 'int *', 'int* '], explanation: 'The syntax int* declares a pointer to an integer.'},
+                {type: 'multiple-choice', question: 'If int x = 42; and int* ptr = &x;, what is the value of *ptr?', options: ['The address of x', '42', 'undefined', 'a syntax error'], correctAnswer: 'B', explanation: '*ptr dereferences the pointer, giving us the value it points to.'},
+                {type: 'true-false', question: 'You can use pointer arithmetic to iterate through an array.', correctAnswer: 'true', explanation: 'Yes! Pointer arithmetic (ptr++, ptr+i) is commonly used to traverse arrays.'},
+                {type: 'multiple-choice', question: 'What is a wild pointer?', options: ['A pointer that points to multiple variables', 'An uninitialized pointer with an unknown value', 'A pointer in a wildlife program', 'A pointer that has been deleted'], correctAnswer: 'B', explanation: 'A wild pointer is uninitialized and contains an arbitrary memory address.'},
+                {type: 'fill-in', question: 'To safely initialize a pointer that doesn\'t point to anything yet, use:', context: 'int* ptr = <span style="color: red;">_______</span>;', hint: 'The null pointer constant', acceptableAnswers: ['nullptr', 'NULL', 'null', '0'], explanation: 'Initialize pointers to nullptr to ensure they don\'t accidentally point to valid memory.'},
+                {type: 'multiple-choice', question: 'What happens when you dereference a nullptr?', options: ['Returns 0', 'Undefined behavior / crash', 'Returns nullptr', 'Compiler error'], correctAnswer: 'B', explanation: 'Dereferencing nullptr causes undefined behavior and typically results in a crash.'},
+                {type: 'true-false', question: 'A pointer to a pointer (int**) is the same as a regular pointer (int*).', correctAnswer: 'false', explanation: 'int** points to an int* (pointer to a pointer), while int* points to an int.'},
+                {type: 'multiple-choice', question: 'If p is a pointer to an array, which expression gives the second element?', options: ['p[1]', '*(p+1)', '*p+1', 'p+1'], correctAnswer: 'B', explanation: 'Both p[1] and *(p+1) are equivalent and give the second element.'}
+            ];
+
+            window.quizSystem = new QuizSystem('Pointers Part 1', questions);
+            openQuizModal();
+        }
+
+        if (!document.getElementById('quizModal')) {
+            const modal = document.createElement('div');
+            modal.id = 'quizModal';
+            modal.className = 'quiz-modal';
+            modal.innerHTML = `<div class="quiz-modal-content"><div class="quiz-header"><div><div class="quiz-question-number">Quiz: Pointers Part 1</div><div class="quiz-progress">Question 1 of 10</div></div><button class="quiz-close" onclick="closeQuizModal()">✕</button></div><div class="quiz-questions-container"></div></div>`;
+            document.body.appendChild(modal);
+        }
+    </script>
+</body>
+</html>
