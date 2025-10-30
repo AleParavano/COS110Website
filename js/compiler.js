@@ -1,9 +1,10 @@
-// COS110 OOP STUDY WEBSITE - JDOODLE COMPILER API WRAPPER
+// COS110 OOP STUDY WEBSITE - JDOODLE COMPILER API WRAPPER WITH CORS PROXY
 
 class CompilerAPI {
     constructor() {
         this.clientId = 'e88569616eeb2f699d91f07b6a073ae9';
         this.clientSecret = 'c2f11a63d797790779de8359c2b3f4421918f0211b2cb1817778112ad1b9819b';
+        // Using CORS proxy to bypass browser CORS restrictions
         this.apiUrl = 'https://cors-anywhere.herokuapp.com/https://api.jdoodle.com/v1/execute';
         this.maxTimeout = 30000;
     }
@@ -46,7 +47,7 @@ class CompilerAPI {
             return {
                 success: false,
                 output: '',
-                error: `Error: ${error.message}. Make sure your code is valid C++98.`,
+                error: `Error: ${error.message}. The CORS proxy may be down. Try refreshing the page.`,
                 stderr: error.message
             };
         }
