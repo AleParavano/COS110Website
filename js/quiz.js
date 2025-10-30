@@ -8,12 +8,14 @@ class QuizSystem {
         this.answers = [];
         this.score = 0;
         this.quizActive = false;
+        this.revealed = new Array(questions.length).fill(false);
     }
 
     startQuiz() {
         this.currentQuestionIndex = 0;
         this.answers = new Array(this.questions.length).fill(null);
         this.score = 0;
+        this.revealed = new Array(this.questions.length).fill(false);
         this.quizActive = true;
         
         const modal = document.getElementById('quizModal');
@@ -67,7 +69,7 @@ class QuizSystem {
         questionHTML += `
                 <div class="quiz-button-group">
                     <button class="btn btn-submit" onclick="window.quizSystem.submitAnswer(${index})">Submit Answer</button>
-                    <button class="btn btn-skip" onclick="window.quizSystem.nextQuestion()">Skip</button>
+                    <button class="btn btn-skip" onclick="window.quizSystem.nextQuestion()">Skip Question</button>
                 </div>
             </div>
         `;
@@ -122,6 +124,7 @@ class QuizSystem {
     submitAnswer(index) {
         const question = this.questions[index];
         let answer = null;
+        let isCorrect = false;
 
         if (question.type === 'multiple-choice' || question.type === 'true-false') {
             const selected = document.querySelector(`input[name="q${index}"]:checked`);
@@ -139,12 +142,80 @@ class QuizSystem {
         this.answers[index] = answer;
 
         if (question.type === 'multiple-choice' || question.type === 'true-false') {
-            if (answer === question.correctAnswer) {
+            isCorrect = answer === question.correctAnswer;
+            if (isCorrect) {
                 this.score++;
             }
         }
 
-        this.nextQuestion();
+        this.showRevealAnswer(index, isCorrect);
+    }
+
+    showRevealAnswer(index, isCorrect) {
+        const question = this.questions[index];
+        const questionDiv = document.getElementById(`question-${index}`);
+        
+        if (!questionDiv) return;
+
+        let revealHTML = `
+            <div class="quiz-answer-reveal" style="margin-top: 20px; padding: 20px; border-radius: 8px; background: ${isCorrect ? '#e8f5e9' : '#ffebee'}; border-left: 5px solid ${isCorrect ? '#4caf50' : '#f44336'};">
+                <div style="font-weight: bold; color: ${isCorrect ? '#2e7d32' : '#c62828'}; margin-bottom: 15px; font-size: 18px;">
+                    ${isCorrect ? '✓ Correct!' : '✗ Incorrect'}
+                </div>
+        `;
+
+        if (question.type === 'multiple-choice' || question.type === 'true-false') {
+            revealHTML += `
+                <div style="margin-bottom: 15px; padding: 10px; background: rgba(0,0,0,0.05); border-radius: 4px;">
+                    <strong>Correct Answer:</strong> ${this.getAnswerLabel(question, question.correctAnswer)}
+                </div>
+                <div style="margin-bottom: 15px; padding: 10px; background: rgba(0,0,0,0.05); border-radius: 4px;">
+                    <strong>Your Answer:</strong> ${this.getAnswerLabel(question, this.answers[index])}
+                </div>
+            `;
+        }
+
+        revealHTML += `
+            <div style="background: rgba(0,0,0,0.1); padding: 15px; border-radius: 4px; line-height: 1.8; margin-bottom: 15px;">
+                <strong style="font-size: 16px; display: block; margin-bottom: 10px;">Explanation:</strong>
+                <div>${question.explanation}</div>
+            </div>
+        `;
+
+        if (question.detailedExplanation) {
+            revealHTML += `
+                <div style="background: rgba(102, 126, 234, 0.1); padding: 15px; border-radius: 4px; line-height: 1.8; border-left: 3px solid #667eea;">
+                    <strong style="font-size: 16px; display: block; margin-bottom: 10px; color: #667eea;">📖 Deep Dive:</strong>
+                    <div>${question.detailedExplanation}</div>
+                </div>
+            `;
+        }
+
+        revealHTML += `
+            </div>
+            <div class="quiz-button-group" style="margin-top: 20px;">
+                <button class="btn btn-primary" onclick="window.quizSystem.nextQuestion()">Next Question</button>
+                <button class="btn btn-skip" onclick="window.quizSystem.skipToEnd()">End Quiz</button>
+            </div>
+        `;
+
+        questionDiv.innerHTML += revealHTML;
+
+        const submitBtn = questionDiv.querySelector('.btn-submit');
+        if (submitBtn) {
+            submitBtn.disabled = true;
+            submitBtn.style.opacity = '0.5';
+        }
+    }
+
+    getAnswerLabel(question, value) {
+        if (question.type === 'multiple-choice') {
+            const index = value.charCodeAt(0) - 65;
+            return `${value}) ${question.options[index] || 'Unknown'}`;
+        } else if (question.type === 'true-false') {
+            return value === 'true' ? 'True' : 'False';
+        }
+        return value;
     }
 
     nextQuestion() {
@@ -155,19 +226,45 @@ class QuizSystem {
         }
     }
 
+    skipToEnd() {
+        this.endQuiz();
+    }
+
     endQuiz() {
         const modal = document.getElementById('quizModal');
         if (!modal) return;
 
         const percentage = Math.round((this.score / this.questions.length) * 100);
+        let feedback = '';
+        let emoji = '';
+        
+        if (percentage === 100) {
+            feedback = 'Perfect score! You have mastered this topic! 🌟';
+            emoji = '🏆';
+        } else if (percentage >= 80) {
+            feedback = 'Excellent work! You have a strong understanding. 🎉';
+            emoji = '👏';
+        } else if (percentage >= 60) {
+            feedback = 'Good job! Review the questions you missed for deeper understanding. 👍';
+            emoji = '📚';
+        } else if (percentage >= 40) {
+            feedback = 'Keep studying! This topic needs more review. Consider re-reading the explanations. 💪';
+            emoji = '🎯';
+        } else {
+            feedback = 'This is the beginning of your learning journey. Study the deep dives and try again! 🚀';
+            emoji = '🌱';
+        }
         
         let resultHTML = `
             <div class="quiz-final-score">
-                <h2>🎉 Quiz Complete!</h2>
+                <h2>${emoji} Quiz Complete!</h2>
                 <div class="quiz-final-score-number">${this.score}/${this.questions.length}</div>
                 <div class="quiz-final-score-percentage">${percentage}%</div>
+                <div style="margin-top: 30px; font-size: 16px; color: var(--text-dark); line-height: 1.6;">
+                    ${feedback}
+                </div>
             </div>
-            <div style="margin-top: 30px; display: flex; gap: 10px;">
+            <div style="margin-top: 40px; display: flex; gap: 10px; justify-content: center; flex-wrap: wrap;">
                 <button class="btn btn-primary" onclick="window.quizSystem.startQuiz()">Retake Quiz</button>
                 <button class="btn btn-skip" onclick="window.quizSystem.closeQuiz()">Close Quiz</button>
             </div>
