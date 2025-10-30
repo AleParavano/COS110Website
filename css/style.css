@@ -459,11 +459,20 @@ body.dark-theme .code-buttons {
 
 .btn-primary {
     background: var(--secondary);
-    color: white;
+    color: white !important;
 }
 
 .btn-primary:hover {
     background: #229954;
+    color: white !important;
+}
+
+body.dark-theme .btn-primary {
+    color: white !important;
+}
+
+body.dark-theme .btn-primary:hover {
+    color: white !important;
 }
 
 .btn-secondary {
@@ -1339,4 +1348,14 @@ body.dark-theme .quiz-modal-content div[style*="background: #f0f0f0"],
 body.dark-theme .quiz-modal-content div[style*="background:#f0f0f0"] {
     background: #1a1a1a !important;
     color: #e0e0e0 !important;
+}
+
+body.dark-theme .quiz-answer-reveal {
+    color: #000 !important;
+    background: #ffebee !important;
+}
+
+body.dark-theme .quiz-answer-reveal div,
+body.dark-theme .quiz-answer-reveal strong {
+    color: #000 !important;
 }
