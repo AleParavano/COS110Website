@@ -508,8 +508,8 @@ body.dark-theme .output-box.error {
 }
 
 body.dark-theme .output-box.success {
-    background: #264a26;
-    color: #99ff99;
+    background: #e6ffe6;
+    color: #1b5e20;
 }
 
 /* ============================================================================
@@ -671,7 +671,7 @@ body.dark-theme .quiz-container {
     overflow-y: auto;
     box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
     transition: background 0.3s;
-    color: var(--text-dark);
+    color: #000;
 }
 
 body.dark-theme .quiz-modal-content {
@@ -686,7 +686,7 @@ body.dark-theme .quiz-modal-content {
     margin-bottom: 20px;
     border-bottom: 2px solid #f0f0f0;
     padding-bottom: 15px;
-    color: var(--text-dark);
+    color: #000;
 }
 
 body.dark-theme .quiz-header {
@@ -727,13 +727,13 @@ body.dark-theme .quiz-close:hover {
 }
 
 body.dark-theme .quiz-question-number {
-    color: #666;
+    color: #999;
 }
 
 .quiz-question-text {
     font-size: 18px;
     font-weight: bold;
-    color: var(--text-dark);
+    color: #000;
     margin-bottom: 20px;
 }
 
@@ -749,7 +749,7 @@ body.dark-theme .quiz-question-text {
     border-radius: 4px;
     cursor: pointer;
     transition: all 0.3s;
-    color: var(--text-dark);
+    color: #000;
 }
 
 body.dark-theme .quiz-option {
@@ -788,7 +788,7 @@ body.dark-theme .quiz-option:hover {
     font-family: 'Courier New', monospace;
     margin: 15px 0;
     background: white;
-    color: var(--text-dark);
+    color: #000;
     transition: background 0.3s, color 0.3s, border 0.3s;
 }
 
@@ -846,7 +846,7 @@ body.dark-theme .fill-in-hint {
 .quiz-final-score {
     text-align: center;
     padding: 40px 20px;
-    color: var(--text-dark);
+    color: #000;
 }
 
 body.dark-theme .quiz-final-score {
@@ -856,7 +856,7 @@ body.dark-theme .quiz-final-score {
 .quiz-final-score h2 {
     font-size: 28px;
     margin-bottom: 20px;
-    color: var(--text-dark);
+    color: #000;
 }
 
 body.dark-theme .quiz-final-score h2 {
@@ -1335,7 +1335,8 @@ body.dark-theme li {
     color: #e0e0e0 !important;
 }
 
-body.dark-theme a.btn-primary {
-    color: white !important;
+body.dark-theme .quiz-modal-content div[style*="background: #f0f0f0"],
+body.dark-theme .quiz-modal-content div[style*="background:#f0f0f0"] {
+    background: #1a1a1a !important;
+    color: #e0e0e0 !important;
 }
-
