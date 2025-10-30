@@ -1287,3 +1287,50 @@ body.dark-theme .footer-info {
 .footer-info p {
     color: inherit;
 }
+
+/* ============================================================================
+   DARK THEME - INDEX PAGE FIXES
+   ============================================================================ */
+
+body.dark-theme .stats-section > div,
+body.dark-theme [style*="background: white"],
+body.dark-theme [style*="background:white"] {
+    background: #1a1a1a !important;
+    border-color: #333 !important;
+    color: #e0e0e0 !important;
+}
+
+body.dark-theme .features-section,
+body.dark-theme section[style*="background: #f9f9f9"] {
+    background: #1a1a1a !important;
+    color: #e0e0e0 !important;
+}
+
+body.dark-theme section[style*="background: #e8f4f8"] {
+    background: #1a1a1a !important;
+    border-left-color: var(--info) !important;
+    color: #e0e0e0 !important;
+}
+
+body.dark-theme h2,
+body.dark-theme section h2,
+body.dark-theme .features-section h2 {
+    color: #e0e0e0 !important;
+}
+
+body.dark-theme h3,
+body.dark-theme section h3 {
+    color: #e0e0e0 !important;
+}
+
+body.dark-theme p {
+    color: #e0e0e0 !important;
+}
+
+body.dark-theme a {
+    color: var(--primary) !important;
+}
+
+body.dark-theme li {
+    color: #e0e0e0 !important;
+}
