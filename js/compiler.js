@@ -1,118 +1,61 @@
-// COS110 OOP STUDY WEBSITE - JDOODLE COMPILER API WRAPPER WITH CORS PROXY
+// WORKING C++ COMPILER - USING SIMPLE BACKEND PROXY
 
-class CompilerAPI {
-    constructor() {
-        this.clientId = 'e88569616eeb2f699d91f07b6a073ae9';
-        this.clientSecret = 'c2f11a63d797790779de8359c2b3f4421918f0211b2cb1817778112ad1b9819b';
-        // Using CORS proxy to bypass browser CORS restrictions
-        this.apiUrl = 'https://cors-anywhere.herokuapp.com/https://api.jdoodle.com/v1/execute';
-        this.maxTimeout = 30000;
-    }
-
-    async execute(code, stdin = '') {
-        try {
-            const response = await Promise.race([
-                fetch(this.apiUrl, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        clientId: this.clientId,
-                        clientSecret: this.clientSecret,
-                        script: code,
-                        language: 'cpp98',
-                        versionIndex: '0',
-                        stdin: stdin
-                    })
-                }),
-                new Promise((_, reject) =>
-                    setTimeout(() => reject(new Error('Compilation timeout')), this.maxTimeout)
-                )
-            ]);
-
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
-            }
-
-            const result = await response.json();
-
-            return {
-                success: result.statusCode === 200,
-                output: result.output || '',
-                error: result.error || result.compileStdout || '',
-                stderr: result.stderr || ''
-            };
-        } catch (error) {
-            return {
-                success: false,
-                output: '',
-                error: `Error: ${error.message}. The CORS proxy may be down. Try refreshing the page.`,
-                stderr: error.message
-            };
-        }
-    }
-
-    formatOutput(output) {
-        if (!output) return '(No output)';
-        return output.trim();
-    }
-}
-
-window.compiler = new CompilerAPI();
-
-async function runCode(codeElement, outputElement, loadingIndicator) {
+async function runCode(codeElement, outputElement) {
     if (!codeElement || !outputElement) {
-        console.error('Code or output element not found');
+        console.error('Element not found');
         return;
     }
 
     const code = codeElement.value || codeElement.textContent;
-    
-    outputElement.textContent = '⏳ Compiling and running...';
+    outputElement.textContent = '⏳ Compiling...';
     outputElement.classList.remove('error', 'success');
-    if (loadingIndicator) {
-        loadingIndicator.textContent = '⏳';
-    }
 
     try {
         if (!code.includes('main')) {
-            throw new Error('Code must contain a main() function');
+            throw new Error('Code must have a main() function');
         }
 
-        const result = await window.compiler.execute(code);
+        // Use a simple backend proxy (no setup needed)
+        const response = await fetch('https://emkc.org/api/v2/piston/execute', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                language: 'cpp',
+                version: '*',
+                files: [
+                    {
+                        name: 'main.cpp',
+                        content: code
+                    }
+                ]
+            })
+        });
 
-        outputElement.classList.remove('error', 'success');
+        const result = await response.json();
 
-        if (result.success) {
-            outputElement.textContent = window.compiler.formatOutput(result.output);
+        if (result.run && result.run.stdout) {
+            outputElement.textContent = result.run.stdout || '(no output)';
             outputElement.classList.add('success');
+        } else if (result.run && result.run.stderr) {
+            outputElement.textContent = 'Compilation Error:\n\n' + result.run.stderr;
+            outputElement.classList.add('error');
         } else {
-            const errorMsg = result.error || result.stderr || 'Unknown error occurred';
-            outputElement.textContent = `Compilation Error:\n\n${errorMsg}`;
+            outputElement.textContent = 'Error: ' + JSON.stringify(result);
             outputElement.classList.add('error');
         }
-
-        if (loadingIndicator) {
-            loadingIndicator.textContent = '';
-        }
     } catch (error) {
-        outputElement.textContent = `Error: ${error.message}\n\nMake sure your code:\n- Has a main() function\n- Is valid C++98\n- Doesn't require external libraries`;
+        outputElement.textContent = 'Error: ' + error.message + '\n\nMake sure your code has a main() function';
         outputElement.classList.add('error');
-        if (loadingIndicator) {
-            loadingIndicator.textContent = '';
-        }
     }
 }
 
-function downloadCode(code, filename = 'program.cpp') {
-    const element = document.createElement('a');
-    element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(code));
-    element.setAttribute('download', filename);
-    element.style.display = 'none';
-    document.body.appendChild(element);
-    element.click();
-    document.body.removeChild(element);
+function downloadCode(code) {
+    const link = document.createElement('a');
+    link.href = 'data:text/plain,' + encodeURIComponent(code);
+    link.download = 'program.cpp';
+    link.click();
 }
 
 window.runCode = runCode;
