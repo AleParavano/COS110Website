@@ -43,11 +43,6 @@ body {
     transition: background-color 0.3s, color 0.3s;
 }
 
-a.btn-primary {
-    color: white;
-    text-decoration: none;
-}
-
 /* ============================================================================
    NAVBAR
    ============================================================================ */
@@ -1338,4 +1333,8 @@ body.dark-theme a {
 
 body.dark-theme li {
     color: #e0e0e0 !important;
+}
+
+body.dark-theme a.btn-primary {
+    color: white !important;
 }
