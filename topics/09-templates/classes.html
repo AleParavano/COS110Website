@@ -9,7 +9,7 @@
 <body>
     <nav class="navbar">
         <a href="../../index.html" class="navbar-brand">📚 COS110 OOP</a>
-        <div class="navbar-search"><input type="text" placeholder="Search ....."></div>
+        <div class="navbar-search"><input type="text" placeholder="Search topics..."></div>
     </nav>
 
     <div class="container">
@@ -65,20 +65,144 @@
             <section class="section">
                 <div class="section-title">📚 Explanation</div>
                 <div class="explanation">
-                    <h3 style="color: var(--primary);">What are Templates?</h3>
-                    <p>Templates are blueprints for generating code. Template classes allow you to write generic code that works with any data type. Instead of creating separate classes for Stack<int>, Stack<double>, Stack<string>, you define one template that generates them all at compile time.</p>
+                    <h3 style="color: var(--primary);">What are Template Classes?</h3>
+                    <p>Template classes are <strong>blueprints for generating code</strong> at compile time. Instead of writing separate classes for <code>Stack&lt;int&gt;</code>, <code>Stack&lt;double&gt;</code>, <code>Stack&lt;string&gt;</code>, you write one template that generates all of them automatically. This is the foundation of <strong>generic programming</strong> in C++ and powers the entire Standard Template Library (STL).</p>
+                    
+                    <div style="background: #f0f0f0; padding: 15px; border-radius: 8px; margin: 15px 0;">
+                    <strong>The Problem Templates Solve:</strong><br><br>
+                    Without templates (terrible approach):<br>
+                    class StackInt { /* for int */ }<br>
+                    class StackDouble { /* for double */ }<br>
+                    class StackString { /* for string */ }<br>
+                    ← Code duplication nightmare!<br><br>
+                    
+                    With templates (elegant solution):<br>
+                    template&lt;typename T&gt; class Stack { /* works for ANY type! */ }<br>
+                    Stack&lt;int&gt; s1; // Compiler generates for int<br>
+                    Stack&lt;double&gt; s2; // Compiler generates for double<br>
+                    Stack&lt;string&gt; s3; // Compiler generates for string
+                    </div>
 
-                    <h3 style="color: var(--primary); margin-top: 20px;">Template Parameters</h3>
-                    <p>Template parameters are placeholders for types (or values). Syntax: template<typename T> or template<class T>. Inside the template, T represents the type. When you instantiate Stack<int>, T becomes int. Multiple parameters are supported: template<typename T, typename U>.</p>
+                    <h3 style="color: var(--primary); margin-top: 25px;">Template Parameters - The Core Concept</h3>
+                    <p><strong>Template Parameters:</strong> Placeholders for types (or values) that the compiler fills in. Think of them like function parameters, but for types instead of values.</p>
+                    
+                    <div style="background: #e8f4f8; padding: 15px; border-radius: 8px; margin: 10px 0; font-family: 'Courier New', monospace;">
+                    <strong>Syntax Variations:</strong><br><br>
+                    template&lt;typename T&gt; ← Modern, preferred<br>
+                    template&lt;class T&gt; ← Old style, but still works<br><br>
+                    
+                    Multiple parameters:<br>
+                    template&lt;typename T, typename U&gt;<br>
+                    template&lt;typename T, int N&gt;  // Value parameter!<br><br>
+                    
+                    <strong>Inside the template, T can be used like a type:</strong><br>
+                    T value;          // T is the template parameter<br>
+                    T* ptr;           // Pointer to T<br>
+                    vector&lt;T&gt; vec;  // Vector of T
+                    </div>
 
-                    <h3 style="color: var(--primary); margin-top: 20px;">Template Instantiation</h3>
-                    <p>When you create Stack<int> s;, the compiler generates a version of Stack with T=int. Each distinct instantiation creates separate code. This is called implicit instantiation. Explicit instantiation is possible with template class declaration.</p>
+                    <h3 style="color: var(--primary); margin-top: 20px;">Template Instantiation - Compiler Magic</h3>
+                    <p><strong>What happens when you use a template:</strong> The compiler reads your template definition and creates a <strong>concrete version</strong> for each type you use. This is called <strong>instantiation</strong>.</p>
+                    
+                    <div style="background: #f0f0f0; padding: 15px; border-radius: 8px; margin: 10px 0;">
+                    <strong>Example Flow:</strong><br><br>
+                    1. You write: template&lt;typename T&gt; class Container { T data; };<br><br>
+                    
+                    2. You use it: Container&lt;int&gt; c1; Container&lt;string&gt; c2;<br><br>
+                    
+                    3. Compiler generates at compile-time:<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;class Container_int { int data; }; // For int<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;class Container_string { string data; }; // For string<br><br>
+                    
+                    4. Linker combines everything into final binary<br><br>
+                    
+                    <strong>Key Point:</strong> This happens at COMPILE time, not runtime. By runtime, only concrete versions exist!
+                    </div>
+
+                    <h3 style="color: var(--primary); margin-top: 20px;">Why Template Definition Must Be in Header Files</h3>
+                    <div style="background: #ffe8e8; padding: 15px; border-radius: 8px; margin: 10px 0;">
+                    <strong>The Problem:</strong> The compiler needs the complete template definition to instantiate it. If you put implementation in a .cpp file, when the compiler tries to instantiate for a new type, it won't see the implementation!<br><br>
+                    
+                    WRONG APPROACH:<br>
+                    // Stack.h<br>
+                    template&lt;typename T&gt; class Stack; // Declaration only!<br><br>
+                    // Stack.cpp<br>
+                    template&lt;typename T&gt;<br>
+                    void Stack&lt;T&gt;::push(T val) { ... } // Compiler can't see this when instantiating!<br><br>
+                    
+                    CORRECT APPROACHES:<br>
+                    1. Put everything in header file<br>
+                    2. Use explicit instantiation in .cpp<br>
+                    3. Use export keyword (rarely used)
+                    </div>
 
                     <h3 style="color: var(--primary); margin-top: 20px;">Member Functions in Templates</h3>
-                    <p>Member functions must be defined in the header file (not separate .cpp) because the compiler needs them to instantiate templates. Alternatively, use explicit instantiation. Each instantiation creates separate copies of all member functions.</p>
+                    <p><strong>Each instantiation creates separate copies:</strong> When you instantiate <code>Stack&lt;int&gt;</code> and <code>Stack&lt;double&gt;</code>, the compiler generates separate copies of <strong>all</strong> member functions. This means: Stack&lt;int&gt;::push() and Stack&lt;double&gt;::push() are different functions!</p>
+                    
+                    <table style="width: 100%; border-collapse: collapse; margin: 15px 0;">
+                    <tr style="background: var(--primary); color: white;">
+                        <th style="padding: 10px; border: 1px solid #999;">Aspect</th>
+                        <th style="padding: 10px; border: 1px solid #999;">Regular Class</th>
+                        <th style="padding: 10px; border: 1px solid #999;">Template Class</th>
+                    </tr>
+                    <tr style="background: #f9f9f9;">
+                        <td style="padding: 10px; border: 1px solid #ddd;"><strong>Compilation</strong></td>
+                        <td style="padding: 10px; border: 1px solid #ddd;">One binary version</td>
+                        <td style="padding: 10px; border: 1px solid #ddd;">One per instantiation</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 10px; border: 1px solid #ddd;"><strong>Memory</strong></td>
+                        <td style="padding: 10px; border: 1px solid #ddd;">Single copy of code</td>
+                        <td style="padding: 10px; border: 1px solid #ddd;">Multiple copies (one per type)</td>
+                    </tr>
+                    <tr style="background: #f9f9f9;">
+                        <td style="padding: 10px; border: 1px solid #ddd;"><strong>Header Location</strong></td>
+                        <td style="padding: 10px; border: 1px solid #ddd;">Can separate .cpp</td>
+                        <td style="padding: 10px; border: 1px solid #ddd;">Must be in .h file</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 10px; border: 1px solid #ddd;"><strong>Compile Time</strong></td>
+                        <td style="padding: 10px; border: 1px solid #ddd;">Fast</td>
+                        <td style="padding: 10px; border: 1px solid #ddd;">Slower (more code generated)</td>
+                    </tr>
+                    <tr style="background: #f9f9f9;">
+                        <td style="padding: 10px; border: 1px solid #ddd;"><strong>Binary Size</strong></td>
+                        <td style="padding: 10px; border: 1px solid #ddd;">Smaller</td>
+                        <td style="padding: 10px; border: 1px solid #ddd;">Larger (code bloat)</td>
+                    </tr>
+                    </table>
 
-                    <h3 style="color: var(--primary); margin-top: 20px;">Template Specialization</h3>
-                    <p>Provide specialized implementations for specific types. Syntax: template<> class Stack<bool> { /* special version */ }. This allows optimizations or special behavior for certain types while keeping generic version for others.</p>
+                    <h3 style="color: var(--primary); margin-top: 20px;">Template Specialization - Special Cases</h3>
+                    <p><strong>Partial Specialization:</strong> Provide a specialized implementation for specific types or patterns while keeping the generic version for others.</p>
+                    
+                    <div style="background: #f0f0f0; padding: 15px; border-radius: 8px; margin: 10px 0; font-family: 'Courier New', monospace;">
+                    <strong>Example: Optimize for bool:</strong><br><br>
+                    // Generic template<br>
+                    template&lt;typename T&gt;<br>
+                    class Container { /* stores T directly */ };<br><br>
+                    
+                    // Specialized for bool (might use bitpack)<br>
+                    template&lt;&gt;<br>
+                    class Container&lt;bool&gt; { /* special bit-packing */ };<br><br>
+                    
+                    Now Container&lt;int&gt; uses generic, but Container&lt;bool&gt; uses optimized version!
+                    </div>
+
+                    <h3 style="color: var(--primary); margin-top: 20px;">Template Instantiation Methods</h3>
+                    <p><strong>Implicit Instantiation (Most Common):</strong> Compiler automatically instantiates templates when you use them. This is automatic and usually what you want.</p>
+                    <p><strong>Explicit Instantiation:</strong> Manually tell compiler to generate specific versions. Used to control code generation or split into .cpp files with explicit templates.</p>
+                    <p><strong>Example:</strong> <code>template class Stack&lt;int&gt;;</code> tells compiler to generate Stack&lt;int&gt; now.</p>
+
+                    <h3 style="color: var(--primary); margin-top: 20px;">Common Template Mistakes & Solutions</h3>
+                    <p><strong>❌ Error: Putting template in .cpp</strong> → ✅ Solution: Keep in header file</p>
+                    <p><strong>❌ Error: Forgetting template&lt;&gt;</strong> → ✅ Solution: Always start with template&lt;typename T&gt;</p>
+                    <p><strong>❌ Error: Circular includes</strong> → ✅ Solution: Use include guards, avoid cycles</p>
+                    <p><strong>❌ Error: Binary size bloat</strong> → ✅ Solution: Use explicit instantiation for known types</p>
+                    <p><strong>❌ Error: Template error hard to debug</strong> → ✅ Solution: Enable verbose compiler errors</p>
+
+                    <h3 style="color: var(--primary); margin-top: 20px;">When to Use Templates</h3>
+                    <p><strong>✅ USE Templates for:</strong> Generic containers (Stack, Queue), algorithms that work on any type, type-safe collections, STL implementation</p>
+                    <p><strong>❌ AVOID Templates for:</strong> One-off classes, performance-critical code without profiling, when you only need one type, excessive specialization</p>
                 </div>
             </section>
 
@@ -91,57 +215,88 @@
                         <button class="code-tab" data-tab="full1">Full Program</button>
                     </div>
                     <div data-tab-content="simple1" class="code-editor">
-template<typename T>
+// ===== BASIC TEMPLATE CLASS =====
+template<typename T>  // T is a type parameter
 class Container {
 private:
-    T data;
+    T data;           // Can hold ANY type!
 public:
     Container(T val) : data(val) {}
-    T get() { return data; }
-    void set(T val) { data = val; }
+    
+    T get() { return data; }              // Returns type T
+    void set(T val) { data = val; }       // Accepts type T
 };
 
-Container<int> ci(42);
-Container<string> cs("hello");
-cout << ci.get() << endl;    // 42
-cout << cs.get() << endl;    // hello
+// Usage:
+Container<int> c1(42);        // T = int
+Container<string> c2("hello"); // T = string
+cout << c1.get() << endl;     // 42
+cout << c2.get() << endl;     // hello
                     </div>
                     <div data-tab-content="full1" style="display: none;">
                         <textarea class="code-editor" id="code1">#include <iostream>
 #include <string>
 using namespace std;
 
+// ===== TEMPLATE CLASS DEFINITION =====
+// template<typename T> tells compiler this is a template
+// T is a placeholder that will be replaced with actual types
+
 template<typename T>
 class Container {
 private:
-    T data;
-public:
-    Container(T val) : data(val) {}
+    T data;                     // Member variable of type T
     
+public:
+    // Constructor: initialize with value of type T
+    Container(T val) : data(val) {
+        cout << "Container created" << endl;
+    }
+    
+    // Getter: returns value of type T
     T get() const {
         return data;
     }
     
+    // Setter: accepts value of type T
     void set(T val) {
         data = val;
     }
     
+    // Display: works differently for different types
     void display() {
         cout << "Value: " << data << endl;
     }
 };
 
+// ===== USAGE IN MAIN =====
 int main() {
-    Container<int> intContainer(42);
+    cout << "=== Template Instantiation ===" << endl;
+    
+    // When we write Container<int>, compiler generates:
+    // class Container_int { int data; ... };
+    Container<int> intContainer(100);
+    intContainer.display();
+    intContainer.set(200);
+    intContainer.display();
+    
+    cout << "\n=== Different Type Same Template ===" << endl;
+    
+    // When we write Container<double>, compiler generates NEW version:
+    // class Container_double { double data; ... };
     Container<double> doubleContainer(3.14);
-    Container<string> stringContainer("Template");
-    
-    intContainer.display();
     doubleContainer.display();
-    stringContainer.display();
+    doubleContainer.set(2.71);
+    doubleContainer.display();
     
-    intContainer.set(100);
-    intContainer.display();
+    cout << "\n=== String Template ===" << endl;
+    
+    // When we write Container<string>, compiler generates:
+    // class Container_string { string data; ... };
+    Container<string> stringContainer("Hello");
+    stringContainer.display();
+    stringContainer.set("Templates!");
+    stringContainer.display();
     
     return 0;
 }
@@ -149,100 +304,127 @@ int main() {
                     </div>
                     <div class="code-buttons">
                         <button class="btn btn-primary" onclick="runCode(document.getElementById('code1'), document.getElementById('output1'))">▶ Run Code</button>
+                        <button class="btn btn-secondary" onclick="downloadCode(document.getElementById('code1'))">⬇ Download Code</button>
                     </div>
                     <div class="output-box" id="output1">Click "Run Code" to execute...</div>
                 </div>
 
                 <div class="code-example">
                     <div class="code-tabs">
-                        <button class="code-tab active" data-tab="simple2">Template Stack</button>
+                        <button class="code-tab active" data-tab="simple2">Stack Template</button>
                         <button class="code-tab" data-tab="full2">Full Program</button>
                     </div>
                     <div data-tab-content="simple2" class="code-editor">
 template<typename T>
 class Stack {
 private:
-    T items[100];
-    int top;
+    T* data;      // Dynamic array of type T
+    int top;      // Top index
+    int capacity; // Maximum size
 public:
-    Stack() : top(-1) {}
+    Stack(int cap = 10) 
+        : capacity(cap), top(-1) {
+        data = new T[capacity];
+    }
     
     void push(T val) {
-        items[++top] = val;
+        if(top < capacity - 1) {
+            data[++top] = val;
+        }
     }
     
     T pop() {
-        return items[top--];
+        if(top >= 0) return data[top--];
+        return T();  // Default value for type T
     }
     
-    bool isEmpty() {
-        return top == -1;
-    }
+    ~Stack() { delete[] data; }  // Clean up!
 };
-
-Stack<int> st;
-st.push(5);
-st.push(10);
-cout << st.pop() << endl;  // 10
                     </div>
                     <div data-tab-content="full2" style="display: none;">
                         <textarea class="code-editor" id="code2">#include <iostream>
 using namespace std;
 
+// ===== GENERIC STACK TEMPLATE =====
+// This single template works for ANY type!
+
 template<typename T>
 class Stack {
 private:
-    static const int MAX = 100;
-    T items[MAX];
-    int top;
+    T* data;              // Dynamic array of type T (works for any type!)
+    int top;              // Index of top element
+    int capacity;         // Maximum capacity
+    
 public:
-    Stack() : top(-1) {}
+    // Constructor: initialize stack with given capacity
+    Stack(int cap = 10) : capacity(cap), top(-1) {
+        data = new T[capacity];  // Allocate array of T
+        cout << "Stack created with capacity " << capacity << endl;
+    }
     
+    // Push: add element of type T to stack
     void push(T val) {
-        if(top < MAX - 1) {
-            items[++top] = val;
-            cout << "Pushed: " << val << endl;
+        if(top < capacity - 1) {  // Check if space available
+            data[++top] = val;    // Increment top, then insert
+            cout << "Pushed element" << endl;
+        } else {
+            cout << "Stack full!" << endl;
         }
     }
     
+    // Pop: remove and return element of type T
     T pop() {
-        if(!isEmpty()) {
-            cout << "Popped: " << items[top] << endl;
-            return items[top--];
+        if(top >= 0) {
+            return data[top--];   // Return top, then decrement
         }
-        return T();
+        return T();  // Return default value for type T
     }
     
-    bool isEmpty() const {
+    // Display: output all elements
+    void display() {
+        cout << "Stack contents: ";
+        for(int i = 0; i <= top; i++) {
+            cout << data[i] << " ";  // Works for any type with << operator
+        }
+        cout << endl;
+    }
+    
+    // Check if empty
+    bool isEmpty() {
         return top == -1;
     }
     
-    int size() const {
-        return top + 1;
+    // Destructor: cleanup dynamic memory (CRITICAL!)
+    ~Stack() {
+        delete[] data;  // Free the array of T
+        cout << "Stack destroyed" << endl;
     }
 };
 
 int main() {
-    cout << "=== Integer Stack ===" << endl;
-    Stack<int> intStack;
+    // ===== DEMONSTRATE WITH INTEGERS =====
+    cout << "=== Stack<int> ===" << endl;
+    Stack<int> intStack(5);  // Compiler generates Stack with T=int
+    
     intStack.push(10);
     intStack.push(20);
     intStack.push(30);
-    cout << "Size: " << intStack.size() << endl;
+    intStack.display();
     
-    cout << "\n=== Double Stack ===" << endl;
-    Stack<double> doubleStack;
+    cout << "Popped: " << intStack.pop() << endl;  // 30 (LIFO!)
+    intStack.display();
+    
+    // ===== DEMONSTRATE WITH DOUBLES =====
+    cout << "\n=== Stack<double> ===" << endl;
+    Stack<double> doubleStack(5);  // Compiler generates Stack with T=double
+    
     doubleStack.push(3.14);
     doubleStack.push(2.71);
-    cout << "Size: " << doubleStack.size() << endl;
-    doubleStack.pop();
-    doubleStack.pop();
+    doubleStack.push(1.41);
+    doubleStack.display();
     
-    cout << "\n=== String Stack ===" << endl;
-    Stack<string> stringStack;
-    stringStack.push("Hello");
-    stringStack.push("World");
-    stringStack.pop();
+    cout << "Popped: " << doubleStack.pop() << endl;  // 1.41
+    doubleStack.display();
     
     return 0;
 }
@@ -250,6 +432,7 @@ int main() {
                     </div>
                     <div class="code-buttons">
                         <button class="btn btn-primary" onclick="runCode(document.getElementById('code2'), document.getElementById('output2'))">▶ Run Code</button>
+                        <button class="btn btn-secondary" onclick="downloadCode(document.getElementById('code2'))">⬇ Download Code</button>
                     </div>
                     <div class="output-box" id="output2">Click "Run Code" to execute...</div>
                 </div>
@@ -260,85 +443,92 @@ int main() {
                         <button class="code-tab" data-tab="full3">Full Program</button>
                     </div>
                     <div data-tab-content="simple3" class="code-editor">
-template<typename K, typename V>
+template<typename Key, typename Value>
 class Pair {
 private:
-    K key;
-    V value;
+    Key k;
+    Value v;
 public:
-    Pair(K k, V v) : key(k), value(v) {}
-    K getKey() { return key; }
-    V getValue() { return value; }
+    Pair(Key key, Value val) 
+        : k(key), v(val) {}
+    
+    Key getKey() { return k; }
+    Value getValue() { return v; }
+    
+    void display() {
+        cout << "Key: " << k 
+             << ", Value: " << v << endl;
+    }
 };
 
-Pair<string, int> p("age", 25);
-cout << p.getKey() << ": " << p.getValue() << endl;
+// Usage with different types:
+Pair<string, int> p1("age", 25);
+Pair<int, double> p2(1, 3.14);
                     </div>
                     <div data-tab-content="full3" style="display: none;">
                         <textarea class="code-editor" id="code3">#include <iostream>
 #include <string>
 using namespace std;
 
-template<typename K, typename V>
+// ===== TEMPLATE WITH MULTIPLE PARAMETERS =====
+// Templates can have MORE than one type parameter!
+// This lets us create generic key-value pairs
+
+template<typename Key, typename Value>
 class Pair {
 private:
-    K key;
-    V value;
+    Key k;           // First template parameter
+    Value v;         // Second template parameter
+    
 public:
-    Pair(K k, V v) : key(k), value(v) {}
-    
-    K getKey() const { return key; }
-    V getValue() const { return value; }
-    
-    void display() {
-        cout << key << " -> " << value << endl;
-    }
-};
-
-template<typename T>
-class Array {
-private:
-    T items[10];
-    int size;
-public:
-    Array() : size(0) {}
-    
-    void add(T val) {
-        if(size < 10) {
-            items[size++] = val;
-        }
+    // Constructor: accepts both Key and Value types
+    Pair(Key key, Value val) : k(key), v(val) {
+        cout << "Pair created" << endl;
     }
     
+    // Get key: returns Key type
+    Key getKey() const {
+        return k;
+    }
+    
+    // Get value: returns Value type
+    Value getValue() const {
+        return v;
+    }
+    
+    // Display: works with any types that support <<
     void display() {
-        for(int i = 0; i < size; i++) {
-            cout << items[i] << " ";
-        }
-        cout << endl;
+        cout << "Key: " << k << ", Value: " << v << endl;
     }
 };
 
 int main() {
-    cout << "=== Pairs ===" << endl;
-    Pair<string, int> p1("Alice", 25);
-    Pair<string, double> p2("Pi", 3.14159);
+    // ===== STRING TO INT MAPPING =====
+    cout << "=== Pair<string, int> ===" << endl;
     
-    p1.display();
-    p2.display();
+    // Compiler generates Pair with Key=string, Value=int
+    Pair<string, int> person("Alice", 30);
+    person.display();
     
-    cout << "\n=== Arrays ===" << endl;
-    Array<int> intArr;
-    intArr.add(1);
-    intArr.add(2);
-    intArr.add(3);
-    cout << "Int Array: ";
-    intArr.display();
+    cout << "Key: " << person.getKey() << endl;      // "Alice"
+    cout << "Value: " << person.getValue() << endl;  // 30
     
-    Array<string> strArr;
-    strArr.add("one");
-    strArr.add("two");
-    strArr.add("three");
-    cout << "String Array: ";
-    strArr.display();
+    // ===== INT TO DOUBLE MAPPING =====
+    cout << "\n=== Pair<int, double> ===" << endl;
+    
+    // Different instantiation: Key=int, Value=double
+    Pair<int, double> point(1, 3.14);
+    point.display();
+    
+    cout << "Key: " << point.getKey() << endl;       // 1
+    cout << "Value: " << point.getValue() << endl;   // 3.14
+    
+    // ===== STRING TO STRING MAPPING =====
+    cout << "\n=== Pair<string, string> ===" << endl;
+    
+    // Both parameters same type is OK!
+    Pair<string, string> mapping("color", "blue");
+    mapping.display();
     
     return 0;
 }
@@ -346,265 +536,290 @@ int main() {
                     </div>
                     <div class="code-buttons">
                         <button class="btn btn-primary" onclick="runCode(document.getElementById('code3'), document.getElementById('output3'))">▶ Run Code</button>
+                        <button class="btn btn-secondary" onclick="downloadCode(document.getElementById('code3'))">⬇ Download Code</button>
                     </div>
                     <div class="output-box" id="output3">Click "Run Code" to execute...</div>
                 </div>
             </section>
 
             <section class="section">
-                <div class="section-title">✍️ Coding Activities</div>
-
-                <div class="activity">
-                    <div class="activity-title">⚡ Intermediate Challenge: Generic Queue</div>
-                    <p>Create a template Queue class with enqueue, dequeue, and display methods.</p>
-                    <button class="btn btn-secondary" onclick="downloadCode(\`#include <iostream>
-using namespace std;
-
-template<typename T>
-class Queue {
-private:
-    struct Node {
-        T data;
-        Node* next;
-        Node(T val) : data(val), next(nullptr) {}
-    };
-    Node* front;
-    Node* rear;
-    
-public:
-    Queue() : front(nullptr), rear(nullptr) {}
-    
-    // TODO: enqueue(T val)
-    // TODO: T dequeue()
-    // TODO: bool isEmpty()
-    
-    ~Queue() {
-        while(!isEmpty()) {
-            dequeue();
-        }
-    }
-};
-
-int main() {
-    Queue<int> q;
-    q.enqueue(1);
-    q.enqueue(2);
-    cout << q.dequeue() << endl;
-    return 0;
-}\`, 'generic_queue.cpp')">⬇ Download Skeleton</button>
-                    <button class="collapsible">▼ Show Solution</button>
-                    <div class="collapsible-content">
-                        <div class="code-editor">
-#include <iostream>
-using namespace std;
-
-template<typename T>
-class Queue {
-private:
-    struct Node {
-        T data;
-        Node* next;
-        Node(T val) : data(val), next(nullptr) {}
-    };
-    Node* front;
-    Node* rear;
-    
-public:
-    Queue() : front(nullptr), rear(nullptr) {}
-    
-    void enqueue(T val) {
-        Node* newNode = new Node(val);
-        if(isEmpty()) {
-            front = rear = newNode;
-        } else {
-            rear->next = newNode;
-            rear = newNode;
-        }
-        cout << "Enqueued: " << val << endl;
-    }
-    
-    T dequeue() {
-        if(isEmpty()) {
-            cout << "Queue empty" << endl;
-            return T();
-        }
-        Node* temp = front;
-        T val = temp->data;
-        front = front->next;
-        if(front == nullptr) {
-            rear = nullptr;
-        }
-        cout << "Dequeued: " << val << endl;
-        delete temp;
-        return val;
-    }
-    
-    bool isEmpty() const {
-        return front == nullptr;
-    }
-    
-    ~Queue() {
-        while(!isEmpty()) {
-            dequeue();
-        }
-    }
-};
-
-int main() {
-    cout << "=== Int Queue ===" << endl;
-    Queue<int> intQ;
-    intQ.enqueue(10);
-    intQ.enqueue(20);
-    intQ.enqueue(30);
-    intQ.dequeue();
-    intQ.dequeue();
-    
-    cout << "\n=== String Queue ===" << endl;
-    Queue<string> strQ;
-    strQ.enqueue("First");
-    strQ.enqueue("Second");
-    strQ.dequeue();
-    
-    return 0;
-}
-                        </div>
-                    </div>
-                </div>
-
-                <div class="activity">
-                    <div class="activity-title">🔥 Advanced Challenge: Template Pair & Dictionary</div>
-                    <p>Create generic Pair and Dictionary classes with template parameter combinations.</p>
-                    <button class="btn btn-secondary" onclick="downloadCode(\`#include <iostream>
+                <div class="section-title">✍️ Coding Challenges with Skeleton Code</div>
+                <div style="background: #f0f0f0; padding: 20px; border-radius: 8px;">
+                    
+                    <h4 style="color: var(--primary);">Challenge 1: Create a Vector Template</h4>
+                    <p>Implement a simple Vector template that stores elements and supports push_back(). Make sure it works with int, double, and string.</p>
+                    <button class="btn btn-secondary" onclick="downloadSkeleton(`#include <iostream>
 #include <string>
 using namespace std;
 
-template<typename K, typename V>
-class Dictionary {
+// ===== YOUR VECTOR TEMPLATE HERE =====
+template<typename T>
+class Vector {
 private:
-    struct Entry {
-        K key;
-        V value;
-        Entry(K k, V v) : key(k), value(v) {}
-    };
-    Entry* entries[100];
-    int count;
+    T* data;           // TODO: Dynamic array pointer
+    int size;          // TODO: Current number of elements
+    int capacity;      // TODO: Maximum capacity
     
 public:
-    Dictionary() : count(0) {}
+    // Constructor
+    Vector(int cap = 10) {
+        // TODO: Initialize data, size, capacity
+    }
     
-    // TODO: void add(K key, V value)
-    // TODO: V get(K key)
-    // TODO: bool contains(K key)
+    // Push element to back
+    void push_back(T value) {
+        // TODO: If size < capacity, add to end
+        // TODO: If full, need to expand (optional for challenge)
+    }
     
+    // Get element at index
+    T get(int index) {
+        // TODO: Return element at index (with bounds check)
+    }
+    
+    // Display all elements
     void display() {
-        cout << \"Dictionary (\" << count << \" entries):\" << endl;
-        for(int i = 0; i < count; i++) {
-            cout << \"  \" << entries[i]->key 
-                 << \" -> \" << entries[i]->value << endl;
-        }
+        // TODO: Print all elements
+    }
+    
+    // Destructor
+    ~Vector() {
+        // TODO: Clean up dynamic memory
     }
 };
 
 int main() {
-    Dictionary<string, int> d;
-    d.add(\"Alice\", 25);
-    d.add(\"Bob\", 30);
-    d.display();
+    // Test with integers
+    Vector<int> v1(5);
+    v1.push_back(10);
+    v1.push_back(20);
+    v1.push_back(30);
+    v1.display();
+    
+    // Test with strings
+    Vector<string> v2(5);
+    v2.push_back("Hello");
+    v2.push_back("World");
+    v2.display();
+    
     return 0;
-}\`, 'template_dictionary.cpp')">⬇ Download Skeleton</button>
-                    <button class="collapsible">▼ Show Solution</button>
-                    <div class="collapsible-content">
-                        <div class="code-editor">
-#include <iostream>
+}`, 'vector_skeleton.cpp')">⬇ Download Vector Skeleton</button>
+
+                    <h4 style="color: var(--primary); margin-top: 20px;">Challenge 2: Pair Template Extension</h4>
+                    <p>Extend the Pair template to support setKey(), setValue(), swap(), and equality comparison.</p>
+                    <button class="btn btn-secondary" onclick="downloadSkeleton(`#include <iostream>
 #include <string>
 using namespace std;
 
-template<typename K, typename V>
-class Dictionary {
+// ===== EXTENDED PAIR TEMPLATE =====
+template<typename Key, typename Value>
+class Pair {
 private:
-    struct Entry {
-        K key;
-        V value;
-        Entry(K k, V v) : key(k), value(v) {}
-    };
-    Entry* entries[100];
-    int count;
+    Key k;
+    Value v;
     
 public:
-    Dictionary() : count(0) {}
+    Pair(Key key, Value val) : k(key), v(val) {}
     
-    void add(K key, V value) {
-        if(!contains(key)) {
-            entries[count++] = 
-                new Entry(key, value);
-            cout << "Added: " << key << " -> " 
-                 << value << endl;
-        }
+    Key getKey() const { return k; }
+    Value getValue() const { return v; }
+    
+    // TODO: Implement setKey(Key key)
+    void setKey(Key key) {
+        // YOUR CODE HERE
     }
     
-    V get(K key) {
-        for(int i = 0; i < count; i++) {
-            if(entries[i]->key == key) {
-                return entries[i]->value;
-            }
-        }
-        return V();
+    // TODO: Implement setValue(Value val)
+    void setValue(Value val) {
+        // YOUR CODE HERE
     }
     
-    bool contains(K key) {
-        for(int i = 0; i < count; i++) {
-            if(entries[i]->key == key) {
-                return true;
-            }
-        }
-        return false;
+    // TODO: Implement swap() - exchange key and value
+    void swap() {
+        // YOUR CODE HERE
+        // HINT: You can't swap different types directly!
+        // This only works if Key and Value are same type!
+    }
+    
+    // TODO: Implement operator== for equality comparison
+    bool operator==(const Pair<Key, Value>& other) const {
+        // YOUR CODE HERE
+        // Return true if both key and value match
     }
     
     void display() {
-        cout << "Dictionary (" << count 
-             << " entries):" << endl;
-        for(int i = 0; i < count; i++) {
-            cout << "  " << entries[i]->key 
-                 << " -> " << entries[i]->value 
-                 << endl;
-        }
-    }
-    
-    ~Dictionary() {
-        for(int i = 0; i < count; i++) {
-            delete entries[i];
-        }
+        cout << "Key: " << k << ", Value: " << v << endl;
     }
 };
 
 int main() {
-    Dictionary<string, int> ages;
-    ages.add("Alice", 25);
-    ages.add("Bob", 30);
-    ages.add("Charlie", 28);
+    Pair<string, int> p1("Alice", 30);
+    p1.display();
     
-    cout << "All entries:" << endl;
-    ages.display();
+    // TODO: Test setKey and setValue
     
-    cout << "\nLookup Alice: " << ages.get("Alice") 
-         << endl;
-    cout << "Contains Bob: " << ages.contains("Bob") 
-         << endl;
+    // TODO: Test operator== (create another pair and compare)
     
-    cout << "\n" << endl;
-    
-    Dictionary<int, string> codes;
-    codes.add(100, "OK");
-    codes.add(404, "Not Found");
-    codes.add(500, "Server Error");
-    
-    codes.display();
-    cout << "Code 404: " << codes.get(404) << endl;
+    // TODO: For same-type pairs, test swap()
+    // Pair<int, int> p2(10, 20);
+    // p2.swap();
     
     return 0;
-}
-                        </div>
-                    </div>
+}`, 'pair_extension_skeleton.cpp')">⬇ Download Pair Extension Skeleton</button>
+
+                    <h4 style="color: var(--primary); margin-top: 20px;">Challenge 3: Template Specialization</h4>
+                    <p>Create a general Container&lt;T&gt; and then specialize it for bool to use bitpacking (store 8 bools per byte).</p>
+                    <button class="btn btn-secondary" onclick="downloadSkeleton(`#include <iostream>
+using namespace std;
+
+// ===== GENERIC CONTAINER TEMPLATE =====
+template<typename T>
+class Container {
+private:
+    T* data;
+    int size;
+    
+public:
+    Container(int s) : size(s) {
+        data = new T[size];
+    }
+    
+    void set(int index, T value) {
+        if(index < size) data[index] = value;
+    }
+    
+    T get(int index) {
+        if(index < size) return data[index];
+        return T();
+    }
+    
+    void display() {
+        cout << "Generic Container: ";
+        for(int i = 0; i < size; i++) {
+            cout << data[i] << " ";
+        }
+        cout << endl;
+    }
+    
+    ~Container() { delete[] data; }
+};
+
+// ===== SPECIALIZED FOR BOOL (8 BOOLS PER BYTE!) =====
+// TODO: Implement template<> class Container<bool>
+// HINT: Use unsigned char as storage, use bitwise operations
+// Template should:
+// - Store 8 bools in each byte using bits 0-7
+// - set(index, bool value) should set bit at index % 8
+// - get(index) should return bit at index % 8
+// - Only need ceil(size/8) bytes instead of size bytes!
+
+int main() {
+    // Generic container (1 byte per int)
+    Container<int> c1(3);
+    c1.set(0, 42);
+    c1.set(1, 100);
+    c1.set(2, 200);
+    c1.display();
+    
+    // Generic container (1 byte per bool - not optimized)
+    Container<bool> c2(3);
+    c2.set(0, true);
+    c2.set(1, false);
+    c2.set(2, true);
+    c2.display();
+    
+    // After specialization:
+    // Container<bool> should use bitpacking for massive memory savings!
+    
+    return 0;
+}`, 'container_specialization_skeleton.cpp')">⬇ Download Specialization Skeleton</button>
+
+                    <h4 style="color: var(--primary); margin-top: 20px;">Challenge 4: Linked List Template</h4>
+                    <p>Implement a LinkedList&lt;T&gt; template with insert(), delete(), and search() for any type T.</p>
+                    <button class="btn btn-secondary" onclick="downloadSkeleton(`#include <iostream>
+#include <string>
+using namespace std;
+
+// ===== GENERIC NODE STRUCTURE =====
+template<typename T>
+struct Node {
+    T data;
+    Node<T>* next;
+    
+    Node(T val) : data(val), next(nullptr) {}
+};
+
+// ===== GENERIC LINKED LIST =====
+template<typename T>
+class LinkedList {
+private:
+    Node<T>* head;
+    
+public:
+    LinkedList() : head(nullptr) {}
+    
+    // TODO: Implement insert(T value) at beginning
+    void insert(T value) {
+        // Create new node and add to front
+        // YOUR CODE HERE
+    }
+    
+    // TODO: Implement search(T target) - return index or -1
+    int search(T target) {
+        // Traverse and find target
+        // YOUR CODE HERE
+    }
+    
+    // TODO: Implement deleteNode(T target) - delete first occurrence
+    void deleteNode(T target) {
+        // Find and remove target node
+        // YOUR CODE HERE
+        // REMEMBER: Update next pointers correctly!
+    }
+    
+    // Display all elements
+    void display() {
+        Node<T>* curr = head;
+        cout << "List: ";
+        while(curr != nullptr) {
+            cout << curr->data << " -> ";
+            curr = curr->next;
+        }
+        cout << "nullptr" << endl;
+    }
+    
+    // Destructor
+    ~LinkedList() {
+        // TODO: Delete all nodes to avoid memory leak
+        // Traverse and delete each node
+    }
+};
+
+int main() {
+    // Test with integers
+    LinkedList<int> list1;
+    list1.insert(30);
+    list1.insert(20);
+    list1.insert(10);
+    list1.display();
+    
+    // Test with strings
+    LinkedList<string> list2;
+    list2.insert("Charlie");
+    list2.insert("Bob");
+    list2.insert("Alice");
+    list2.display();
+    
+    // TODO: Test search()
+    // int pos = list1.search(20);
+    // cout << "Found at index: " << pos << endl;
+    
+    // TODO: Test deleteNode()
+    // list1.deleteNode(20);
+    // list1.display();
+    
+    return 0;
+}`, 'linkedlist_template_skeleton.cpp')">⬇ Download LinkedList Skeleton</button>
                 </div>
             </section>
 
@@ -626,26 +841,16 @@ int main() {
     <script>
         function initializeQuiz() {
             const questions = [
-                {type: 'multiple-choice', question: 'What is a template?', options: ['Inheritance', 'Generic blueprint', 'Pointer type', 'None'], correctAnswer: 'B', explanation: 'Templates are compile-time blueprints for generic code.'},
-                {type: 'true-false', question: 'Templates work with any type.', correctAnswer: 'true', explanation: 'Yes, templates generate code for each type used.'},
-                {type: 'fill-in', question: 'Template declaration:', context: '<span style="color: red;">_______</span><typename T>', hint: 'template', acceptableAnswers: ['template', 'template '], explanation: 'Use template keyword to declare templates.'},
-                {type: 'multiple-choice', question: 'T in template<typename T> represents:', options: ['Fixed type', 'Placeholder', 'Template', 'Function'], correctAnswer: 'B', explanation: 'T is a placeholder for any type.'},
-                {type: 'true-false', question: 'Template instantiation happens at compile time.', correctAnswer: 'true', explanation: 'Yes, compiler generates code for each instantiation.'},
-                {type: 'multiple-choice', question: 'Member functions must be:', options: ['Compiled separately', 'In header file', 'In .cpp', 'Global'], correctAnswer: 'B', explanation: 'Template member functions go in header for instantiation.'},
-                {type: 'fill-in', question: 'Instantiate Stack<int>:', context: '<span style="color: red;">_______</span><int> s;', hint: 'Stack', acceptableAnswers: ['Stack', 'Stack '], explanation: 'Use type in angle brackets to instantiate.'},
-                {type: 'true-false', question: 'Each instantiation creates separate code.', correctAnswer: 'true', explanation: 'Yes, Stack<int> and Stack<double> are different types.'},
-                {type: 'multiple-choice', question: 'Multiple template parameters:', options: ['Not allowed', 'Allowed', 'One only', 'Limited'], correctAnswer: 'B', explanation: 'Can have multiple parameters: template<typename T, typename U>.'},
-                {type: 'fill-in', question: 'Two parameters:', context: 'template<typename T, <span style="color: red;">_______</span> U>', hint: 'typename', acceptableAnswers: ['typename', 'typename '], explanation: 'Each parameter needs typename keyword.'},
-                {type: 'true-false', question: 'Template specialization is possible.', correctAnswer: 'true', explanation: 'Yes, provide specialized implementations for specific types.'},
-                {type: 'multiple-choice', question: 'Template specialization:', options: ['Required', 'Optional', 'Forbidden', 'Rarely used'], correctAnswer: 'B', explanation: 'Specialization allows optimizations for specific types.'},
-                {type: 'true-false', question: 'Stack<int> and Stack<double> are same type.', correctAnswer: 'false', explanation: 'No, each is a distinct type.'},
-                {type: 'fill-in', question: 'Default initialization of T:', context: 'return <span style="color: red;">_______</span>();', hint: 'T', acceptableAnswers: ['T', 'T()'], explanation: 'T() creates default value for type T.'},
-                {type: 'multiple-choice', question: 'Template inheritance possible:', options: ['No', 'Yes', 'Maybe', 'Rarely'], correctAnswer: 'B', explanation: 'Can inherit from or create derived template classes.'},
-                {type: 'true-false', question: 'Templates increase code size.', correctAnswer: 'true', explanation: 'Yes, separate instantiation for each type.'},
-                {type: 'multiple-choice', question: 'typename vs class in templates:', options: ['Different', 'Same', 'Rarely class', 'Context dependent'], correctAnswer: 'B', explanation: 'typename and class are equivalent in template context.'},
-                {type: 'true-false', question: 'Can specialize specific member functions.', correctAnswer: 'true', explanation: 'Yes, can specialize methods without full class.'},
-                {type: 'multiple-choice', question: 'Template code duplication:', options: ['Avoided', 'Unavoidable', 'Minimal', 'Depends'], correctAnswer: 'B', explanation: 'Each instantiation creates separate code.'},
-                {type: 'true-false', question: 'Templates provide type safety.', correctAnswer: 'true', explanation: 'Yes, type checking happens at compile time.'}
+                {type: 'multiple-choice', question: 'What is the primary advantage of template classes?', options: ['Reduce code duplication for multiple types', 'Faster execution speed', 'Smaller binary files', 'Easier to debug'], correctAnswer: 'A', explanation: 'Templates eliminate code duplication by generating type-specific versions from one template.'},
+                {type: 'true-false', question: 'Template member functions can be defined in a separate .cpp file.', correctAnswer: 'false', explanation: 'False. Compiler needs complete template definition to instantiate. Either keep in header or use explicit instantiation.'},
+                {type: 'multiple-choice', question: 'When you write Stack<int> s; and Stack<double> s2;, what happens?', options: ['Compiler generates two different Stack classes', 'Same Stack class used for both', 'Stack is generated at runtime', 'Compiler error: cannot use same template twice'], correctAnswer: 'A', explanation: 'Compiler generates separate concrete classes for each instantiation during compile time.'},
+                {type: 'fill-in', question: 'Syntax for template class definition', context: 'template<_____ T> class Container { ... }', hint: 'typename or class', acceptableAnswers: ['typename', 'class'], explanation: 'Both typename and class work for template parameters in class definitions.'},
+                {type: 'true-false', question: 'Template specialization allows optimizing for specific types while keeping generic version.', correctAnswer: 'true', explanation: 'True. You can provide specialized implementations for certain types like bool while others use generic version.'},
+                {type: 'multiple-choice', question: 'What is the main disadvantage of using templates?', options: ['Code bloat - multiple instantiations increase binary size', 'Always slower than normal classes', 'Cannot use multiple types', 'Must always use pointers'], correctAnswer: 'A', explanation: 'Each instantiation creates separate code, potentially increasing binary size significantly.'},
+                {type: 'short-answer', question: 'Explain why template definitions must be in header files.', context: 'The compiler needs _______ definition when instantiating templates.', hint: 'complete', acceptableAnswers: ['complete', 'the', 'full', 'entire'], explanation: 'Compiler needs complete template source to generate code for new types. .cpp files are compiled separately.'},
+                {type: 'multiple-choice', question: 'What does template<typename T, typename U> mean?', options: ['T and U are names of classes', 'Template with two different type parameters', 'Two templates must be combined', 'U is default version of T'], correctAnswer: 'B', explanation: 'This template has two independent type parameters that can be different types.'},
+                {type: 'true-false', question: 'Each instantiation of a template creates separate member function copies.', correctAnswer: 'true', explanation: 'Yes. Stack<int>::push() and Stack<double>::push() are different functions.'},
+                {type: 'multiple-choice', question: 'What is explicit instantiation?', options: ['Manually declaring a specific template version', 'Automatic generation of templates', 'Compiler error prevention', 'Runtime template generation'], correctAnswer: 'A', explanation: 'Using syntax like "template class Stack<int>;" to explicitly tell compiler to generate that version.'},
             ];
 
             window.quizSystem = new QuizSystem('Template Classes', questions);
@@ -656,7 +861,7 @@ int main() {
             const modal = document.createElement('div');
             modal.id = 'quizModal';
             modal.className = 'quiz-modal';
-            modal.innerHTML = `<div class="quiz-modal-content"><div class="quiz-header"><div><div class="quiz-question-number">Quiz: Template Classes</div><div class="quiz-progress">Question 1 of 20</div></div><button class="quiz-close" onclick="closeQuizModal()">✕</button></div><div class="quiz-questions-container"></div></div>`;
+            modal.innerHTML = `<div class="quiz-modal-content"><div class="quiz-header"><div><div class="quiz-question-number">Quiz: Template Classes</div><div class="quiz-progress">Question 1 of 10</div></div><button class="quiz-close" onclick="closeQuizModal()">✕</button></div><div class="quiz-questions-container"></div></div>`;
             document.body.appendChild(modal);
         }
     </script>

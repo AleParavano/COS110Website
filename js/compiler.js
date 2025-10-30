@@ -51,12 +51,47 @@ async function runCode(codeElement, outputElement) {
     }
 }
 
-function downloadCode(code) {
+function downloadCode(codeElement) {
+    // Get the code text from either textarea or div
+    const code = codeElement.value || codeElement.textContent;
+    
+    // Create a Blob from the code string
+    const blob = new Blob([code], { type: 'text/plain' });
+    
+    // Create URL for the Blob
+    const url = URL.createObjectURL(blob);
+    
+    // Create and trigger download link
     const link = document.createElement('a');
-    link.href = 'data:text/plain,' + encodeURIComponent(code);
+    link.href = url;
     link.download = 'program.cpp';
+    document.body.appendChild(link);
     link.click();
+    document.body.removeChild(link);
+    
+    // Clean up the URL object
+    URL.revokeObjectURL(url);
+}
+
+function downloadSkeleton(skeletonCode, filename = 'skeleton.cpp') {
+    // Create a Blob from the skeleton code string
+    const blob = new Blob([skeletonCode], { type: 'text/plain' });
+    
+    // Create URL for the Blob
+    const url = URL.createObjectURL(blob);
+    
+    // Create and trigger download link
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = filename;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    
+    // Clean up the URL object
+    URL.revokeObjectURL(url);
 }
 
 window.runCode = runCode;
 window.downloadCode = downloadCode;
+window.downloadSkeleton = downloadSkeleton;

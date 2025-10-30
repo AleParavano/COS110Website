@@ -60,25 +60,167 @@
         </aside>
 
         <main class="main-content">
-            <h1>⚙️ Template Functions - Generic Algorithms</h1>
+            <h1>⚡ Template Functions - Generic Algorithms</h1>
 
             <section class="section">
                 <div class="section-title">📚 Explanation</div>
                 <div class="explanation">
-                    <h3 style="color: var(--primary);">Function Templates</h3>
-                    <p>Function templates allow you to write functions that work with any data type. Instead of overloading swap() for int, double, string, etc., you write one template that generates them all. The compiler deduces template arguments from function call parameters automatically.</p>
+                    <h3 style="color: var(--primary);">What are Template Functions?</h3>
+                    <p>Template functions allow you to write <strong>generic algorithms</strong> that work with any type. Instead of writing separate <code>swapInt()</code>, <code>swapDouble()</code>, <code>swapString()</code> functions, you write one template function that the compiler instantiates for each type. This is simpler than template classes and is commonly used for algorithms in STL.</p>
+                    
+                    <div style="background: #f0f0f0; padding: 15px; border-radius: 8px; margin: 15px 0;">
+                    <strong>The Problem Without Templates:</strong><br><br>
+                    void swapInt(int&a, int&b) { int t=a; a=b; b=t; }<br>
+                    void swapDouble(double&a, double&b) { double t=a; a=b; b=t; }<br>
+                    void swapString(string&a, string&b) { string t=a; a=b; b=t; }<br>
+                    ← Massive code duplication!<br><br>
+                    
+                    <strong>With Template Functions (Elegant!):</strong><br>
+                    template&lt;typename T&gt;<br>
+                    void swap(T&a, T&b) { T t=a; a=b; b=t; }<br>
+                    ← One function works for ANY type!
+                    </div>
+
+                    <h3 style="color: var(--primary); margin-top: 25px;">Template Function Syntax</h3>
+                    <p><strong>Basic Pattern:</strong> Start with <code>template&lt;typename T&gt;</code>, then write your function using T as if it were a real type.</p>
+                    
+                    <div style="background: #e8f4f8; padding: 15px; border-radius: 8px; margin: 10px 0; font-family: 'Courier New', monospace;">
+                    <strong>Syntax Examples:</strong><br><br>
+                    // Single parameter:<br>
+                    template&lt;typename T&gt;<br>
+                    T max(T a, T b) { return a > b ? a : b; }<br><br>
+                    
+                    // Multiple parameters:<br>
+                    template&lt;typename T, typename U&gt;<br>
+                    void print(T t, U u) { cout << t << ", " << u; }<br><br>
+                    
+                    // Multiple same type:<br>
+                    template&lt;typename T&gt;<br>
+                    void swap(T&a, T&b) { T t=a; a=b; b=t; }<br><br>
+                    
+                    // Template with iterator (STL style):<br>
+                    template&lt;typename Iterator&gt;<br>
+                    void printAll(Iterator begin, Iterator end) { ... }
+                    </div>
 
                     <h3 style="color: var(--primary); margin-top: 20px;">Template Argument Deduction</h3>
-                    <p>When you call swap(a, b), the compiler deduces T from the argument types. If arguments don't match, deduction fails and the compiler reports an error. You can also explicitly specify template arguments: swap<int>(a, b), though automatic deduction is usually preferred.</p>
+                    <p><strong>Automatic Type Inference:</strong> The compiler can often figure out the template parameter from the arguments you pass. You don't always need to write <code>max&lt;int&gt;(5, 10)</code>; just write <code>max(5, 10)</code> and compiler deduces <code>T=int</code>.</p>
+                    
+                    <div style="background: #f0f0f0; padding: 15px; border-radius: 8px; margin: 10px 0;">
+                    <strong>Deduction vs Explicit Specification:</strong><br><br>
+                    // Compiler deduces T=int from arguments<br>
+                    int a = 5, b = 10;<br>
+                    cout << max(a, b);  // Calls max&lt;int&gt; automatically<br><br>
+                    
+                    // Explicit specification (rarely needed)<br>
+                    cout << max&lt;int&gt;(a, b);  // Same result, more verbose<br><br>
+                    
+                    // Needed when compiler can't deduce:<br>
+                    vector&lt;int&gt; v;  // Must specify type<br>
+                    sort&lt;vector&lt;int&gt;::iterator&gt;(v.begin(), v.end());
+                    </div>
 
-                    <h3 style="color: var(--primary); margin-top: 20px;">Generic Algorithms</h3>
-                    <p>Template functions enable writing generic algorithms. Functions like max(), min(), sort() work with any comparable type. This is the basis of the Standard Template Library (STL). Generic algorithms reduce code duplication and improve maintainability.</p>
+                    <h3 style="color: var(--primary); margin-top: 20px;">Key Differences: Template Functions vs Classes</h3>
+                    <table style="width: 100%; border-collapse: collapse; margin: 15px 0;">
+                    <tr style="background: var(--primary); color: white;">
+                        <th style="padding: 10px; border: 1px solid #999;">Aspect</th>
+                        <th style="padding: 10px; border: 1px solid #999;">Template Functions</th>
+                        <th style="padding: 10px; border: 1px solid #999;">Template Classes</th>
+                    </tr>
+                    <tr style="background: #f9f9f9;">
+                        <td style="padding: 10px; border: 1px solid #ddd;"><strong>Purpose</strong></td>
+                        <td style="padding: 10px; border: 1px solid #ddd;">Generic algorithms</td>
+                        <td style="padding: 10px; border: 1px solid #ddd;">Generic data containers</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 10px; border: 1px solid #ddd;"><strong>Usage</strong></td>
+                        <td style="padding: 10px; border: 1px solid #ddd;">swap(a, b), sort(v)</td>
+                        <td style="padding: 10px; border: 1px solid #ddd;">Stack&lt;int&gt;, Vector&lt;string&gt;</td>
+                    </tr>
+                    <tr style="background: #f9f9f9;">
+                        <td style="padding: 10px; border: 1px solid #ddd;"><strong>Deduction</strong></td>
+                        <td style="padding: 10px; border: 1px solid #ddd;">Automatic from arguments</td>
+                        <td style="padding: 10px; border: 1px solid #ddd;">Must explicitly specify</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 10px; border: 1px solid #ddd;"><strong>Header Placement</strong></td>
+                        <td style="padding: 10px; border: 1px solid #ddd;">Must be in .h file</td>
+                        <td style="padding: 10px; border: 1px solid #ddd;">Must be in .h file</td>
+                    </tr>
+                    <tr style="background: #f9f9f9;">
+                        <td style="padding: 10px; border: 1px solid #ddd;"><strong>Specialization</strong></td>
+                        <td style="padding: 10px; border: 1px solid #ddd;">Function overloading possible</td>
+                        <td style="padding: 10px; border: 1px solid #ddd;">Template specialization</td>
+                    </tr>
+                    </table>
 
-                    <h3 style="color: var(--primary); margin-top: 20px;">Constraints and Specialization</h3>
-                    <p>Template functions work best with types that support required operations. If a template needs operator<, it will fail for types that don't have it. You can provide specialized versions for specific types: template<> void swap<bool>(bool&, bool&).</p>
+                    <h3 style="color: var(--primary); margin-top: 20px;">Function Overloading vs Specialization</h3>
+                    <p><strong>Key Distinction:</strong> With template functions, you can use function overloading AND template specialization.</p>
+                    
+                    <div style="background: #ffe8e8; padding: 15px; border-radius: 8px; margin: 10px 0;">
+                    <strong>Function Overloading (preferred for templates):</strong><br>
+                    // General template<br>
+                    template&lt;typename T&gt; void process(T val) { /* generic */ }<br><br>
+                    
+                    // Overload for specific type<br>
+                    void process(int val) { /* special for int */ }<br><br>
+                    
+                    When you call process(5), compiler uses specialized int version!<br><br>
+                    
+                    <strong>Advantage:</strong> Compiler tries overload first, then template. Gives you fine control.
+                    </div>
 
-                    <h3 style="color: var(--primary); margin-top: 20px;">Overloading and Resolution</h3>
-                    <p>Template functions can be overloaded with each other and with regular functions. Overload resolution prefers non-template functions when possible. You can have multiple templates with different signatures, and the compiler chooses the best match.</p>
+                    <h3 style="color: var(--primary); margin-top: 20px;">Common STL Template Functions</h3>
+                    <div style="background: #f0f0f0; padding: 15px; border-radius: 8px; margin: 10px 0; font-family: 'Courier New', monospace;">
+                    sort(begin, end)  // Sort any container<br>
+                    find(begin, end, value)  // Find in any range<br>
+                    count(begin, end, value)  // Count occurrences<br>
+                    max(a, b)  // Maximum of two values<br>
+                    min(a, b)  // Minimum of two values<br>
+                    swap(a, b)  // Exchange two values<br>
+                    copy(begin, end, dest)  // Copy range<br>
+                    reverse(begin, end)  // Reverse order<br><br>
+                    
+                    <strong>All work for ANY type that supports necessary operations!</strong>
+                    </div>
+
+                    <h3 style="color: var(--primary); margin-top: 20px;">Constraints on Template Functions</h3>
+                    <p><strong>⚠️ Important:** Template function must work with the operations it uses. If your template calls <code>a > b</code>, type T must support <code>&gt;</code> operator. Compiler will complain if you try <code>sort(vector&lt;CustomObject&gt;)</code> without <code>&lt;</code> operator defined.</p>
+                    
+                    <p><strong>Example:</strong> <code>template&lt;typename T&gt; T max(T a, T b)</code> requires T to support <code>&gt;</code>. Won't compile for types lacking this operator.</p>
+
+                    <h3 style="color: var(--primary); margin-top: 20px;">Template Function Specialization</h3>
+                    <p><strong>Full Specialization:</strong> Provide complete alternative implementation for specific type combination.</p>
+                    
+                    <div style="background: #f0f0f0; padding: 15px; border-radius: 8px; margin: 10px 0; font-family: 'Courier New', monospace;">
+                    // General template<br>
+                    template&lt;typename T&gt;<br>
+                    void print(T val) { cout << val << endl; }<br><br>
+                    
+                    // Specialization for const char*<br>
+                    template&lt;&gt;<br>
+                    void print&lt;const char*&gt;(const char* str) {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;cout << "String: " << str << endl;<br>
+                    }<br><br>
+                    
+                    Now print("hello") uses specialized version!
+                    </div>
+
+                    <h3 style="color: var(--primary); margin-top: 20px;">Variadic Templates (C++11 and Later)</h3>
+                    <p><strong>Advanced Feature:</strong> Functions with variable number of template parameters. Enables extremely generic functions that work with any number of any types.</p>
+                    
+                    <div style="background: #f0f0f0; padding: 15px; border-radius: 8px; margin: 10px 0; font-family: 'Courier New', monospace;">
+                    template&lt;typename... Args&gt;  // ... means variable arguments<br>
+                    void printAll(Args... args) { /* process all args */ }<br><br>
+                    
+                    printAll(1, 2.5, "hello", true);  // Works with any types!<br><br>
+                    
+                    <strong>Use Case:</strong> printf-like functions, tuple operations, advanced metaprogramming
+                    </div>
+
+                    <h3 style="color: var(--primary); margin-top: 20px;">Best Practices for Template Functions</h3>
+                    <p><strong>✅ DO:</strong> Keep templates focused and simple. Use clear parameter names. Document requirements (what operators must T support?). Provide specializations for common types.</p>
+                    <p><strong>❌ DON'T:</strong> Create overly complex templates. Don't mix template logic with specialization excessively. Avoid template metaprogramming unless necessary.</p>
                 </div>
             </section>
 
@@ -87,67 +229,84 @@
 
                 <div class="code-example">
                     <div class="code-tabs">
-                        <button class="code-tab active" data-tab="simple1">Simple Function Template</button>
+                        <button class="code-tab active" data-tab="simple1">Simple Swap Function</button>
                         <button class="code-tab" data-tab="full1">Full Program</button>
                     </div>
                     <div data-tab-content="simple1" class="code-editor">
-template<typename T>
-void swap(T& a, T& b) {
-    T temp = a;
-    a = b;
+// ===== SIMPLE TEMPLATE FUNCTION =====
+template<typename T>  // T will be any type
+void mySwap(T& a, T& b) {
+    T temp = a;  // Create temporary of type T
+    a = b;       // Swap
     b = temp;
 }
 
+// Usage - compiler deduces type!
 int x = 5, y = 10;
-swap(x, y);
-cout << x << " " << y << endl;  // 10 5
+mySwap(x, y);  // T=int automatically
 
-string s1 = "hello", s2 = "world";
-swap(s1, s2);
-cout << s1 << " " << s2 << endl;  // world hello
+string s1 = "Hello", s2 = "World";
+mySwap(s1, s2);  // T=string automatically
                     </div>
                     <div data-tab-content="full1" style="display: none;">
                         <textarea class="code-editor" id="code1">#include <iostream>
 #include <string>
 using namespace std;
 
-template<typename T>
-void swap(T& a, T& b) {
-    cout << "Swapping " << a << " and " 
-         << b << endl;
-    T temp = a;
-    a = b;
-    b = temp;
-    cout << "Result: " << a << " and " 
-         << b << endl;
-}
+// ===== TEMPLATE FUNCTION DEFINITION =====
+// template<typename T> at the start tells compiler this is generic
+// T becomes the actual type when function is called
 
 template<typename T>
-T maximum(T a, T b) {
-    return (a > b) ? a : b;
+void mySwap(T& a, T& b) {
+    // This works for ANY type that can be assigned!
+    T temp = a;   // Save first value (type T)
+    a = b;        // Move second to first
+    b = temp;     // Move saved to second
 }
 
+// ===== HELPER FUNCTION =====
 template<typename T>
-T minimum(T a, T b) {
-    return (a < b) ? a : b;
+void displayValues(T a, T b) {
+    cout << "First: " << a << ", Second: " << b << endl;
 }
 
 int main() {
-    cout << "=== Integers ===" << endl;
+    // ===== SWAP INTEGERS =====
+    cout << "=== Swapping Integers ===" << endl;
     int x = 5, y = 10;
-    swap(x, y);
-    cout << "Max: " << maximum(x, y) << endl;
-    cout << "Min: " << minimum(x, y) << endl;
     
-    cout << "\n=== Doubles ===" << endl;
+    cout << "Before: ";
+    displayValues(x, y);
+    
+    mySwap(x, y);  // Compiler generates mySwap<int> automatically!
+    
+    cout << "After:  ";
+    displayValues(x, y);
+    
+    // ===== SWAP DOUBLES =====
+    cout << "\n=== Swapping Doubles ===" << endl;
     double a = 3.14, b = 2.71;
-    swap(a, b);
-    cout << "Max: " << maximum(a, b) << endl;
     
-    cout << "\n=== Strings ===" << endl;
-    string s1 = "hello", s2 = "world";
-    swap(s1, s2);
-    cout << "Max: " << maximum(s1, s2) << endl;
+    cout << "Before: ";
+    displayValues(a, b);
+    
+    mySwap(a, b);  // Compiler generates mySwap<double>!
+    
+    cout << "After:  ";
+    displayValues(a, b);
+    
+    // ===== SWAP STRINGS =====
+    cout << "\n=== Swapping Strings ===" << endl;
+    string s1 = "Hello", s2 = "World";
+    
+    cout << "Before: ";
+    displayValues(s1, s2);
+    
+    mySwap(s1, s2);  // Compiler generates mySwap<string>!
+    
+    cout << "After:  ";
+    displayValues(s1, s2);
     
     return 0;
 }
@@ -155,64 +314,105 @@ int main() {
                     </div>
                     <div class="code-buttons">
                         <button class="btn btn-primary" onclick="runCode(document.getElementById('code1'), document.getElementById('output1'))">▶ Run Code</button>
+                        <button class="btn btn-secondary" onclick="downloadCode(document.getElementById('code1'))">⬇ Download Code</button>
                     </div>
                     <div class="output-box" id="output1">Click "Run Code" to execute...</div>
                 </div>
 
                 <div class="code-example">
                     <div class="code-tabs">
-                        <button class="code-tab active" data-tab="simple2">Multiple Parameters</button>
+                        <button class="code-tab active" data-tab="simple2">Min/Max Functions</button>
                         <button class="code-tab" data-tab="full2">Full Program</button>
                     </div>
                     <div data-tab-content="simple2" class="code-editor">
-template<typename T, typename U>
-void print(T val1, U val2) {
-    cout << "First: " << val1 << ", Second: " 
-         << val2 << endl;
+template<typename T>
+T getMax(T a, T b) {
+    return (a > b) ? a : b;
 }
 
-print(42, "hello");      // int, string
-print(3.14, true);       // double, bool
-print("C++", 2024);      // string, int
+template<typename T>
+T getMin(T a, T b) {
+    return (a < b) ? a : b;
+}
+
+// Usage:
+int max_int = getMax(5, 10);      // 10
+double max_dbl = getMax(3.1, 3.2); // 3.2
+
+string max_str = getMax("apple", "banana");
+// "banana" (lexicographic comparison)
                     </div>
                     <div data-tab-content="full2" style="display: none;">
                         <textarea class="code-editor" id="code2">#include <iostream>
 #include <string>
 using namespace std;
 
-template<typename T, typename U>
-U convert(T value) {
-    return static_cast<U>(value);
+// ===== GENERIC MAX FUNCTION =====
+// Works with ANY type that supports > operator
+template<typename T>
+T getMax(T a, T b) {
+    // Return larger of two values
+    // T must support > operator!
+    return (a > b) ? a : b;
 }
 
-template<typename T, typename U>
-void printPair(T first, U second) {
-    cout << "Pair: (" << first << ", " 
-         << second << ")" << endl;
+// ===== GENERIC MIN FUNCTION =====
+// Works with ANY type that supports < operator
+template<typename T>
+T getMin(T a, T b) {
+    // Return smaller of two values
+    // T must support < operator!
+    return (a < b) ? a : b;
 }
 
-template<typename T, typename U, typename V>
-V combine(T a, U b) {
-    return static_cast<V>(a + b);
+// ===== GENERIC SORT-3 FUNCTION =====
+// Arrange three values in ascending order
+template<typename T>
+void sort3(T& a, T& b, T& c) {
+    // Simple bubble-sort-like logic for 3 elements
+    if(a > b) {
+        T temp = a; a = b; b = temp;  // Swap a and b
+    }
+    if(b > c) {
+        T temp = b; b = c; c = temp;  // Swap b and c
+    }
+    if(a > b) {
+        T temp = a; a = b; b = temp;  // Swap a and b again
+    }
 }
 
 int main() {
-    cout << "=== Type Conversions ===" << endl;
-    int intVal = 42;
-    double dblVal = convert<int, double>(intVal);
-    cout << "Int to Double: " << dblVal << endl;
+    // ===== MAX WITH INTEGERS =====
+    cout << "=== Integer Min/Max ===" << endl;
+    int x = 15, y = 8;
     
-    cout << "\n=== Pairs ===" << endl;
-    printPair(10, "hello");
-    printPair(3.14, 42);
-    printPair("C++", 2024);
+    cout << "Numbers: " << x << ", " << y << endl;
+    cout << "Max: " << getMax(x, y) << endl;  // Calls getMax<int>
+    cout << "Min: " << getMin(x, y) << endl;  // Calls getMin<int>
     
-    cout << "\n=== Combining ===" << endl;
-    int result = combine<int, int, int>(5, 3);
-    cout << "Combined: " << result << endl;
+    // ===== MAX WITH DOUBLES =====
+    cout << "\n=== Double Min/Max ===" << endl;
+    double a = 2.71, b = 3.14;
     
-    double dresult = combine<double, double, double>(2.5, 1.5);
-    cout << "Combined: " << dresult << endl;
+    cout << "Numbers: " << a << ", " << b << endl;
+    cout << "Max: " << getMax(a, b) << endl;  // Calls getMax<double>
+    cout << "Min: " << getMin(a, b) << endl;  // Calls getMin<double>
+    
+    // ===== MAX WITH STRINGS =====
+    cout << "\n=== String Min/Max ===" << endl;
+    string s1 = "apple", s2 = "zebra";
+    
+    cout << "Strings: " << s1 << ", " << s2 << endl;
+    cout << "Max (lexicographic): " << getMax(s1, s2) << endl;
+    cout << "Min (lexicographic): " << getMin(s1, s2) << endl;
+    
+    // ===== SORT 3 NUMBERS =====
+    cout << "\n=== Sort Three Numbers ===" << endl;
+    int v1 = 30, v2 = 10, v3 = 20;
+    
+    cout << "Before: " << v1 << ", " << v2 << ", " << v3 << endl;
+    sort3(v1, v2, v3);  // Calls sort3<int>
+    cout << "After:  " << v1 << ", " << v2 << ", " << v3 << endl;
     
     return 0;
 }
@@ -220,83 +420,113 @@ int main() {
                     </div>
                     <div class="code-buttons">
                         <button class="btn btn-primary" onclick="runCode(document.getElementById('code2'), document.getElementById('output2'))">▶ Run Code</button>
+                        <button class="btn btn-secondary" onclick="downloadCode(document.getElementById('code2'))">⬇ Download Code</button>
                     </div>
                     <div class="output-box" id="output2">Click "Run Code" to execute...</div>
                 </div>
 
                 <div class="code-example">
                     <div class="code-tabs">
-                        <button class="code-tab active" data-tab="simple3">Generic Algorithms</button>
+                        <button class="code-tab active" data-tab="simple3">Array Search</button>
                         <button class="code-tab" data-tab="full3">Full Program</button>
                     </div>
                     <div data-tab-content="simple3" class="code-editor">
 template<typename T>
-int linearSearch(T arr[], int size, T key) {
+int findIndex(T arr[], int size, T target) {
     for(int i = 0; i < size; i++) {
-        if(arr[i] == key) return i;
+        if(arr[i] == target) {
+            return i;  // Found at index i
+        }
     }
-    return -1;
+    return -1;  // Not found
 }
 
-int arr[] = {10, 20, 30, 40, 50};
-cout << linearSearch(arr, 5, 30) << endl;  // 2
+// Usage:
+int nums[] = {1, 2, 3, 4, 5};
+int idx = findIndex(nums, 5, 3);  // Returns 2
 
-string strs[] = {"a", "b", "c"};
-cout << linearSearch(strs, 3, "b") << endl;  // 1
+string words[] = {"cat", "dog", "bird"};
+int pos = findIndex(words, 3, "dog");  // Returns 1
                     </div>
                     <div data-tab-content="full3" style="display: none;">
                         <textarea class="code-editor" id="code3">#include <iostream>
 #include <string>
 using namespace std;
 
+// ===== GENERIC SEARCH FUNCTION =====
+// Find index of target element in array of type T
 template<typename T>
-int linearSearch(T arr[], int size, T key) {
+int findIndex(T arr[], int size, T target) {
+    // Linear search: compare each element with target
+    // T must support == operator
+    
     for(int i = 0; i < size; i++) {
-        if(arr[i] == key) return i;
+        if(arr[i] == target) {  // Element matches target
+            return i;  // Return index (0-based)
+        }
     }
-    return -1;
+    return -1;  // Not found, return -1
 }
 
+// ===== GENERIC COUNT FUNCTION =====
+// Count how many times target appears in array
 template<typename T>
-void reverseArray(T arr[], int size) {
-    for(int i = 0; i < size / 2; i++) {
-        T temp = arr[i];
-        arr[i] = arr[size - 1 - i];
-        arr[size - 1 - i] = temp;
-    }
-}
-
-template<typename T>
-void printArray(T arr[], int size) {
+int countOccurrences(T arr[], int size, T target) {
+    int count = 0;
+    
     for(int i = 0; i < size; i++) {
-        cout << arr[i] << " ";
+        if(arr[i] == target) {
+            count++;  // Increment count when found
+        }
     }
-    cout << endl;
+    return count;
 }
 
 int main() {
-    cout << "=== Integer Array ===" << endl;
-    int intArr[] = {10, 20, 30, 40, 50};
-    printArray(intArr, 5);
+    // ===== SEARCH IN INTEGER ARRAY =====
+    cout << "=== Search Integer Array ===" << endl;
     
-    int pos = linearSearch(intArr, 5, 30);
-    cout << "Found 30 at: " << pos << endl;
+    int numbers[] = {10, 20, 30, 40, 50};
+    int size = 5;
     
-    reverseArray(intArr, 5);
-    cout << "Reversed: ";
-    printArray(intArr, 5);
+    cout << "Array: ";
+    for(int i = 0; i < size; i++) {
+        cout << numbers[i] << " ";
+    }
+    cout << endl;
     
-    cout << "\n=== String Array ===" << endl;
-    string strArr[] = {"apple", "banana", 
-                       "cherry", "date"};
-    printArray(strArr, 4);
+    int idx = findIndex(numbers, size, 30);  // Calls findIndex<int>
+    if(idx != -1) {
+        cout << "Found 30 at index: " << idx << endl;
+    } else {
+        cout << "30 not found" << endl;
+    }
     
-    pos = linearSearch(strArr, 4, "cherry");
-    cout << "Found cherry at: " << pos << endl;
+    // ===== SEARCH IN STRING ARRAY =====
+    cout << "\n=== Search String Array ===" << endl;
     
-    reverseArray(strArr, 4);
-    cout << "Reversed: ";
-    printArray(strArr, 4);
+    string fruits[] = {"apple", "banana", "cherry", "apple", "date"};
+    int numFruits = 5;
+    
+    cout << "Array: ";
+    for(int i = 0; i < numFruits; i++) {
+        cout << fruits[i] << " ";
+    }
+    cout << endl;
+    
+    int pos = findIndex(fruits, numFruits, "cherry");  // findIndex<string>
+    if(pos != -1) {
+        cout << "Found 'cherry' at index: " << pos << endl;
+    }
+    
+    // ===== COUNT OCCURRENCES =====
+    cout << "\n=== Count Occurrences ===" << endl;
+    
+    int appearances = countOccurrences(fruits, numFruits, "apple");
+    cout << "'apple' appears " << appearances << " times" << endl;
+    
+    int numCount = countOccurrences(numbers, size, 40);
+    cout << "40 appears " << numCount << " times in numbers" << endl;
     
     return 0;
 }
@@ -304,201 +534,231 @@ int main() {
                     </div>
                     <div class="code-buttons">
                         <button class="btn btn-primary" onclick="runCode(document.getElementById('code3'), document.getElementById('output3'))">▶ Run Code</button>
+                        <button class="btn btn-secondary" onclick="downloadCode(document.getElementById('code3'))">⬇ Download Code</button>
                     </div>
                     <div class="output-box" id="output3">Click "Run Code" to execute...</div>
                 </div>
             </section>
 
             <section class="section">
-                <div class="section-title">✍️ Coding Activities</div>
-
-                <div class="activity">
-                    <div class="activity-title">⚡ Intermediate Challenge: Generic Sorting</div>
-                    <p>Implement bubble sort as a template function working with any comparable type.</p>
-                    <button class="btn btn-secondary" onclick="downloadCode(\`#include <iostream>
+                <div class="section-title">✍️ Coding Challenges with Skeleton Code</div>
+                <div style="background: #f0f0f0; padding: 20px; border-radius: 8px;">
+                    
+                    <h4 style="color: var(--primary);">Challenge 1: Generic Sort Function</h4>
+                    <p>Implement a template function bubbleSort&lt;T&gt;() that sorts an array of any type supporting &lt; operator. Works for int, double, string, etc.</p>
+                    <button class="btn btn-secondary" onclick="downloadSkeleton(`#include <iostream>
+#include <string>
 using namespace std;
 
+// ===== BUBBLE SORT TEMPLATE =====
 template<typename T>
 void bubbleSort(T arr[], int size) {
     // TODO: Implement bubble sort
-    // Use T's operator< for comparisons
+    // Compare adjacent elements and swap if needed
+    // HINT: for(int i = 0; i < size-1; i++)
+    //       for(int j = 0; j < size-i-1; j++)
+    //           if(arr[j] > arr[j+1])
+    //               // swap using temp or std::swap
 }
 
+// TODO: Helper function to display array
 template<typename T>
-void print(T arr[], int size) {
-    for(int i = 0; i < size; i++) {
-        cout << arr[i] << \" \";
-    }
-    cout << endl;
+void displayArray(T arr[], int size) {
+    // Print all elements separated by spaces
 }
 
 int main() {
-    int arr[] = {5, 2, 8, 1, 9};
-    bubbleSort(arr, 5);
-    print(arr, 5);
+    // Test with integers
+    int numbers[] = {64, 34, 25, 12, 22, 11, 90};
+    int n = 7;
+    
+    cout << "Before: ";
+    displayArray(numbers, n);
+    
+    bubbleSort(numbers, n);
+    
+    cout << "After:  ";
+    displayArray(numbers, n);
+    
+    // Test with doubles
+    double decimals[] = {3.14, 2.71, 1.41, 1.73};
+    int n2 = 4;
+    
+    cout << "\\nBefore: ";
+    displayArray(decimals, n2);
+    
+    bubbleSort(decimals, n2);
+    
+    cout << "After:  ";
+    displayArray(decimals, n2);
+    
+    // Test with strings
+    string words[] = {"zebra", "apple", "mango", "banana"};
+    int n3 = 4;
+    
+    cout << "\\nBefore: ";
+    displayArray(words, n3);
+    
+    bubbleSort(words, n3);
+    
+    cout << "After:  ";
+    displayArray(words, n3);
+    
     return 0;
-}\`, 'generic_sort.cpp')">⬇ Download Skeleton</button>
-                    <button class="collapsible">▼ Show Solution</button>
-                    <div class="collapsible-content">
-                        <div class="code-editor">
-#include <iostream>
+}`, 'bubble_sort_skeleton.cpp')">⬇ Download Sort Skeleton</button>
+
+                    <h4 style="color: var(--primary); margin-top: 20px;">Challenge 2: Generic Sum Function</h4>
+                    <p>Create a template function sum&lt;T&gt;() that takes an array and returns sum of all elements. Works for int, double, but fails gracefully for string.</p>
+                    <button class="btn btn-secondary" onclick="downloadSkeleton(`#include <iostream>
 #include <string>
 using namespace std;
 
+// ===== GENERIC SUM TEMPLATE =====
 template<typename T>
-void bubbleSort(T arr[], int size) {
-    for(int i = 0; i < size - 1; i++) {
-        for(int j = 0; j < size - i - 1; j++) {
-            if(arr[j] > arr[j + 1]) {
-                T temp = arr[j];
-                arr[j] = arr[j + 1];
-                arr[j + 1] = temp;
-            }
-        }
-    }
+T sum(T arr[], int size) {
+    // TODO: Initialize result to zero (or default value)
+    // TODO: Loop through array and accumulate
+    // HINT: T result = T();  // Default constructor
+    //       for(int i = 0; i < size; i++)
+    //           result += arr[i];
+    //       return result;
 }
 
-template<typename T>
-void print(T arr[], int size) {
-    for(int i = 0; i < size; i++) {
-        cout << arr[i] << " ";
-    }
-    cout << endl;
-}
+// TODO: Optional - specialized version for string (to avoid errors)
+// template<>
+// string sum<string>(string arr[], int size) {
+//     cout << "Cannot sum strings!" << endl;
+//     return "";
+// }
 
 int main() {
-    cout << "=== Integer Sort ===" << endl;
-    int intArr[] = {5, 2, 8, 1, 9, 3};
-    cout << "Before: ";
-    print(intArr, 6);
-    bubbleSort(intArr, 6);
-    cout << "After:  ";
-    print(intArr, 6);
+    // Test with integers
+    int numbers[] = {1, 2, 3, 4, 5};
+    int n1 = 5;
     
-    cout << "\n=== Double Sort ===" << endl;
-    double dblArr[] = {3.14, 1.41, 2.71, 1.73};
-    cout << "Before: ";
-    print(dblArr, 4);
-    bubbleSort(dblArr, 4);
-    cout << "After:  ";
-    print(dblArr, 4);
+    int total = sum(numbers, n1);
+    cout << "Sum of numbers: " << total << endl;
     
-    cout << "\n=== String Sort ===" << endl;
-    string strArr[] = {"zebra", "apple", 
-                       "mango", "banana"};
-    cout << "Before: ";
-    print(strArr, 4);
-    bubbleSort(strArr, 4);
-    cout << "After:  ";
-    print(strArr, 4);
+    // Test with doubles
+    double decimals[] = {1.5, 2.5, 3.0};
+    int n2 = 3;
+    
+    double total2 = sum(decimals, n2);
+    cout << "Sum of decimals: " << total2 << endl;
+    
+    // Uncommenting this would fail without specialization:
+    // string words[] = {"a", "b", "c"};
+    // string result = sum(words, 3);  // ERROR: operator+ not logical for strings
     
     return 0;
-}
-                        </div>
-                    </div>
-                </div>
+}`, 'sum_template_skeleton.cpp')">⬇ Download Sum Skeleton</button>
 
-                <div class="activity">
-                    <div class="activity-title">🔥 Advanced Challenge: Generic Min/Max with Comparators</div>
-                    <p>Create template functions for finding min/max with custom comparison functions.</p>
-                    <button class="btn btn-secondary" onclick="downloadCode(\`#include <iostream>
+                    <h4 style="color: var(--primary); margin-top: 20px;">Challenge 3: Reverse Array Function</h4>
+                    <p>Write a template function reverse&lt;T&gt;() that reverses an array in-place using your knowledge of swapping.</p>
+                    <button class="btn btn-secondary" onclick="downloadSkeleton(`#include <iostream>
 #include <string>
 using namespace std;
 
+// ===== SWAP TEMPLATE HELPER =====
 template<typename T>
-T findMin(T arr[], int size) {
-    T min = arr[0];
-    for(int i = 1; i < size; i++) {
-        if(arr[i] < min) min = arr[i];
-    }
-    return min;
+void swap(T& a, T& b) {
+    // TODO: Implement swap (if not using std::swap)
 }
 
+// ===== REVERSE TEMPLATE =====
 template<typename T>
-T findMax(T arr[], int size) {
-    T max = arr[0];
-    for(int i = 1; i < size; i++) {
-        if(arr[i] > max) max = arr[i];
-    }
-    return max;
+void reverseArray(T arr[], int size) {
+    // TODO: Reverse array in-place
+    // HINT: Use two pointers - one at start, one at end
+    //       while(start < end)
+    //           swap arr[start] and arr[end]
+    //           move start forward, end backward
+}
+
+// TODO: Display helper
+template<typename T>
+void displayArray(T arr[], int size) {
+    // Print all elements
 }
 
 int main() {
-    // TODO: Test with integers
-    // TODO: Test with doubles
-    // TODO: Test with strings
+    // Test with integers
+    int numbers[] = {1, 2, 3, 4, 5};
+    int n = 5;
+    
+    cout << "Before: ";
+    displayArray(numbers, n);
+    
+    reverseArray(numbers, n);
+    
+    cout << "After:  ";
+    displayArray(numbers, n);
+    
+    // Test with strings
+    string words[] = {"a", "b", "c", "d"};
+    int n2 = 4;
+    
+    cout << "\\nBefore: ";
+    displayArray(words, n2);
+    
+    reverseArray(words, n2);
+    
+    cout << "After:  ";
+    displayArray(words, n2);
+    
     return 0;
-}\`, 'generic_minmax.cpp')">⬇ Download Skeleton</button>
-                    <button class="collapsible">▼ Show Solution</button>
-                    <div class="collapsible-content">
-                        <div class="code-editor">
-#include <iostream>
+}`, 'reverse_array_skeleton.cpp')">⬇ Download Reverse Skeleton</button>
+
+                    <h4 style="color: var(--primary); margin-top: 20px;">Challenge 4: Generic Print with Separator</h4>
+                    <p>Implement printArray&lt;T&gt;(arr, size, separator) that prints elements separated by custom delimiter for any type supporting &lt;&lt;.</p>
+                    <button class="btn btn-secondary" onclick="downloadSkeleton(`#include <iostream>
 #include <string>
-#include <cmath>
 using namespace std;
 
+// ===== PRINT ARRAY WITH CUSTOM SEPARATOR =====
 template<typename T>
-T findMin(T arr[], int size) {
-    T min = arr[0];
-    for(int i = 1; i < size; i++) {
-        if(arr[i] < min) min = arr[i];
-    }
-    return min;
-}
-
-template<typename T>
-T findMax(T arr[], int size) {
-    T max = arr[0];
-    for(int i = 1; i < size; i++) {
-        if(arr[i] > max) max = arr[i];
-    }
-    return max;
-}
-
-template<typename T>
-T findAbsMin(T arr[], int size) {
-    T min = arr[0];
-    for(int i = 1; i < size; i++) {
-        if(abs(arr[i]) < abs(min)) 
-            min = arr[i];
-    }
-    return min;
+void printArray(T arr[], int size, string separator = ", ") {
+    // TODO: Print elements with separator between them
+    // HINT: for(int i = 0; i < size; i++) {
+    //           cout << arr[i];
+    //           if(i < size - 1) cout << separator;
+    //       }
+    //       cout << endl;
 }
 
 int main() {
-    cout << "=== Integers ===" << endl;
-    int intArr[] = {5, 2, 8, 1, 9};
-    cout << "Array: ";
-    for(int i = 0; i < 5; i++) 
-        cout << intArr[i] << " ";
-    cout << endl;
-    cout << "Min: " << findMin(intArr, 5) << endl;
-    cout << "Max: " << findMax(intArr, 5) << endl;
+    // Test with integers - different separators
+    int numbers[] = {10, 20, 30, 40, 50};
+    int n = 5;
     
-    cout << "\n=== Doubles ===" << endl;
-    double dblArr[] = {3.14, -1.41, 2.71, -0.5};
-    cout << "Array: ";
-    for(int i = 0; i < 4; i++) 
-        cout << dblArr[i] << " ";
-    cout << endl;
-    cout << "Min: " << findMin(dblArr, 4) << endl;
-    cout << "Max: " << findMax(dblArr, 4) << endl;
-    cout << "Min Abs: " << findAbsMin(dblArr, 4) 
-         << endl;
+    cout << "Numbers with commas: ";
+    printArray(numbers, n, ", ");
     
-    cout << "\n=== Strings ===" << endl;
-    string strArr[] = {"apple", "zebra", "mango"};
-    cout << "Array: ";
-    for(int i = 0; i < 3; i++) 
-        cout << strArr[i] << " ";
-    cout << endl;
-    cout << "Min: " << findMin(strArr, 3) << endl;
-    cout << "Max: " << findMax(strArr, 3) << endl;
+    cout << "Numbers with pipes: ";
+    printArray(numbers, n, " | ");
+    
+    cout << "Numbers with arrows: ";
+    printArray(numbers, n, " -> ");
+    
+    // Test with doubles
+    double decimals[] = {3.14, 2.71, 1.41};
+    int n2 = 3;
+    
+    cout << "\\nDecimals with semicolons: ";
+    printArray(decimals, n2, "; ");
+    
+    // Test with strings
+    string words[] = {"apple", "banana", "cherry"};
+    int n3 = 3;
+    
+    cout << "Words with slashes: ";
+    printArray(words, n3, " / ");
+    
+    cout << "Words with newlines:\\n";
+    printArray(words, n3, "\\n");
     
     return 0;
-}
-                        </div>
-                    </div>
+}`, 'print_array_skeleton.cpp')">⬇ Download Print Skeleton</button>
                 </div>
             </section>
 
@@ -520,26 +780,16 @@ int main() {
     <script>
         function initializeQuiz() {
             const questions = [
-                {type: 'multiple-choice', question: 'Function templates enable:', options: ['Type safety', 'Generic functions', 'Code reuse', 'All above'], correctAnswer: 'D', explanation: 'Templates provide all these benefits.'},
-                {type: 'true-false', question: 'Compiler deduces template arguments.', correctAnswer: 'true', explanation: 'Yes, automatic deduction from function arguments.'},
-                {type: 'fill-in', question: 'Function template:', context: '<span style="color: red;">_______</span><typename T> void func(T val)', hint: 'template', acceptableAnswers: ['template', 'template '], explanation: 'Use template keyword to declare function templates.'},
-                {type: 'true-false', question: 'Can explicitly specify template arguments.', correctAnswer: 'true', explanation: 'Yes, but automatic deduction is preferred.'},
-                {type: 'multiple-choice', question: 'Template argument deduction fails when:', options: ['Types mismatch', 'No argument', 'Ambiguous', 'All above'], correctAnswer: 'D', explanation: 'Deduction fails in various situations.'},
-                {type: 'fill-in', question: 'Explicit template specification:', context: 'func<span style="color: red;">_______</span>int<span style="color: red;">_______</span>(x);', hint: '<< >>',acceptableAnswers: ['<', '>'], explanation: 'Use angle brackets for explicit specification.'},
-                {type: 'true-false', question: 'Generic algorithms reduce code duplication.', correctAnswer: 'true', explanation: 'Yes, one function works for all types.'},
-                {type: 'multiple-choice', question: 'Template function requirements:', options: ['No constraints', 'Type needs operations', 'All types work', 'None'], correctAnswer: 'B', explanation: 'Type must support required operations.'},
-                {type: 'true-false', question: 'Can overload template functions.', correctAnswer: 'true', explanation: 'Yes, with each other and regular functions.'},
-                {type: 'fill-in', question: 'Multiple template parameters:', context: 'template<typename T, <span style="color: red;">_______</span> U>', hint: 'typename', acceptableAnswers: ['typename', 'typename '], explanation: 'Each parameter needs typename keyword.'},
-                {type: 'true-false', question: 'Template specialization available.', correctAnswer: 'true', explanation: 'Yes, can provide specific implementations.'},
-                {type: 'multiple-choice', question: 'Function templates located:', options: ['Header', 'Implementation file', 'Header or explicit inst', 'Anywhere'], correctAnswer: 'C', explanation: 'Templates go in headers for implicit instantiation.'},
-                {type: 'true-false', question: 'Compiler generates code for each instantiation.', correctAnswer: 'true', explanation: 'Yes, separate code for each type used.'},
-                {type: 'multiple-choice', question: 'Return type deduction:', options: ['Automatic', 'Must specify', 'Optional', 'Forbidden'], correctAnswer: 'B', explanation: 'Return type usually specified explicitly.'},
-                {type: 'fill-in', question: 'Generic swap function:', context: 'template<typename T> void swap(T& a, T& <span style="color: red;">_______</span>)', hint: 'b', acceptableAnswers: ['b', 'b)'], explanation: 'Takes references to avoid copying.'},
-                {type: 'true-false', question: 'Template functions must use references.', correctAnswer: 'false', explanation: 'Can use values, references, or pointers.'},
-                {type: 'multiple-choice', question: 'STL algorithms use:', options: ['Regular functions', 'Template functions', 'Classes only', 'Macros'], correctAnswer: 'B', explanation: 'STL algorithms are template functions.'},
-                {type: 'true-false', question: 'Type T can be any type.', correctAnswer: 'true', explanation: 'Yes, built-in or user-defined types.'},
-                {type: 'multiple-choice', question: 'Template function call:', options: ['func<int>(x)', 'func(x)', 'Both', 'Neither'], correctAnswer: 'C', explanation: 'Both explicit and implicit calls work.'},
-                {type: 'true-false', question: 'Template enables compile-time polymorphism.', correctAnswer: 'true', explanation: 'Yes, templates are compile-time generic code.'}
+                {type: 'multiple-choice', question: 'What is template argument deduction?', options: ['Compiler automatically figures out template parameter from function arguments', 'Manual specification of template parameters', 'A compiler error', 'Function overloading'], correctAnswer: 'A', explanation: 'Compiler can infer T=int from max(5, 10) without explicitly writing max<int>.'},
+                {type: 'true-false', question: 'Template functions can be defined in a separate .cpp file.', correctAnswer: 'false', explanation: 'False. Compiler needs complete definition when instantiating. Must be in header file.'},
+                {type: 'multiple-choice', question: 'What does template<typename T> swap(T& a, T& b) require of type T?', options: ['Must support assignment and swap', 'Can be any type without restrictions', 'Must support operator=', 'Must be a primitive type'], correctAnswer: 'C', explanation: 'The template needs assignment (operator=) to work.'},
+                {type: 'fill-in', question: 'When compiler sees max(5, 10), it deduces T=___', context: 'T=_____', hint: 'int', acceptableAnswers: ['int'], explanation: 'The compiler infers T is int from the argument types.'},
+                {type: 'true-false', question: 'Template functions can be overloaded with non-template functions.', correctAnswer: 'true', explanation: 'Yes! Non-template function takes priority. Compiler tries overload first, then template.'},
+                {type: 'multiple-choice', question: 'What is function template specialization?', options: ['Providing specialized version for specific type', 'Automatic deduction of template parameters', 'Compiler error', 'A template that never instantiates'], correctAnswer: 'A', explanation: 'You can provide alternative implementation for specific types like const char*.'},
+                {type: 'short-answer', question: 'Why does sort(begin, end) work with any container type?', context: 'It is a ______ function that works on iterators', hint: 'template', acceptableAnswers: ['template'], explanation: 'sort() is a template function that works with any iterator type.'},
+                {type: 'multiple-choice', question: 'What happens when max(5, 10.5) is called?', options: ['Compiler error: deduction fails with mixed types', 'Implicitly converts one to other', 'Returns 10.5', 'Compilation succeeds with implicit conversion'], correctAnswer: 'A', explanation: 'Compiler cannot deduce single T when arguments are different types.'},
+                {type: 'true-false', question: 'Each template function instantiation creates separate function copies.', correctAnswer: 'true', explanation: 'Yes. swap<int> and swap<double> are separate functions in the binary.'},
+                {type: 'multiple-choice', question: 'Which constraint applies to template functions?', options: ['Must specify all template parameters explicitly', 'Type must support operations used in function', 'Can only work with primitive types', 'No constraints exist'], correctAnswer: 'B', explanation: 'If your template uses >, type T must support > operator.'},
             ];
 
             window.quizSystem = new QuizSystem('Template Functions', questions);
@@ -550,7 +800,7 @@ int main() {
             const modal = document.createElement('div');
             modal.id = 'quizModal';
             modal.className = 'quiz-modal';
-            modal.innerHTML = `<div class="quiz-modal-content"><div class="quiz-header"><div><div class="quiz-question-number">Quiz: Template Functions</div><div class="quiz-progress">Question 1 of 20</div></div><button class="quiz-close" onclick="closeQuizModal()">✕</button></div><div class="quiz-questions-container"></div></div>`;
+            modal.innerHTML = `<div class="quiz-modal-content"><div class="quiz-header"><div><div class="quiz-question-number">Quiz: Template Functions</div><div class="quiz-progress">Question 1 of 10</div></div><button class="quiz-close" onclick="closeQuizModal()">✕</button></div><div class="quiz-questions-container"></div></div>`;
             document.body.appendChild(modal);
         }
     </script>
