@@ -5,6 +5,37 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>COS110 OOP Study Website - Learn C++ Object-Oriented Programming</title>
     <link rel="stylesheet" href="css/style.css">
+    <style>
+        /* Dark theme fixes for inline styles */
+        body.dark-theme section[style*="background: #f9f9f9"] {
+            background: #1a1a1a !important;
+        }
+        
+        body.dark-theme section[style*="background: #e8f4f8"] {
+            background: #1a1a1a !important;
+        }
+        
+        body.dark-theme div[style*="background: white"] {
+            background: #0d0d0d !important;
+            border-color: #333 !important;
+        }
+        
+        body.dark-theme p {
+            color: var(--text-dark);
+        }
+        
+        body.dark-theme h2 {
+            color: var(--text-dark);
+        }
+        
+        body.dark-theme ol {
+            color: var(--text-dark);
+        }
+        
+        body.dark-theme ol li {
+            color: var(--text-dark);
+        }
+    </style>
 </head>
 <body>
     <!-- NAVBAR -->
@@ -71,130 +102,130 @@
         <!-- MAIN CONTENT -->
         <main class="main-content">
             <!-- HERO SECTION -->
-            <section style="text-align: center; padding: 40px 0; border-bottom: 2px solid var(--primary); margin-bottom: 40px;">
-                <h1 style="font-size: 48px; border: none; padding: 0; margin-bottom: 20px;">Welcome to COS110 OOP Study Website</h1>
-                <p style="font-size: 18px; color: var(--text-light); margin-bottom: 20px;">
+            <section class="hero-section">
+                <h1 class="hero-title">Welcome to COS110 OOP Study Website</h1>
+                <p class="hero-subtitle">
                     Master Object-Oriented Programming in C++98<br>
                     with comprehensive explanations, interactive code examples, and practice quizzes
                 </p>
-                <div style="display: flex; gap: 15px; justify-content: center; flex-wrap: wrap;">
+                <div class="hero-buttons">
                     <a href="topics/01-pointers/part1.html" class="btn btn-primary">Start Learning</a>
                     <button class="btn btn-secondary" onclick="scrollToTopics()">Browse Topics</button>
                 </div>
             </section>
 
             <!-- STATS SECTION -->
-            <section style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-bottom: 40px;">
-                <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 30px; border-radius: 8px; text-align: center;">
-                    <div style="font-size: 32px; font-weight: bold;">19</div>
-                    <div>Topics Covered</div>
+            <section class="stats-section">
+                <div class="stat-card stat-card-1">
+                    <div class="stat-number">19</div>
+                    <div class="stat-label">Topics Covered</div>
                 </div>
-                <div style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); color: white; padding: 30px; border-radius: 8px; text-align: center;">
-                    <div style="font-size: 32px; font-weight: bold;">200+</div>
-                    <div>Code Examples</div>
+                <div class="stat-card stat-card-2">
+                    <div class="stat-number">200+</div>
+                    <div class="stat-label">Code Examples</div>
                 </div>
-                <div style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); color: white; padding: 30px; border-radius: 8px; text-align: center;">
-                    <div style="font-size: 32px; font-weight: bold;">380+</div>
-                    <div>Quiz Questions</div>
+                <div class="stat-card stat-card-3">
+                    <div class="stat-number">380+</div>
+                    <div class="stat-label">Quiz Questions</div>
                 </div>
-                <div style="background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%); color: white; padding: 30px; border-radius: 8px; text-align: center;">
-                    <div style="font-size: 32px; font-weight: bold;">40+</div>
-                    <div>Activities</div>
+                <div class="stat-card stat-card-4">
+                    <div class="stat-number">40+</div>
+                    <div class="stat-label">Activities</div>
                 </div>
             </section>
 
             <!-- FEATURES SECTION -->
-            <section style="background: #f9f9f9; padding: 30px; border-radius: 8px; margin-bottom: 40px;">
-                <h2 style="font-size: 24px; margin-bottom: 20px; color: var(--text-dark);">📚 What You'll Learn</h2>
-                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px;">
-                    <div>
-                        <h3 style="color: var(--primary); margin-bottom: 10px;">✓ Pointers & Memory</h3>
+            <section class="features-section">
+                <h2>📚 What You'll Learn</h2>
+                <div class="features-grid">
+                    <div class="feature-item">
+                        <h3>✓ Pointers & Memory</h3>
                         <p>Understand pointers, dynamic memory allocation, and memory management in C++</p>
                     </div>
-                    <div>
-                        <h3 style="color: var(--primary); margin-bottom: 10px;">✓ Object-Oriented Design</h3>
+                    <div class="feature-item">
+                        <h3>✓ Object-Oriented Design</h3>
                         <p>Master classes, objects, constructors, and proper OOP design patterns</p>
                     </div>
-                    <div>
-                        <h3 style="color: var(--primary); margin-bottom: 10px;">✓ Operator Overloading</h3>
+                    <div class="feature-item">
+                        <h3>✓ Operator Overloading</h3>
                         <p>Learn to overload operators as class members, friends, and special operators</p>
                     </div>
-                    <div>
-                        <h3 style="color: var(--primary); margin-bottom: 10px;">✓ Inheritance & Polymorphism</h3>
+                    <div class="feature-item">
+                        <h3>✓ Inheritance & Polymorphism</h3>
                         <p>Explore inheritance hierarchies, virtual functions, and polymorphic behavior</p>
                     </div>
-                    <div>
-                        <h3 style="color: var(--primary); margin-bottom: 10px;">✓ Exception Handling</h3>
+                    <div class="feature-item">
+                        <h3>✓ Exception Handling</h3>
                         <p>Handle errors gracefully with try-catch blocks and custom exceptions</p>
                     </div>
-                    <div>
-                        <h3 style="color: var(--primary); margin-bottom: 10px;">✓ Data Structures</h3>
+                    <div class="feature-item">
+                        <h3>✓ Data Structures</h3>
                         <p>Implement and understand lists, stacks, queues, and STL containers</p>
                     </div>
                 </div>
             </section>
 
             <!-- TOPICS SECTION -->
-            <section id="topics">
-                <h2 style="font-size: 24px; margin-bottom: 20px; color: var(--text-dark);">🎯 All Topics</h2>
+            <section id="topics" class="topics-section">
+                <h2>🎯 All Topics</h2>
                 
-                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px;">
-                    <div style="background: white; border: 1px solid var(--border); border-radius: 8px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
-                        <div style="background: #667eea; color: white; padding: 15px; font-weight: bold;">📌 Pointers</div>
-                        <div style="padding: 15px;">
-                            <p style="margin-bottom: 10px;">Learn memory addresses and pointer operations</p>
-                            <a href="topics/01-pointers/part1.html" style="color: var(--primary); text-decoration: none;">Part 1 →</a> | 
-                            <a href="topics/01-pointers/part2.html" style="color: var(--primary); text-decoration: none;">Part 2 →</a>
+                <div class="topics-grid">
+                    <div class="topic-card">
+                        <div class="topic-header topic-header-1">📌 Pointers</div>
+                        <div class="topic-content">
+                            <p>Learn memory addresses and pointer operations</p>
+                            <a href="topics/01-pointers/part1.html" class="topic-link">Part 1 →</a> | 
+                            <a href="topics/01-pointers/part2.html" class="topic-link">Part 2 →</a>
                         </div>
                     </div>
 
-                    <div style="background: white; border: 1px solid var(--border); border-radius: 8px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
-                        <div style="background: #764ba2; color: white; padding: 15px; font-weight: bold;">🏗️ Classes & Objects</div>
-                        <div style="padding: 15px;">
-                            <p style="margin-bottom: 10px;">Understand class design and object creation</p>
-                            <a href="topics/02-classes/basics.html" style="color: var(--primary); text-decoration: none;">Basics →</a>
+                    <div class="topic-card">
+                        <div class="topic-header topic-header-2">🏗️ Classes & Objects</div>
+                        <div class="topic-content">
+                            <p>Understand class design and object creation</p>
+                            <a href="topics/02-classes/basics.html" class="topic-link">Basics →</a>
                         </div>
                     </div>
 
-                    <div style="background: white; border: 1px solid var(--border); border-radius: 8px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
-                        <div style="background: #f093fb; color: white; padding: 15px; font-weight: bold;">➕ Operator Overloading</div>
-                        <div style="padding: 15px;">
-                            <p style="margin-bottom: 10px;">Create custom operator behaviors for classes</p>
-                            <a href="topics/05-operator-overloading/basics.html" style="color: var(--primary); text-decoration: none;">Learn More →</a>
+                    <div class="topic-card">
+                        <div class="topic-header topic-header-3">➕ Operator Overloading</div>
+                        <div class="topic-content">
+                            <p>Create custom operator behaviors for classes</p>
+                            <a href="topics/05-operator-overloading/basics.html" class="topic-link">Learn More →</a>
                         </div>
                     </div>
 
-                    <div style="background: white; border: 1px solid var(--border); border-radius: 8px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
-                        <div style="background: #4facfe; color: white; padding: 15px; font-weight: bold;">👨‍👧 Inheritance</div>
-                        <div style="padding: 15px;">
-                            <p style="margin-bottom: 10px;">Master class inheritance and reusability</p>
-                            <a href="topics/07-inheritance/basics.html" style="color: var(--primary); text-decoration: none;">Learn More →</a>
+                    <div class="topic-card">
+                        <div class="topic-header topic-header-4">👨‍👧 Inheritance</div>
+                        <div class="topic-content">
+                            <p>Master class inheritance and reusability</p>
+                            <a href="topics/07-inheritance/basics.html" class="topic-link">Learn More →</a>
                         </div>
                     </div>
 
-                    <div style="background: white; border: 1px solid var(--border); border-radius: 8px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
-                        <div style="background: #43e97b; color: white; padding: 15px; font-weight: bold;">🔄 Polymorphism</div>
-                        <div style="padding: 15px;">
-                            <p style="margin-bottom: 10px;">Achieve flexible and extensible code design</p>
-                            <a href="topics/08-polymorphism/virtual-functions.html" style="color: var(--primary); text-decoration: none;">Learn More →</a>
+                    <div class="topic-card">
+                        <div class="topic-header topic-header-5">🔄 Polymorphism</div>
+                        <div class="topic-content">
+                            <p>Achieve flexible and extensible code design</p>
+                            <a href="topics/08-polymorphism/virtual-functions.html" class="topic-link">Learn More →</a>
                         </div>
                     </div>
 
-                    <div style="background: white; border: 1px solid var(--border); border-radius: 8px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
-                        <div style="background: #fa709a; color: white; padding: 15px; font-weight: bold;">📊 Data Structures</div>
-                        <div style="padding: 15px;">
-                            <p style="margin-bottom: 10px;">Implement lists, stacks, queues, and more</p>
-                            <a href="topics/10-data-structures/linked-lists.html" style="color: var(--primary); text-decoration: none;">Learn More →</a>
+                    <div class="topic-card">
+                        <div class="topic-header topic-header-6">📊 Data Structures</div>
+                        <div class="topic-content">
+                            <p>Implement lists, stacks, queues, and more</p>
+                            <a href="topics/10-data-structures/linked-lists.html" class="topic-link">Learn More →</a>
                         </div>
                     </div>
                 </div>
             </section>
 
             <!-- GETTING STARTED -->
-            <section style="background: #e8f4f8; border-left: 4px solid var(--info); padding: 30px; border-radius: 8px; margin-top: 40px;">
-                <h2 style="font-size: 24px; margin-bottom: 20px; color: var(--text-dark);">🚀 Getting Started</h2>
-                <ol style="margin-left: 20px; line-height: 2;">
-                    <li><strong>Start with Pointers:</strong> Begin with <a href="topics/01-pointers/part1.html" style="color: var(--primary);">Part 1</a> to understand memory management</li>
+            <section class="getting-started">
+                <h2>🚀 Getting Started</h2>
+                <ol>
+                    <li><strong>Start with Pointers:</strong> Begin with <a href="topics/01-pointers/part1.html">Part 1</a> to understand memory management</li>
                     <li><strong>Learn Classes:</strong> Master object-oriented basics</li>
                     <li><strong>Practice Code:</strong> Run examples and modify them to learn by doing</li>
                     <li><strong>Take Quizzes:</strong> Test your knowledge with interactive quizzes on each topic</li>
@@ -202,13 +233,13 @@
                 </ol>
             </section>
 
-            <hr style="margin: 40px 0;">
+            <hr class="section-divider">
 
             <!-- FOOTER INFO -->
-            <section style="text-align: center; color: #999; font-size: 14px; padding: 20px 0;">
+            <section class="footer-info">
                 <p>COS110 Object-Oriented Programming Study Website</p>
                 <p>Interactive C++98 Learning Platform with Live Code Compilation</p>
-                <p style="margin-top: 20px;">All examples are fully functional and can be run and modified directly in your browser</p>
+                <p>All examples are fully functional and can be run and modified directly in your browser</p>
             </section>
         </main>
     </div>

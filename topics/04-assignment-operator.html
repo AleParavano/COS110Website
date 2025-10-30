@@ -65,20 +65,20 @@
             <section class="section">
                 <div class="section-title">📚 Explanation</div>
                 <div class="explanation">
-                    <h3 style="color: var(--primary);">What is the Assignment Operator?</h3>
-                    <p>The assignment operator (=) is used to copy data from one object to another after both objects have been created. It's different from the copy constructor, which is called during initialization. Like the copy constructor, you often need to overload it for classes managing dynamic memory.</p>
+                    <h3 style="color: var(--primary); margin-top: 0;">What is the Assignment Operator?</h3>
+                    <p style="color: var(--text-dark);">The assignment operator (=) is used to copy data from one object to another after both objects have been created. It's different from the copy constructor, which is called during initialization. Like the copy constructor, you often need to overload it for classes managing dynamic memory.</p>
 
                     <h3 style="color: var(--primary); margin-top: 20px;">Default Assignment Operator</h3>
-                    <p>C++ provides a default assignment operator that performs shallow copy. For classes without dynamic memory, this is usually fine. For classes with dynamic memory, you must implement a custom assignment operator.</p>
+                    <p style="color: var(--text-dark);">C++ provides a default assignment operator that performs shallow copy. For classes without dynamic memory, this is usually fine. For classes with dynamic memory, you must implement a custom assignment operator.</p>
 
                     <h3 style="color: var(--primary); margin-top: 20px;">Self-Assignment Check</h3>
-                    <p>The most critical aspect of implementing an assignment operator is checking for self-assignment (a = a). Without this check, you could delete memory before copying, causing data loss. Use if(this != &other) to prevent this.</p>
+                    <p style="color: var(--text-dark);">The most critical aspect of implementing an assignment operator is checking for self-assignment (a = a). Without this check, you could delete memory before copying, causing data loss. Use if(this != &other) to prevent this.</p>
 
                     <h3 style="color: var(--primary); margin-top: 20px;">Signature and Return Value</h3>
-                    <p>The assignment operator should return a reference to *this: ClassName& operator=(const ClassName& other). Returning a reference allows chaining assignments like a = b = c.</p>
+                    <p style="color: var(--text-dark);">The assignment operator should return a reference to *this: ClassName& operator=(const ClassName& other). Returning a reference allows chaining assignments like a = b = c.</p>
 
                     <h3 style="color: var(--primary); margin-top: 20px;">Difference from Copy Constructor</h3>
-                    <p>Copy constructor initializes a new object from an existing one. Assignment operator assigns to an already-initialized object. The assignment operator must handle cleanup of old data before acquiring new data.</p>
+                    <p style="color: var(--text-dark);">Copy constructor initializes a new object from an existing one. Assignment operator assigns to an already-initialized object. The assignment operator must handle cleanup of old data before acquiring new data.</p>
                 </div>
             </section>
 
@@ -323,7 +323,7 @@ int main() {
 
                 <div class="activity">
                     <div class="activity-title">⚡ Intermediate Challenge: Safe Assignment Operator</div>
-                    <p>Create a Matrix class with assignment operator that performs proper cleanup and deep copy. Test self-assignment.</p>
+                    <p style="color: var(--text-dark);">Create a Matrix class with assignment operator that performs proper cleanup and deep copy. Test self-assignment.</p>
                     <button class="btn btn-secondary" onclick="downloadCode(\`#include <iostream>
 using namespace std;
 
@@ -409,7 +409,7 @@ int main() {
 
                 <div class="activity">
                     <div class="activity-title">🔥 Advanced Challenge: Chained Assignment</div>
-                    <p>Implement assignment operator that supports chaining (a = b = c = d). Verify it works correctly with self-assignment protection.</p>
+                    <p style="color: var(--text-dark);">Implement assignment operator that supports chaining (a = b = c = d). Verify it works correctly with self-assignment protection.</p>
                     <button class="btn btn-secondary" onclick="downloadCode(\`#include <iostream>
 using namespace std;
 

@@ -65,20 +65,20 @@
             <section class="section">
                 <div class="section-title">📚 Explanation</div>
                 <div class="explanation">
-                    <h3 style="color: var(--primary);">What is a Copy Constructor?</h3>
-                    <p>A copy constructor is a special constructor that creates a new object as a copy of an existing object. It takes a const reference to an object of the same class as a parameter. The copy constructor is called automatically when you initialize a new object with an existing object.</p>
+                    <h3 style="color: var(--primary); margin-top: 0;">What is a Copy Constructor?</h3>
+                    <p style="color: var(--text-dark);">A copy constructor is a special constructor that creates a new object as a copy of an existing object. It takes a const reference to an object of the same class as a parameter. The copy constructor is called automatically when you initialize a new object with an existing object.</p>
 
                     <h3 style="color: var(--primary); margin-top: 20px;">Deep vs Shallow Copy</h3>
-                    <p>A shallow copy duplicates only the member variables, which may include pointers. If two objects share the same dynamically allocated memory, deleting one will corrupt the other. A deep copy duplicates the actual data that pointers point to, ensuring independence between objects.</p>
+                    <p style="color: var(--text-dark);">A shallow copy duplicates only the member variables, which may include pointers. If two objects share the same dynamically allocated memory, deleting one will corrupt the other. A deep copy duplicates the actual data that pointers point to, ensuring independence between objects.</p>
 
                     <h3 style="color: var(--primary); margin-top: 20px;">Default Copy Constructor</h3>
-                    <p>C++ provides a default copy constructor that performs a shallow copy. For classes without dynamic memory, this is usually sufficient. However, for classes managing dynamic memory, you must implement a custom copy constructor.</p>
+                    <p style="color: var(--text-dark);">C++ provides a default copy constructor that performs a shallow copy. For classes without dynamic memory, this is usually sufficient. However, for classes managing dynamic memory, you must implement a custom copy constructor.</p>
 
                     <h3 style="color: var(--primary); margin-top: 20px;">Rule of Three/Five/Zero</h3>
-                    <p>If you define a custom destructor, you should also define a custom copy constructor and copy assignment operator (Rule of Three). In modern C++, also consider move constructor and move assignment operator (Rule of Five).</p>
+                    <p style="color: var(--text-dark);">If you define a custom destructor, you should also define a custom copy constructor and copy assignment operator (Rule of Three). In modern C++, also consider move constructor and move assignment operator (Rule of Five).</p>
 
                     <h3 style="color: var(--primary); margin-top: 20px;">When Copy Constructor is Called</h3>
-                    <p>Copy constructors are called when: initializing one object with another, passing objects by value to functions, or returning objects by value from functions.</p>
+                    <p style="color: var(--text-dark);">Copy constructors are called when: initializing one object with another, passing objects by value to functions, or returning objects by value from functions.</p>
                 </div>
             </section>
 
@@ -273,7 +273,7 @@ int main() {
 
                 <div class="activity">
                     <div class="activity-title">⚡ Intermediate Challenge: Array Class with Deep Copy</div>
-                    <p>Create an Array class that manages a dynamic array. Implement a copy constructor that performs a deep copy so each Array object has its own independent data.</p>
+                    <p style="color: var(--text-dark);">Create an Array class that manages a dynamic array. Implement a copy constructor that performs a deep copy so each Array object has its own independent data.</p>
                     <button class="btn btn-secondary" onclick="downloadCode(\`#include <iostream>
 using namespace std;
 
@@ -350,7 +350,7 @@ int main() {
 
                 <div class="activity">
                     <div class="activity-title">🔥 Advanced Challenge: Implementing Rule of Three</div>
-                    <p>Create a class with constructor, destructor, copy constructor, and copy assignment operator (Rule of Three). Demonstrate proper resource management.</p>
+                    <p style="color: var(--text-dark);">Create a class with constructor, destructor, copy constructor, and copy assignment operator (Rule of Three). Demonstrate proper resource management.</p>
                     <button class="btn btn-secondary" onclick="downloadCode(\`#include <iostream>
 #include <cstring>
 using namespace std;
@@ -479,7 +479,7 @@ int main() {
             const modal = document.createElement('div');
             modal.id = 'quizModal';
             modal.className = 'quiz-modal';
-            modal.innerHTML = `<div class="quiz-modal-content"><div class="quiz-header"><div><div class="quiz-question-number">Quiz: Copy Constructors</div><div class="quiz-progress">Question 1 of 20</div></div><button class="quiz-close" onclick="closeQuizModal()">✕</button></div><div class="quiz-questions-container"></div></div>`;
+            modal.innerHTML = `<div class="quiz-modal-content"><div class="quiz-header"><div><div class="quiz-question-number">Quiz: Copy Constructors</div><div class="quiz-progress">Question 1 of 19</div></div><button class="quiz-close" onclick="closeQuizModal()">✕</button></div><div class="quiz-questions-container"></div></div>`;
             document.body.appendChild(modal);
         }
     </script>
