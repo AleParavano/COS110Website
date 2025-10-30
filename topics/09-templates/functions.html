@@ -546,219 +546,19 @@ int main() {
                     
                     <h4 style="color: var(--primary);">Challenge 1: Generic Sort Function</h4>
                     <p>Implement a template function bubbleSort&lt;T&gt;() that sorts an array of any type supporting &lt; operator. Works for int, double, string, etc.</p>
-                    <button class="btn btn-secondary" onclick="downloadSkeleton(`#include <iostream>
-#include <string>
-using namespace std;
-
-// ===== BUBBLE SORT TEMPLATE =====
-template<typename T>
-void bubbleSort(T arr[], int size) {
-    // TODO: Implement bubble sort
-    // Compare adjacent elements and swap if needed
-    // HINT: for(int i = 0; i < size-1; i++)
-    //       for(int j = 0; j < size-i-1; j++)
-    //           if(arr[j] > arr[j+1])
-    //               // swap using temp or std::swap
-}
-
-// TODO: Helper function to display array
-template<typename T>
-void displayArray(T arr[], int size) {
-    // Print all elements separated by spaces
-}
-
-int main() {
-    // Test with integers
-    int numbers[] = {64, 34, 25, 12, 22, 11, 90};
-    int n = 7;
-    
-    cout << "Before: ";
-    displayArray(numbers, n);
-    
-    bubbleSort(numbers, n);
-    
-    cout << "After:  ";
-    displayArray(numbers, n);
-    
-    // Test with doubles
-    double decimals[] = {3.14, 2.71, 1.41, 1.73};
-    int n2 = 4;
-    
-    cout << "\\nBefore: ";
-    displayArray(decimals, n2);
-    
-    bubbleSort(decimals, n2);
-    
-    cout << "After:  ";
-    displayArray(decimals, n2);
-    
-    // Test with strings
-    string words[] = {"zebra", "apple", "mango", "banana"};
-    int n3 = 4;
-    
-    cout << "\\nBefore: ";
-    displayArray(words, n3);
-    
-    bubbleSort(words, n3);
-    
-    cout << "After:  ";
-    displayArray(words, n3);
-    
-    return 0;
-}`, 'bubble_sort_skeleton.cpp')">⬇ Download Sort Skeleton</button>
+                    <button class="btn btn-secondary" onclick="downloadFunctionsSortSkeleton()">⬇ Download Sort Skeleton</button>
 
                     <h4 style="color: var(--primary); margin-top: 20px;">Challenge 2: Generic Sum Function</h4>
                     <p>Create a template function sum&lt;T&gt;() that takes an array and returns sum of all elements. Works for int, double, but fails gracefully for string.</p>
-                    <button class="btn btn-secondary" onclick="downloadSkeleton(`#include <iostream>
-#include <string>
-using namespace std;
-
-// ===== GENERIC SUM TEMPLATE =====
-template<typename T>
-T sum(T arr[], int size) {
-    // TODO: Initialize result to zero (or default value)
-    // TODO: Loop through array and accumulate
-    // HINT: T result = T();  // Default constructor
-    //       for(int i = 0; i < size; i++)
-    //           result += arr[i];
-    //       return result;
-}
-
-// TODO: Optional - specialized version for string (to avoid errors)
-// template<>
-// string sum<string>(string arr[], int size) {
-//     cout << "Cannot sum strings!" << endl;
-//     return "";
-// }
-
-int main() {
-    // Test with integers
-    int numbers[] = {1, 2, 3, 4, 5};
-    int n1 = 5;
-    
-    int total = sum(numbers, n1);
-    cout << "Sum of numbers: " << total << endl;
-    
-    // Test with doubles
-    double decimals[] = {1.5, 2.5, 3.0};
-    int n2 = 3;
-    
-    double total2 = sum(decimals, n2);
-    cout << "Sum of decimals: " << total2 << endl;
-    
-    // Uncommenting this would fail without specialization:
-    // string words[] = {"a", "b", "c"};
-    // string result = sum(words, 3);  // ERROR: operator+ not logical for strings
-    
-    return 0;
-}`, 'sum_template_skeleton.cpp')">⬇ Download Sum Skeleton</button>
+                    <button class="btn btn-secondary" onclick="downloadFunctionsSumSkeleton()">⬇ Download Sum Skeleton</button>
 
                     <h4 style="color: var(--primary); margin-top: 20px;">Challenge 3: Reverse Array Function</h4>
                     <p>Write a template function reverse&lt;T&gt;() that reverses an array in-place using your knowledge of swapping.</p>
-                    <button class="btn btn-secondary" onclick="downloadSkeleton(`#include <iostream>
-#include <string>
-using namespace std;
-
-// ===== SWAP TEMPLATE HELPER =====
-template<typename T>
-void swap(T& a, T& b) {
-    // TODO: Implement swap (if not using std::swap)
-}
-
-// ===== REVERSE TEMPLATE =====
-template<typename T>
-void reverseArray(T arr[], int size) {
-    // TODO: Reverse array in-place
-    // HINT: Use two pointers - one at start, one at end
-    //       while(start < end)
-    //           swap arr[start] and arr[end]
-    //           move start forward, end backward
-}
-
-// TODO: Display helper
-template<typename T>
-void displayArray(T arr[], int size) {
-    // Print all elements
-}
-
-int main() {
-    // Test with integers
-    int numbers[] = {1, 2, 3, 4, 5};
-    int n = 5;
-    
-    cout << "Before: ";
-    displayArray(numbers, n);
-    
-    reverseArray(numbers, n);
-    
-    cout << "After:  ";
-    displayArray(numbers, n);
-    
-    // Test with strings
-    string words[] = {"a", "b", "c", "d"};
-    int n2 = 4;
-    
-    cout << "\\nBefore: ";
-    displayArray(words, n2);
-    
-    reverseArray(words, n2);
-    
-    cout << "After:  ";
-    displayArray(words, n2);
-    
-    return 0;
-}`, 'reverse_array_skeleton.cpp')">⬇ Download Reverse Skeleton</button>
+                    <button class="btn btn-secondary" onclick="downloadFunctionsReverseSkeleton()">⬇ Download Reverse Skeleton</button>
 
                     <h4 style="color: var(--primary); margin-top: 20px;">Challenge 4: Generic Print with Separator</h4>
                     <p>Implement printArray&lt;T&gt;(arr, size, separator) that prints elements separated by custom delimiter for any type supporting &lt;&lt;.</p>
-                    <button class="btn btn-secondary" onclick="downloadSkeleton(`#include <iostream>
-#include <string>
-using namespace std;
-
-// ===== PRINT ARRAY WITH CUSTOM SEPARATOR =====
-template<typename T>
-void printArray(T arr[], int size, string separator = ", ") {
-    // TODO: Print elements with separator between them
-    // HINT: for(int i = 0; i < size; i++) {
-    //           cout << arr[i];
-    //           if(i < size - 1) cout << separator;
-    //       }
-    //       cout << endl;
-}
-
-int main() {
-    // Test with integers - different separators
-    int numbers[] = {10, 20, 30, 40, 50};
-    int n = 5;
-    
-    cout << "Numbers with commas: ";
-    printArray(numbers, n, ", ");
-    
-    cout << "Numbers with pipes: ";
-    printArray(numbers, n, " | ");
-    
-    cout << "Numbers with arrows: ";
-    printArray(numbers, n, " -> ");
-    
-    // Test with doubles
-    double decimals[] = {3.14, 2.71, 1.41};
-    int n2 = 3;
-    
-    cout << "\\nDecimals with semicolons: ";
-    printArray(decimals, n2, "; ");
-    
-    // Test with strings
-    string words[] = {"apple", "banana", "cherry"};
-    int n3 = 3;
-    
-    cout << "Words with slashes: ";
-    printArray(words, n3, " / ");
-    
-    cout << "Words with newlines:\\n";
-    printArray(words, n3, "\\n");
-    
-    return 0;
-}`, 'print_array_skeleton.cpp')">⬇ Download Print Skeleton</button>
+                    <button class="btn btn-secondary" onclick="downloadFunctionsPrintSkeleton()">⬇ Download Print Skeleton</button>
                 </div>
             </section>
 
@@ -778,6 +578,260 @@ int main() {
     <script src="../../js/quiz.js"></script>
 
     <script>
+        function downloadFunctionsTemplateSkeleton() {
+            const code = `#include <iostream>
+using namespace std;
+
+// TODO: Implement a generic swap template function
+// Should work with any data type
+template<typename T>
+void swap(T& a, T& b) {
+    // YOUR CODE HERE
+}
+
+// TODO: Implement a generic max template function
+// Should work with any comparable data type
+template<typename T>
+T max(T a, T b) {
+    // YOUR CODE HERE
+    return a;
+}
+
+// TODO: Implement a generic min template function
+template<typename T>
+T min(T a, T b) {
+    // YOUR CODE HERE
+    return a;
+}
+
+int main() {
+    // Test swap
+    int x = 5, y = 10;
+    swap(x, y);
+    cout << "After swap: x = " << x << ", y = " << y << endl;
+    
+    // Test max
+    cout << "Max of 15 and 20: " << max(15, 20) << endl;
+    
+    // Test min
+    cout << "Min of 15 and 20: " << min(15, 20) << endl;
+    
+    // Test with doubles
+    double a = 3.5, b = 2.8;
+    cout << "Max of " << a << " and " << b << ": " << max(a, b) << endl;
+    
+    return 0;
+}`;
+            downloadSkeleton(code, 'function_templates.cpp');
+        }
+
+        function downloadFunctionsGenericSkeleton() {
+            const code = `#include <iostream>
+#include <string>
+using namespace std;
+
+// TODO: Implement a generic print function template
+// Should work with arrays of any type
+template<typename T>
+void printArray(T arr[], int size) {
+    // YOUR CODE HERE
+}
+
+// TODO: Implement a generic search function template
+// Should return the index if found, -1 otherwise
+template<typename T>
+int search(T arr[], int size, T value) {
+    // YOUR CODE HERE
+    return -1;
+}
+
+// TODO: Implement a generic sum function template
+// Should sum all elements in an array
+template<typename T>
+T sum(T arr[], int size) {
+    // YOUR CODE HERE
+    return 0;
+}
+
+int main() {
+    // Test with integers
+    int intArr[] = {1, 2, 3, 4, 5};
+    cout << "Integer array: ";
+    printArray(intArr, 5);
+    
+    cout << "Sum of integers: " << sum(intArr, 5) << endl;
+    cout << "Search for 3: " << search(intArr, 5, 3) << endl;
+    
+    // Test with doubles
+    double dblArr[] = {1.5, 2.5, 3.5, 4.5};
+    cout << "\\nDouble array: ";
+    printArray(dblArr, 4);
+    
+    cout << "Sum of doubles: " << sum(dblArr, 4) << endl;
+    
+    return 0;
+}`;
+            downloadSkeleton(code, 'generic_functions.cpp');
+        }
+
+        function downloadFunctionsSortSkeleton() {
+            const code = `#include <iostream>
+using namespace std;
+
+// TODO: Implement generic bubbleSort template function
+// Should work with any type that supports < operator
+template<typename T>
+void bubbleSort(T arr[], int size) {
+    // YOUR CODE HERE
+    // Use nested loops for bubble sort
+    // Compare with < operator
+}
+
+int main() {
+    // Test with integers
+    int intArr[] = {64, 34, 25, 12, 22, 11, 90};
+    cout << "Original: ";
+    for(int i = 0; i < 7; i++) cout << intArr[i] << " ";
+    
+    bubbleSort(intArr, 7);
+    
+    cout << "\\nSorted: ";
+    for(int i = 0; i < 7; i++) cout << intArr[i] << " ";
+    cout << endl;
+    
+    // Test with doubles
+    double dblArr[] = {3.2, 1.5, 4.8, 2.1};
+    bubbleSort(dblArr, 4);
+    
+    cout << "Sorted doubles: ";
+    for(int i = 0; i < 4; i++) cout << dblArr[i] << " ";
+    cout << endl;
+    
+    return 0;
+}`;
+            downloadSkeleton(code, 'sort_template.cpp');
+        }
+
+        function downloadFunctionsSumSkeleton() {
+            const code = `#include <iostream>
+using namespace std;
+
+// TODO: Implement generic sum template function
+// Should work with numeric types (int, double, float)
+// Should handle string gracefully (or static_assert prevent)
+template<typename T>
+T sum(T arr[], int size) {
+    // YOUR CODE HERE
+    // Initialize result to 0 (or T())
+    // Sum all elements
+}
+
+int main() {
+    // Test with integers
+    int intArr[] = {1, 2, 3, 4, 5};
+    cout << "Sum of integers: " << sum(intArr, 5) << endl;
+    
+    // Test with doubles
+    double dblArr[] = {1.5, 2.5, 3.5, 4.5};
+    cout << "Sum of doubles: " << sum(dblArr, 4) << endl;
+    
+    // Test with floats
+    float fltArr[] = {1.1f, 2.2f, 3.3f};
+    cout << "Sum of floats: " << sum(fltArr, 3) << endl;
+    
+    return 0;
+}`;
+            downloadSkeleton(code, 'sum_template.cpp');
+        }
+
+        function downloadFunctionsReverseSkeleton() {
+            const code = `#include <iostream>
+using namespace std;
+
+// TODO: Implement generic reverse template function
+// Reverse array in-place using swap technique
+template<typename T>
+void swap(T& a, T& b) {
+    T temp = a;
+    a = b;
+    b = temp;
+}
+
+template<typename T>
+void reverse(T arr[], int size) {
+    // YOUR CODE HERE
+    // Use two pointers: one at start, one at end
+    // Swap elements moving towards middle
+}
+
+int main() {
+    // Test with integers
+    int intArr[] = {1, 2, 3, 4, 5};
+    cout << "Original: ";
+    for(int i = 0; i < 5; i++) cout << intArr[i] << " ";
+    
+    reverse(intArr, 5);
+    
+    cout << "\\nReversed: ";
+    for(int i = 0; i < 5; i++) cout << intArr[i] << " ";
+    cout << endl;
+    
+    // Test with doubles
+    double dblArr[] = {1.1, 2.2, 3.3, 4.4};
+    reverse(dblArr, 4);
+    
+    cout << "Reversed doubles: ";
+    for(int i = 0; i < 4; i++) cout << dblArr[i] << " ";
+    cout << endl;
+    
+    return 0;
+}`;
+            downloadSkeleton(code, 'reverse_template.cpp');
+        }
+
+        function downloadFunctionsPrintSkeleton() {
+            const code = `#include <iostream>
+#include <string>
+using namespace std;
+
+// TODO: Implement generic printArray template function
+// Print array elements separated by custom separator
+template<typename T>
+void printArray(T arr[], int size, string separator = ", ") {
+    // YOUR CODE HERE
+    // Print first element
+    // Loop through remaining elements
+    // Print separator before each element
+}
+
+int main() {
+    // Test with integers
+    int intArr[] = {10, 20, 30, 40, 50};
+    cout << "Integers with comma separator: ";
+    printArray(intArr, 5);
+    cout << endl;
+    
+    cout << "Integers with dash separator: ";
+    printArray(intArr, 5, " - ");
+    cout << endl;
+    
+    // Test with doubles
+    double dblArr[] = {1.5, 2.5, 3.5};
+    cout << "Doubles: ";
+    printArray(dblArr, 3, " | ");
+    cout << endl;
+    
+    // Test with strings
+    string strArr[] = {"Hello", "World", "C++"};
+    cout << "Strings: ";
+    printArray(strArr, 3, " :: ");
+    cout << endl;
+    
+    return 0;
+}`;
+            downloadSkeleton(code, 'print_template.cpp');
+        }
+
         function initializeQuiz() {
             const questions = [
                 {type: 'multiple-choice', question: 'What is template argument deduction?', options: ['Compiler automatically figures out template parameter from function arguments', 'Manual specification of template parameters', 'A compiler error', 'Function overloading'], correctAnswer: 'A', explanation: 'Compiler can infer T=int from max(5, 10) without explicitly writing max<int>.'},

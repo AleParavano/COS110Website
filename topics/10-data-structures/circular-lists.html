@@ -542,35 +542,7 @@ int main() {
                 <div class="activity">
                     <div class="activity-title">⚡ Intermediate Challenge: Josephus Problem</div>
                     <p>Solve classic Josephus problem using circular linked list.</p>
-                    <button class="btn btn-secondary" onclick="downloadCode(\`#include <iostream>
-using namespace std;
-
-// Josephus Problem: n people, every kth eliminated
-// Find survivor using circular linked list
-
-struct Node {
-    int data;
-    Node* next;
-    Node(int val) : data(val), next(nullptr) {}
-};
-
-class Josephus {
-private:
-    Node* head;
-public:
-    Josephus() : head(nullptr) {}
-    void addPerson(int id) { /* add to list */ }
-    int solve(int k) { /* find survivor */ }
-};
-
-int main() {
-    Josephus j;
-    for(int i = 1; i <= 7; i++) {
-        j.addPerson(i);
-    }
-    cout << \"Survivor: \" << j.solve(3) << endl;
-    return 0;
-}\`, 'josephus_problem.cpp')">⬇ Download Skeleton</button>
+                    <button class="btn btn-secondary" onclick="downloadCircularSkeleton()">⬇ Download Skeleton</button>
                     <button class="collapsible">▼ Show Solution</button>
                     <div class="collapsible-content">
                         <div class="code-editor">
@@ -664,42 +636,7 @@ int main() {
                 <div class="activity">
                     <div class="activity-title">🔥 Advanced Challenge: Music Playlist</div>
                     <p>Implement circular playlist with next/previous and shuffle.</p>
-                    <button class="btn btn-secondary" onclick="downloadCode(\`#include <iostream>
-#include <string>
-using namespace std;
-
-struct Song {
-    string title;
-    int duration;
-    Song(string t, int d) : title(t), duration(d) {}
-};
-
-struct Node {
-    Song* song;
-    Node* next;
-    Node(Song* s) : song(s), next(nullptr) {}
-};
-
-class Playlist {
-private:
-    Node* head;
-    Node* current;
-public:
-    Playlist() : head(nullptr), current(nullptr) {}
-    
-    // TODO: void addSong(string title, int duration)
-    // TODO: void play()
-    // TODO: void next()
-    // TODO: void previous()
-};
-
-int main() {
-    Playlist playlist;
-    playlist.addSong(\"Song1\", 180);
-    playlist.play();
-    playlist.next();
-    return 0;
-}\`, 'music_playlist.cpp')">⬇ Download Skeleton</button>
+                    <button class="btn btn-secondary" onclick="downloadCircularAdvancedSkeleton()">⬇ Download Skeleton</button>
                     <button class="collapsible">▼ Show Solution</button>
                     <div class="collapsible-content">
                         <div class="code-editor">
@@ -835,6 +772,130 @@ int main() {
     <script src="../../js/quiz.js"></script>
 
     <script>
+        function downloadCircularSkeleton() {
+            const code = `#include <iostream>
+using namespace std;
+
+struct Node {
+    int data;
+    Node* next;
+    Node(int val) : data(val), next(nullptr) {}
+};
+
+class CircularLinkedList {
+private:
+    Node* tail;
+public:
+    CircularLinkedList() : tail(nullptr) {}
+    
+    void insert(int val) {
+        Node* newNode = new Node(val);
+        if(tail == nullptr) {
+            tail = newNode;
+            tail->next = tail;
+            return;
+        }
+        newNode->next = tail->next;
+        tail->next = newNode;
+        tail = newNode;
+    }
+    
+    // TODO: int getLength()
+    // Count nodes in circular list
+    // HINT: Start at tail->next, follow until back to tail
+    int getLength() {
+        // YOUR CODE HERE
+        return 0;
+    }
+    
+    void display() {
+        if(tail == nullptr) return;
+        Node* curr = tail->next;
+        do {
+            cout << curr->data << " -> ";
+            curr = curr->next;
+        } while(curr != tail->next);
+        cout << "(back to start)" << endl;
+    }
+};
+
+int main() {
+    CircularLinkedList list;
+    list.insert(10);
+    list.insert(20);
+    list.insert(30);
+    list.display();
+    
+    cout << "Length: " << list.getLength() << endl;
+    
+    return 0;
+}`;
+            downloadSkeleton(code, 'circular_list_ops.cpp');
+        }
+        function downloadCircularAdvancedSkeleton() {
+            const code = `#include <iostream>
+using namespace std;
+
+struct Node {
+    int data;
+    Node* next;
+    Node(int val) : data(val), next(nullptr) {}
+};
+
+class CircularLinkedList {
+private:
+    Node* tail;
+public:
+    CircularLinkedList() : tail(nullptr) {}
+    
+    void insert(int val) {
+        Node* newNode = new Node(val);
+        if(tail == nullptr) {
+            tail = newNode;
+            tail->next = tail;
+            return;
+        }
+        newNode->next = tail->next;
+        tail->next = newNode;
+        tail = newNode;
+    }
+    
+    // TODO: void rotate(int k)
+    // Rotate list k positions
+    // HINT: Move tail pointer k times
+    void rotate(int k) {
+        // YOUR CODE HERE
+    }
+    
+    void display() {
+        if(tail == nullptr) return;
+        Node* curr = tail->next;
+        for(int i = 0; i < 4; i++) {
+            cout << curr->data << " -> ";
+            curr = curr->next;
+        }
+        cout << "..." << endl;
+    }
+};
+
+int main() {
+    CircularLinkedList list;
+    list.insert(10);
+    list.insert(20);
+    list.insert(30);
+    list.insert(40);
+    
+    cout << "Before: ";
+    list.display();
+    
+    list.rotate(2);
+    cout << "After rotate(2): ";
+    list.display();
+    
+    return 0;
+}`;
+            downloadSkeleton(code, 'circular_advanced.cpp');
+        }
         function initializeQuiz() {
             const questions = [
                 {type: 'multiple-choice', question: 'In a circular linked list, the traversal termination condition curr != head must execute AFTER processing the current node. Why is this ordering critical?', options: ['To ensure the head node itself is processed in traversal', 'The ordering is arbitrary; any condition works identically', 'To prevent infinite loops in the comparison logic', 'To optimize memory cache utilization'], correctAnswer: 'A', explanation: 'Using do-while ensures the head is processed before checking termination. A while loop checking before entering would skip the head node entirely due to circular structure.'},

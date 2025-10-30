@@ -445,7 +445,7 @@ int main() {
                     </div>
                     <div class="code-buttons">
                         <button class="btn btn-primary" onclick="runCode(document.getElementById('code2'), document.getElementById('output2'))">▶ Run Code</button>
-                        <button class="btn btn-secondary" onclick="downloadCode(document.getElementById('code2'))">⬇ Download Code</button>
+                        <button class="btn btn-secondary" onclick="downloadSTLAlgorithmsSkeleton(document.getElementById('code2'))">⬇ Download Code</button>
                     </div>
                     <div class="output-box" id="output2">Click "Run Code" to execute...</div>
                 </div>
@@ -533,7 +533,7 @@ int main() {
                 <div class="activity">
                     <div class="activity-title">⚡ Intermediate Challenge: Word Frequency Counter</div>
                     <p>Use STL map to count word frequencies from input text.</p>
-                    <button class="btn btn-secondary" onclick="downloadCode(\`#include <iostream>
+                    <button class="btn btn-secondary" onclick="downloadSkeleton(`#include <iostream>
 #include <map>
 #include <string>
 using namespace std;
@@ -550,7 +550,7 @@ int main() {
     // TODO: Display sorted by frequency
     
     return 0;
-}\`, 'word_frequency.cpp')">⬇ Download Skeleton</button>
+                    <button class="btn btn-secondary" onclick="downloadVectorSkeleton()">⬇ Download Skeleton</button>
                     <button class="collapsible">▼ Show Solution</button>
                     <div class="collapsible-content">
                         <div class="code-editor">
@@ -598,7 +598,7 @@ int main() {
                 <div class="activity">
                     <div class="activity-title">🔥 Advanced Challenge: Contact Manager</div>
                     <p>Build contact management system using STL map and string for names/phone numbers.</p>
-                    <button class="btn btn-secondary" onclick="downloadCode(\`#include <iostream>
+                    <button class="btn btn-secondary" onclick="downloadSkeleton(`#include <iostream>
 #include <map>
 #include <string>
 using namespace std;
@@ -617,7 +617,7 @@ int main() {
     } while(choice != 0);
     
     return 0;
-}\`, 'contact_manager.cpp')">⬇ Download Skeleton</button>
+                    <button class="btn btn-secondary" onclick="downloadSTLAlgorithmsSkeleton()">⬇ Download Skeleton</button>
                     <button class="collapsible">▼ Show Solution</button>
                     <div class="collapsible-content">
                         <div class="code-editor">
@@ -709,6 +709,55 @@ int main() {
     <script src="../../js/quiz.js"></script>
 
     <script>
+        function downloadVectorSkeleton() {
+            const code = `#include <iostream>
+#include <vector>
+using namespace std;
+
+int main() {
+    vector<int> v;
+    
+    // TODO: Add elements using push_back()
+    // Add: 10, 20, 30, 40, 50
+    
+    // TODO: Access and print elements
+    // Use v[i] or v.at(i)
+    
+    // TODO: Modify element at index 2 to 35
+    
+    // TODO: Remove last element
+    
+    // TODO: Print size and capacity
+    
+    return 0;
+}`;
+            downloadSkeleton(code, 'vector_usage.cpp');
+        }
+        function downloadSTLAlgorithmsSkeleton() {
+            const code = `#include <iostream>
+#include <vector>
+#include <algorithm>
+using namespace std;
+
+int main() {
+    vector<int> v = {64, 34, 25, 12, 22, 11, 90};
+    
+    // TODO: Use sort() to sort vector
+    
+    // TODO: Print sorted vector
+    
+    // TODO: Use find() to find element 25
+    
+    // TODO: Use count() to count occurrences of 12
+    
+    // TODO: Use reverse() to reverse vector
+    
+    // TODO: Use max_element() to find maximum
+    
+    return 0;
+}`;
+            downloadSkeleton(code, 'stl_algorithms.cpp');
+        }
         function initializeQuiz() {
             const questions = [
                 {type: 'multiple-choice', question: 'The STL is divided into containers, iterators, and algorithms. Why is this three-part design powerful?', options: ['It\'s just organizational; separate parts don\'t interact', 'Algorithms work with any container via iterators, enabling code reuse and flexibility', 'Each part must be used independently', 'STL actually has seven main components'], correctAnswer: 'B', explanation: 'Iterators provide abstract interface. Algorithms written for iterators work with any container. This separation enables powerful, generic programming.'},

@@ -444,35 +444,7 @@ int main() {
                 <div class="activity">
                     <div class="activity-title">⚡ Intermediate Challenge: Stack using Linked List</div>
                     <p>Implement stack with dynamic allocation using linked list.</p>
-                    <button class="btn btn-secondary" onclick="downloadCode(\`#include <iostream>
-using namespace std;
-
-template<typename T>
-struct Node {
-    T data;
-    Node* next;
-    Node(T val) : data(val), next(nullptr) {}
-};
-
-template<typename T>
-class LinkedStack {
-private:
-    Node<T>* head;
-public:
-    LinkedStack() : head(nullptr) {}
-    
-    // TODO: void push(T val)
-    // TODO: T pop()
-    // TODO: bool isEmpty()
-};
-
-int main() {
-    LinkedStack<int> s;
-    s.push(10);
-    s.push(20);
-    cout << s.pop() << endl;
-    return 0;
-}\`, 'linked_stack.cpp')">⬇ Download Skeleton</button>
+                    <button class="btn btn-secondary" onclick="downloadStackBasicSkeleton()">⬇ Download Skeleton</button>
                     <button class="collapsible">▼ Show Solution</button>
                     <div class="collapsible-content">
                         <div class="code-editor">
@@ -556,7 +528,7 @@ int main() {
                 <div class="activity">
                     <div class="activity-title">🔥 Advanced Challenge: Infix to Postfix Converter</div>
                     <p>Convert infix expressions to postfix using stack with operator precedence.</p>
-                    <button class="btn btn-secondary" onclick="downloadCode(\`#include <iostream>
+                    <button class="btn btn-secondary" onclick="downloadSkeleton(`#include <iostream>
 #include <string>
 #include <cctype>
 using namespace std;
@@ -666,6 +638,126 @@ int main() {
     <script src="../../js/quiz.js"></script>
 
     <script>
+        function downloadStackBasicSkeleton() {
+            const code = `#include <iostream>
+using namespace std;
+
+struct Node {
+    int data;
+    Node* next;
+    Node(int val) : data(val), next(nullptr) {}
+};
+
+class Stack {
+private:
+    Node* top;
+public:
+    Stack() : top(nullptr) {}
+    
+    // TODO: void push(int val)
+    // Add element to top of stack
+    void push(int val) {
+        // YOUR CODE HERE
+    }
+    
+    // TODO: int pop()
+    // Remove and return top element
+    // Return -1 if stack empty
+    int pop() {
+        // YOUR CODE HERE
+        return -1;
+    }
+    
+    // TODO: int peek()
+    // View top element without removing
+    // Return -1 if stack empty
+    int peek() {
+        // YOUR CODE HERE
+        return -1;
+    }
+    
+    // TODO: bool isEmpty()
+    bool isEmpty() {
+        // YOUR CODE HERE
+        return true;
+    }
+    
+    void display() {
+        Node* curr = top;
+        cout << "Stack: ";
+        while(curr != nullptr) {
+            cout << curr->data << " ";
+            curr = curr->next;
+        }
+        cout << endl;
+    }
+};
+
+int main() {
+    Stack s;
+    s.push(10);
+    s.push(20);
+    s.push(30);
+    s.display();
+    
+    cout << "Peek: " << s.peek() << endl;
+    cout << "Pop: " << s.pop() << endl;
+    s.display();
+    
+    return 0;
+}`;
+            downloadSkeleton(code, 'stack_basic.cpp');
+        }
+        function downloadStackProblesSkeleton() {
+            const code = `#include <iostream>
+#include <string>
+using namespace std;
+
+// TODO: Implement stack for bracket matching
+// Check if brackets are balanced: (), {}, []
+
+class Stack {
+private:
+    char* data;
+    int top;
+    int capacity;
+public:
+    Stack(int cap = 100) : capacity(cap), top(-1) {
+        data = new char[capacity];
+    }
+    
+    void push(char c) {
+        if(top < capacity - 1) data[++top] = c;
+    }
+    
+    char pop() {
+        if(top >= 0) return data[top--];
+        return '';
+    }
+    
+    bool isEmpty() { return top == -1; }
+    
+    ~Stack() { delete[] data; }
+};
+
+// TODO: bool isBalanced(string str)
+// Check if brackets in string are balanced
+// Use stack to match opening and closing brackets
+bool isBalanced(string str) {
+    // YOUR CODE HERE
+    return false;
+}
+
+int main() {
+    cout << isBalanced("()") << endl;        // true
+    cout << isBalanced("([{}])") << endl;    // true
+    cout << isBalanced("([)]") << endl;      // false
+    cout << isBalanced("({[}])") << endl;    // false
+    
+    return 0;
+}`;
+            downloadSkeleton(code, 'stack_problems.cpp');
+        }
         function initializeQuiz() {
             const questions = [
                     {type: 'multiple-choice', question: 'In a stack-based postfix evaluation of "3 4 + 2 *", why does LIFO semantics ensure operators apply to the correct operands?', options: ['It\'s arbitrary; any order would evaluate correctly', 'LIFO guarantees the top two elements are the operands for the current operator', 'Operators must be pushed before operands in postfix', 'Memory alignment requires this ordering'], correctAnswer: 'B', explanation: 'Postfix notation uses stack LIFO: when an operator is encountered, its operands are guaranteed to be the top two elements, correctly implementing operator precedence.'},

@@ -603,33 +603,7 @@ int main() {
                 <div class="activity">
                     <div class="activity-title">⚡ Intermediate Challenge: Search from Both Ends</div>
                     <p>Implement binary search pattern by searching from both ends simultaneously.</p>
-                    <button class="btn btn-secondary" onclick="downloadCode(\`#include <iostream>
-using namespace std;
-
-struct Node {
-    int data;
-    Node* next;
-    Node* prev;
-    Node(int val) : data(val), next(nullptr), prev(nullptr) {}
-};
-
-class DoublyLinkedList {
-private:
-    Node* head;
-public:
-    DoublyLinkedList() : head(nullptr) {}
-    
-    // TODO: bool searchFromBothEnds(int target)
-    // Search from head and tail simultaneously
-    
-    void insert(int val) { /* existing */ }
-};
-
-int main() {
-    DoublyLinkedList list;
-    // Build and search
-    return 0;
-}\`, 'doubly_search_both.cpp')">⬇ Download Skeleton</button>
+                    <button class="btn btn-secondary" onclick="downloadDoublySearchSkeleton()">⬇ Download Skeleton</button>
                     <button class="collapsible">▼ Show Solution</button>
                     <div class="collapsible-content">
                         <div class="code-editor">
@@ -727,42 +701,7 @@ int main() {
                 <div class="activity">
                     <div class="activity-title">🔥 Advanced Challenge: Undo/Redo System</div>
                     <p>Implement undo/redo using doubly linked list for command history.</p>
-                    <button class="btn btn-secondary" onclick="downloadCode(\`#include <iostream>
-#include <string>
-using namespace std;
-
-struct Command {
-    string action;
-    Command(string a) : action(a) {}
-};
-
-struct Node {
-    Command* cmd;
-    Node* next;
-    Node* prev;
-    Node(Command* c) : cmd(c), next(nullptr), prev(nullptr) {}
-};
-
-class CommandHistory {
-private:
-    Node* current;
-    Node* head;
-public:
-    CommandHistory() : current(nullptr), head(nullptr) {}
-    
-    // TODO: void execute(string cmd)
-    // TODO: void undo()
-    // TODO: void redo()
-};
-
-int main() {
-    CommandHistory history;
-    history.execute(\"CreateFile\");
-    history.execute(\"EditText\");
-    history.undo();
-    history.redo();
-    return 0;
-}\`, 'undo_redo_system.cpp')">⬇ Download Skeleton</button>
+                    <button class="btn btn-secondary" onclick="downloadDoublyUndoRedoSkeleton()">⬇ Download Skeleton</button>
                     <button class="collapsible">▼ Show Solution</button>
                     <div class="collapsible-content">
                         <div class="code-editor">
@@ -901,6 +840,134 @@ int main() {
     <script src="../../js/quiz.js"></script>
 
     <script>
+        function downloadDoublySearchSkeleton() {
+            const code = `#include <iostream>
+using namespace std;
+
+struct Node {
+    int data;
+    Node* prev;
+    Node* next;
+    Node(int val) : data(val), prev(nullptr), next(nullptr) {}
+};
+
+class DoublyLinkedList {
+private:
+    Node* head;
+    Node* tail;
+public:
+    DoublyLinkedList() : head(nullptr), tail(nullptr) {}
+    
+    void insertEnd(int val) {
+        Node* newNode = new Node(val);
+        if(head == nullptr) {
+            head = tail = newNode;
+            return;
+        }
+        tail->next = newNode;
+        newNode->prev = tail;
+        tail = newNode;
+    }
+    
+    // TODO: int searchBothDirections(int target)
+    // Search from both head and tail simultaneously
+    // Return 1 if found from head direction
+    // Return 2 if found from tail direction
+    // Return -1 if not found
+    // HINT: Use two pointers: front=head, rear=tail
+    int searchBothDirections(int target) {
+        // YOUR CODE HERE
+        return -1;
+    }
+    
+    ~DoublyLinkedList() {
+        Node* curr = head;
+        while(curr != nullptr) {
+            Node* temp = curr;
+            curr = curr->next;
+            delete temp;
+        }
+    }
+};
+
+int main() {
+    DoublyLinkedList list;
+    list.insertEnd(10);
+    list.insertEnd(20);
+    list.insertEnd(30);
+    list.insertEnd(40);
+    
+    int result = list.searchBothDirections(30);
+    cout << "Search result: " << result << endl;
+    
+    return 0;
+}`;
+            downloadSkeleton(code, 'doubly_search_both.cpp');
+        }
+        function downloadDoublyUndoRedoSkeleton() {
+            const code = `#include <iostream>
+#include <vector>
+using namespace std;
+
+class UndoRedoSystem {
+private:
+    vector<string> history;
+    int currentState;
+    
+public:
+    UndoRedoSystem() : currentState(-1) {}
+    
+    void execute(string action) {
+        if(currentState < (int)history.size() - 1) {
+            history.erase(history.begin() + currentState + 1, history.end());
+        }
+        history.push_back(action);
+        currentState++;
+    }
+    
+    // TODO: string undo()
+    // Move back one step in history
+    // HINT: Decrease currentState if possible
+    string undo() {
+        // YOUR CODE HERE
+        return "";
+    }
+    
+    // TODO: string redo()
+    // Move forward one step in history
+    // HINT: Increase currentState if possible
+    string redo() {
+        // YOUR CODE HERE
+        return "";
+    }
+    
+    void display() {
+        cout << "History: ";
+        for(int i = 0; i < (int)history.size(); i++) {
+            if(i == currentState) cout << "[" << history[i] << "] ";
+            else cout << history[i] << " ";
+        }
+        cout << endl;
+    }
+};
+
+int main() {
+    UndoRedoSystem sys;
+    sys.execute("Action1");
+    sys.execute("Action2");
+    sys.execute("Action3");
+    sys.display();
+    
+    sys.undo();
+    sys.display();
+    
+    sys.redo();
+    sys.display();
+    
+    return 0;
+}`;
+            downloadSkeleton(code, 'undo_redo_system.cpp');
+        }
         function initializeQuiz() {
             const questions = [
                  {type: 'multiple-choice', question: 'In a doubly linked list, why must you update both predecessor->next AND successor->prev to maintain structural integrity?', options: ['Both pointers must point to valid nodes; updating only one creates a broken chain in one direction', 'It\'s purely for stylistic consistency with forward and backward traversal', 'Only updating one would cause immediate memory corruption', 'Both updates are equivalent; you could update just one'], correctAnswer: 'A', explanation: 'A doubly linked list maintains bidirectional connectivity. Updating only one direction creates an asymmetrical, broken structure where reverse traversal from successor wouldn\'t reach predecessor.'},

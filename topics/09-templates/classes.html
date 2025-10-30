@@ -548,7 +548,40 @@ int main() {
                     
                     <h4 style="color: var(--primary);">Challenge 1: Create a Vector Template</h4>
                     <p>Implement a simple Vector template that stores elements and supports push_back(). Make sure it works with int, double, and string.</p>
-                    <button class="btn btn-secondary" onclick="downloadSkeleton(`#include <iostream>
+                    <button class="btn btn-secondary" onclick="downloadClassesVectorSkeleton()">⬇ Download Vector Skeleton</button>
+
+                    <h4 style="color: var(--primary); margin-top: 20px;">Challenge 2: Pair Template Extension</h4>
+                    <p>Extend the Pair template to support setKey(), setValue(), swap(), and equality comparison.</p>
+                    <button class="btn btn-secondary" onclick="downloadClassesPairSkeleton()">⬇ Download Pair Extension Skeleton</button>
+
+                    <h4 style="color: var(--primary); margin-top: 20px;">Challenge 3: Template Specialization</h4>
+                    <p>Create a general Container&lt;T&gt; and then specialize it for bool to use bitpacking (store 8 bools per byte).</p>
+                    <button class="btn btn-secondary" onclick="downloadClassesSpecializationSkeleton()">⬇ Download Specialization Skeleton</button>
+
+                    <h4 style="color: var(--primary); margin-top: 20px;">Challenge 4: Linked List Template</h4>
+                    <p>Implement a LinkedList&lt;T&gt; template with insert(), delete(), and search() for any type T.</p>
+                    <button class="btn btn-secondary" onclick="downloadClassesLinkedListSkeleton()">⬇ Download LinkedList Skeleton</button>
+                </div>
+            </section>
+
+            <section class="section">
+                <div class="section-title">📝 Knowledge Check Quiz</div>
+                <div class="quiz-container">
+                    <button class="quiz-btn" onclick="initializeQuiz()">▶ Start Quiz</button>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <footer><p>COS110 OOP Study Website | November 2025</p></footer>
+
+    <script src="../../js/main.js"></script>
+    <script src="../../js/compiler.js"></script>
+    <script src="../../js/quiz.js"></script>
+
+    <script>
+        function downloadClassesVectorSkeleton() {
+            const code = `#include <iostream>
 #include <string>
 using namespace std;
 
@@ -556,62 +589,55 @@ using namespace std;
 template<typename T>
 class Vector {
 private:
-    T* data;           // TODO: Dynamic array pointer
-    int size;          // TODO: Current number of elements
-    int capacity;      // TODO: Maximum capacity
+    T* data;
+    int size;
+    int capacity;
     
 public:
-    // Constructor
     Vector(int cap = 10) {
         // TODO: Initialize data, size, capacity
     }
     
-    // Push element to back
     void push_back(T value) {
         // TODO: If size < capacity, add to end
-        // TODO: If full, need to expand (optional for challenge)
+        // TODO: If full, need to expand (optional)
     }
     
-    // Get element at index
     T get(int index) {
         // TODO: Return element at index (with bounds check)
     }
     
-    // Display all elements
     void display() {
         // TODO: Print all elements
     }
     
-    // Destructor
     ~Vector() {
         // TODO: Clean up dynamic memory
     }
 };
 
 int main() {
-    // Test with integers
     Vector<int> v1(5);
     v1.push_back(10);
     v1.push_back(20);
     v1.push_back(30);
     v1.display();
     
-    // Test with strings
     Vector<string> v2(5);
     v2.push_back("Hello");
     v2.push_back("World");
     v2.display();
     
     return 0;
-}`, 'vector_skeleton.cpp')">⬇ Download Vector Skeleton</button>
+}`;
+            downloadSkeleton(code, 'vector_skeleton.cpp');
+        }
 
-                    <h4 style="color: var(--primary); margin-top: 20px;">Challenge 2: Pair Template Extension</h4>
-                    <p>Extend the Pair template to support setKey(), setValue(), swap(), and equality comparison.</p>
-                    <button class="btn btn-secondary" onclick="downloadSkeleton(`#include <iostream>
+        function downloadClassesPairSkeleton() {
+            const code = `#include <iostream>
 #include <string>
 using namespace std;
 
-// ===== EXTENDED PAIR TEMPLATE =====
 template<typename Key, typename Value>
 class Pair {
 private:
@@ -634,122 +660,115 @@ public:
         // YOUR CODE HERE
     }
     
-    // TODO: Implement swap() - exchange key and value
+    // TODO: Implement swap()
     void swap() {
         // YOUR CODE HERE
-        // HINT: You can't swap different types directly!
-        // This only works if Key and Value are same type!
     }
     
-    // TODO: Implement operator== for equality comparison
-    bool operator==(const Pair<Key, Value>& other) const {
+    // TODO: Implement operator==(const Pair& other)
+    bool operator==(const Pair& other) const {
         // YOUR CODE HERE
-        // Return true if both key and value match
-    }
-    
-    void display() {
-        cout << "Key: " << k << ", Value: " << v << endl;
+        return false;
     }
 };
 
 int main() {
-    Pair<string, int> p1("Alice", 30);
-    p1.display();
+    Pair<string, int> p1("Alice", 25);
+    cout << p1.getKey() << ": " << p1.getValue() << endl;
     
-    // TODO: Test setKey and setValue
-    
-    // TODO: Test operator== (create another pair and compare)
-    
-    // TODO: For same-type pairs, test swap()
-    // Pair<int, int> p2(10, 20);
-    // p2.swap();
+    p1.setKey("Bob");
+    p1.setValue(30);
+    cout << p1.getKey() << ": " << p1.getValue() << endl;
     
     return 0;
-}`, 'pair_extension_skeleton.cpp')">⬇ Download Pair Extension Skeleton</button>
+}`;
+            downloadSkeleton(code, 'pair_skeleton.cpp');
+        }
 
-                    <h4 style="color: var(--primary); margin-top: 20px;">Challenge 3: Template Specialization</h4>
-                    <p>Create a general Container&lt;T&gt; and then specialize it for bool to use bitpacking (store 8 bools per byte).</p>
-                    <button class="btn btn-secondary" onclick="downloadSkeleton(`#include <iostream>
+        function downloadClassesSpecializationSkeleton() {
+            const code = `#include <iostream>
 using namespace std;
 
-// ===== GENERIC CONTAINER TEMPLATE =====
+// TODO: Implement a general Container<T> template
+// Store elements in a vector-like structure
 template<typename T>
 class Container {
 private:
     T* data;
     int size;
+    int capacity;
     
 public:
-    Container(int s) : size(s) {
-        data = new T[size];
+    Container() {
+        // TODO: Initialize
     }
     
-    void set(int index, T value) {
-        if(index < size) data[index] = value;
-    }
-    
-    T get(int index) {
-        if(index < size) return data[index];
-        return T();
+    void add(T value) {
+        // TODO: Add element to container
     }
     
     void display() {
-        cout << "Generic Container: ";
-        for(int i = 0; i < size; i++) {
-            cout << data[i] << " ";
-        }
-        cout << endl;
+        // TODO: Display all elements
     }
-    
-    ~Container() { delete[] data; }
 };
 
-// ===== SPECIALIZED FOR BOOL (8 BOOLS PER BYTE!) =====
-// TODO: Implement template<> class Container<bool>
-// HINT: Use unsigned char as storage, use bitwise operations
-// Template should:
-// - Store 8 bools in each byte using bits 0-7
-// - set(index, bool value) should set bit at index % 8
-// - get(index) should return bit at index % 8
-// - Only need ceil(size/8) bytes instead of size bytes!
+// TODO: Specialize Container for bool to use bitpacking
+// Store 8 bools in each byte
+template<>
+class Container<bool> {
+private:
+    unsigned char* data;
+    int numBits;
+    int capacity;
+    
+public:
+    Container() {
+        // TODO: Initialize for bitpacking
+    }
+    
+    void add(bool value) {
+        // TODO: Pack boolean into bits
+    }
+    
+    bool get(int index) {
+        // TODO: Extract boolean from packed bits
+        return false;
+    }
+    
+    void display() {
+        // TODO: Display all boolean values
+    }
+};
 
 int main() {
-    // Generic container (1 byte per int)
-    Container<int> c1(3);
-    c1.set(0, 42);
-    c1.set(1, 100);
-    c1.set(2, 200);
-    c1.display();
+    Container<int> intContainer;
+    intContainer.add(10);
+    intContainer.add(20);
+    intContainer.display();
     
-    // Generic container (1 byte per bool - not optimized)
-    Container<bool> c2(3);
-    c2.set(0, true);
-    c2.set(1, false);
-    c2.set(2, true);
-    c2.display();
-    
-    // After specialization:
-    // Container<bool> should use bitpacking for massive memory savings!
+    Container<bool> boolContainer;
+    boolContainer.add(true);
+    boolContainer.add(false);
+    boolContainer.add(true);
+    boolContainer.display();
     
     return 0;
-}`, 'container_specialization_skeleton.cpp')">⬇ Download Specialization Skeleton</button>
+}`;
+            downloadSkeleton(code, 'template_specialization.cpp');
+        }
 
-                    <h4 style="color: var(--primary); margin-top: 20px;">Challenge 4: Linked List Template</h4>
-                    <p>Implement a LinkedList&lt;T&gt; template with insert(), delete(), and search() for any type T.</p>
-                    <button class="btn btn-secondary" onclick="downloadSkeleton(`#include <iostream>
-#include <string>
+        function downloadClassesLinkedListSkeleton() {
+            const code = `#include <iostream>
 using namespace std;
 
-// ===== GENERIC NODE STRUCTURE =====
 template<typename T>
 struct Node {
     T data;
     Node<T>* next;
-    
     Node(T val) : data(val), next(nullptr) {}
 };
 
-// ===== GENERIC LINKED LIST =====
+// TODO: Implement LinkedList<T> template
 template<typename T>
 class LinkedList {
 private:
@@ -758,87 +777,52 @@ private:
 public:
     LinkedList() : head(nullptr) {}
     
-    // TODO: Implement insert(T value) at beginning
+    // TODO: Implement insert(T value)
     void insert(T value) {
-        // Create new node and add to front
         // YOUR CODE HERE
     }
     
-    // TODO: Implement search(T target) - return index or -1
-    int search(T target) {
-        // Traverse and find target
+    // TODO: Implement delete(T value)
+    bool deleteNode(T value) {
         // YOUR CODE HERE
+        return false;
     }
     
-    // TODO: Implement deleteNode(T target) - delete first occurrence
-    void deleteNode(T target) {
-        // Find and remove target node
+    // TODO: Implement search(T value)
+    bool search(T value) {
         // YOUR CODE HERE
-        // REMEMBER: Update next pointers correctly!
+        return false;
     }
     
-    // Display all elements
+    // TODO: Implement display()
     void display() {
-        Node<T>* curr = head;
-        cout << "List: ";
-        while(curr != nullptr) {
-            cout << curr->data << " -> ";
-            curr = curr->next;
-        }
-        cout << "nullptr" << endl;
+        // YOUR CODE HERE
     }
     
-    // Destructor
     ~LinkedList() {
-        // TODO: Delete all nodes to avoid memory leak
-        // Traverse and delete each node
+        // TODO: Clean up all nodes
     }
 };
 
 int main() {
-    // Test with integers
-    LinkedList<int> list1;
-    list1.insert(30);
-    list1.insert(20);
-    list1.insert(10);
-    list1.display();
+    LinkedList<int> intList;
+    intList.insert(10);
+    intList.insert(20);
+    intList.insert(30);
+    intList.display();
     
-    // Test with strings
-    LinkedList<string> list2;
-    list2.insert("Charlie");
-    list2.insert("Bob");
-    list2.insert("Alice");
-    list2.display();
+    cout << "Search for 20: " << (intList.search(20) ? "Found" : "Not found") << endl;
     
-    // TODO: Test search()
-    // int pos = list1.search(20);
-    // cout << "Found at index: " << pos << endl;
-    
-    // TODO: Test deleteNode()
-    // list1.deleteNode(20);
-    // list1.display();
+    LinkedList<string> strList;
+    strList.insert("Alice");
+    strList.insert("Bob");
+    strList.display();
     
     return 0;
-}`, 'linkedlist_template_skeleton.cpp')">⬇ Download LinkedList Skeleton</button>
-                </div>
-            </section>
+}`;
+            downloadSkeleton(code, 'linkedlist_template.cpp');
+        }
 
-            <section class="section">
-                <div class="section-title">📝 Knowledge Check Quiz</div>
-                <div class="quiz-container">
-                    <button class="quiz-btn" onclick="initializeQuiz()">▶ Start Quiz</button>
-                </div>
-            </section>
-        </main>
-    </div>
-
-    <footer><p>COS110 OOP Study Website | November 2025</p></footer>
-
-    <script src="../../js/main.js"></script>
-    <script src="../../js/compiler.js"></script>
-    <script src="../../js/quiz.js"></script>
-
-    <script>
         function initializeQuiz() {
             const questions = [
                 {type: 'multiple-choice', question: 'What is the primary advantage of template classes?', options: ['Reduce code duplication for multiple types', 'Faster execution speed', 'Smaller binary files', 'Easier to debug'], correctAnswer: 'A', explanation: 'Templates eliminate code duplication by generating type-specific versions from one template.'},
