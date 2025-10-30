@@ -838,6 +838,159 @@ int main() {
     <script src="../../js/quiz.js"></script>
 
     <script>
+        // Skeleton download functions
+        function downloadLinkedListInsertSkeleton() {
+            const code = `#include <iostream>
+using namespace std;
+
+struct Node {
+    int data;
+    Node* next;
+    Node(int val) : data(val), next(nullptr) {}
+};
+
+class LinkedList {
+private:
+    Node* head;
+public:
+    LinkedList() : head(nullptr) {}
+    
+    void insert(int val) { 
+        Node* newNode = new Node(val);
+        if(head == nullptr) {
+            head = newNode;
+            return;
+        }
+        Node* curr = head;
+        while(curr->next != nullptr) curr = curr->next;
+        curr->next = newNode;
+    }
+    
+    // TODO: void insertAt(int pos, int val)
+    // Insert element at specific position (0-based index)
+    // HINT: Traverse to position-1, then insert
+    void insertAt(int pos, int val) {
+        // YOUR CODE HERE
+    }
+    
+    void display() { 
+        Node* curr = head;
+        cout << "List: ";
+        while(curr != nullptr) {
+            cout << curr->data << " -> ";
+            curr = curr->next;
+        }
+        cout << "nullptr" << endl;
+    }
+    
+    ~LinkedList() {
+        Node* curr = head;
+        while(curr != nullptr) {
+            Node* temp = curr;
+            curr = curr->next;
+            delete temp;
+        }
+    }
+};
+
+int main() {
+    LinkedList list;
+    list.insert(10);
+    list.insert(20);
+    list.insert(40);
+    
+    cout << "Before: ";
+    list.display();
+    
+    list.insertAt(2, 30);  // Insert 30 at index 2
+    
+    cout << "After:  ";
+    list.display();  // Should be 10 -> 20 -> 30 -> 40
+    
+    return 0;
+}`;
+            downloadSkeleton(code, 'linked_list_insert_pos.cpp');
+        }
+        
+        function downloadLinkedListReverseSkeleton() {
+            const code = `#include <iostream>
+using namespace std;
+
+struct Node {
+    int data;
+    Node* next;
+    Node(int val) : data(val), next(nullptr) {}
+};
+
+class LinkedList {
+private:
+    Node* head;
+public:
+    LinkedList() : head(nullptr) {}
+    
+    void insert(int val) { 
+        Node* newNode = new Node(val);
+        if(head == nullptr) {
+            head = newNode;
+            return;
+        }
+        Node* curr = head;
+        while(curr->next != nullptr) curr = curr->next;
+        curr->next = newNode;
+    }
+    
+    // TODO: void reverse() - Reverse entire list in-place
+    // HINT: Use three pointers: prev, curr, next
+    // Algorithm:
+    // 1. Initialize: prev=nullptr, curr=head, next=nullptr
+    // 2. Loop through list:
+    //    - Save curr->next in next
+    //    - Reverse link: curr->next = prev
+    //    - Move prev and curr forward
+    // 3. Update head to prev (the new head)
+    void reverse() {
+        // YOUR CODE HERE
+    }
+    
+    void display() { 
+        Node* curr = head;
+        cout << "List: ";
+        while(curr != nullptr) {
+            cout << curr->data << " -> ";
+            curr = curr->next;
+        }
+        cout << "nullptr" << endl;
+    }
+    
+    ~LinkedList() {
+        Node* curr = head;
+        while(curr != nullptr) {
+            Node* temp = curr;
+            curr = curr->next;
+            delete temp;
+        }
+    }
+};
+
+int main() {
+    LinkedList list;
+    list.insert(1);
+    list.insert(2);
+    list.insert(3);
+    
+    cout << "Before reverse: ";
+    list.display();  // Should be: 1 -> 2 -> 3 -> nullptr
+    
+    list.reverse();
+    
+    cout << "After reverse:  ";
+    list.display();  // Should be: 3 -> 2 -> 1 -> nullptr
+    
+    return 0;
+}`;
+            downloadSkeleton(code, 'linked_list_reverse.cpp');
+        }
+
         function initializeQuiz() {
             const questions = [
                 {type: 'multiple-choice', question: 'You need to insert a node at position k in a singly linked list. Why does insertion at the beginning (k=1) have different pointer mechanics than insertion at the middle?', options: ['Beginning insertion requires updating the head pointer; middle insertion only updates next pointers between existing nodes', 'All insertions use identical mechanics; position is irrelevant', 'Middle insertion is more efficient because it avoids head pointer modification', 'Position k determines memory allocation strategy'], correctAnswer: 'A', explanation: 'At the beginning, you must update the external head pointer reference, while middle insertion only affects internal node pointers. This distinction is critical for proper list management.'},
