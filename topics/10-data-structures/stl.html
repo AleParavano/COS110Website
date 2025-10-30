@@ -65,20 +65,241 @@
             <section class="section">
                 <div class="section-title">📚 Explanation</div>
                 <div class="explanation">
-                    <h3 style="color: var(--primary);">What is STL?</h3>
-                    <p>The Standard Template Library (STL) is a collection of template classes and functions providing common data structures and algorithms. It's part of the C++ Standard Library and eliminates need for manual implementation. STL includes containers (vector, list, stack, queue, map), iterators, and algorithms (sort, find, transform).</p>
+                    <h3 style="color: var(--primary);">What is STL? The Game Changer</h3>
+                    <p>The <strong>Standard Template Library (STL)</strong> is a comprehensive collection of template classes and functions that provides production-ready implementations of common data structures and algorithms. Instead of manually implementing linked lists, queues, sorting algorithms, etc., STL gives you tested, optimized versions. It's one of C++'s greatest strengths and saves thousands of lines of code.</p>
+                    
+                    <div style="background: #f0f0f0; padding: 15px; border-radius: 8px; margin: 15px 0;">
+                    <strong>Why Learn Manual Implementations Before STL?</strong><br>
+                    Understanding how linked lists, stacks, and queues work internally helps you:<br>
+                    • Know which STL container to use for which problem<br>
+                    • Predict performance characteristics<br>
+                    • Debug issues when something unexpected happens<br>
+                    • Optimize when STL doesn't meet constraints<br>
+                    <br>
+                    <strong>Bottom Line:</strong> Learn fundamentals (your data structures course), then use STL in real projects!
+                    </div>
 
-                    <h3 style="color: var(--primary); margin-top: 20px;">STL Containers</h3>
-                    <p>Sequence containers: vector (dynamic array), list (linked list), deque (double-ended queue). Associative containers: set (unique sorted), map (key-value pairs), multiset, multimap. Container adapters: stack, queue, priority_queue. Each has different performance characteristics for operations.</p>
+                    <h3 style="color: var(--primary); margin-top: 25px;">STL Containers - The Three Categories</h3>
+                    
+                    <strong>1️⃣ Sequence Containers (Ordered by Position)</strong>
+                    <table style="width: 100%; border-collapse: collapse; margin: 15px 0;">
+                    <tr style="background: var(--primary); color: white;">
+                        <th style="padding: 10px; border: 1px solid #999;">Container</th>
+                        <th style="padding: 10px; border: 1px solid #999;">Underlying Structure</th>
+                        <th style="padding: 10px; border: 1px solid #999;">Random Access</th>
+                        <th style="padding: 10px; border: 1px solid #999;">Insert/Delete</th>
+                        <th style="padding: 10px; border: 1px solid #999;">Use When</th>
+                    </tr>
+                    <tr style="background: #f9f9f9;">
+                        <td style="padding: 10px; border: 1px solid #ddd;"><strong>vector</strong></td>
+                        <td style="padding: 10px; border: 1px solid #ddd;">Dynamic array</td>
+                        <td style="padding: 10px; border: 1px solid #ddd;">O(1)</td>
+                        <td style="padding: 10px; border: 1px solid #ddd;">O(n)</td>
+                        <td style="padding: 10px; border: 1px solid #ddd;">Need fast access, back insertion</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 10px; border: 1px solid #ddd;"><strong>list</strong></td>
+                        <td style="padding: 10px; border: 1px solid #ddd;">Doubly linked list</td>
+                        <td style="padding: 10px; border: 1px solid #ddd;">O(n)</td>
+                        <td style="padding: 10px; border: 1px solid #ddd;">O(1)</td>
+                        <td style="padding: 10px; border: 1px solid #ddd;">Frequent insertions/deletions anywhere</td>
+                    </tr>
+                    <tr style="background: #f9f9f9;">
+                        <td style="padding: 10px; border: 1px solid #ddd;"><strong>deque</strong></td>
+                        <td style="padding: 10px; border: 1px solid #ddd;">Double-ended queue</td>
+                        <td style="padding: 10px; border: 1px solid #ddd;">O(1)</td>
+                        <td style="padding: 10px; border: 1px solid #ddd;">O(1) both ends</td>
+                        <td style="padding: 10px; border: 1px solid #ddd;">Need both ends O(1) access/insert</td>
+                    </tr>
+                    </table>
 
-                    <h3 style="color: var(--primary); margin-top: 20px;">Iterators</h3>
-                    <p>Iterators are pointer-like objects enabling element access and traversal. Types: input (read-only), output (write-only), forward, bidirectional, random-access. Algorithms work with iterators making them container-independent. Learn iterator operations: ++, --, *, ->, begin(), end().</p>
+                    <strong>2️⃣ Associative Containers (Ordered by Key/Value)</strong>
+                    <table style="width: 100%; border-collapse: collapse; margin: 15px 0;">
+                    <tr style="background: var(--primary); color: white;">
+                        <th style="padding: 10px; border: 1px solid #999;">Container</th>
+                        <th style="padding: 10px; border: 1px solid #999;">Structure</th>
+                        <th style="padding: 10px; border: 1px solid #999;">Keys</th>
+                        <th style="padding: 10px; border: 1px solid #999;">Order</th>
+                        <th style="padding: 10px; border: 1px solid #999;">Use When</th>
+                    </tr>
+                    <tr style="background: #f9f9f9;">
+                        <td style="padding: 10px; border: 1px solid #ddd;"><strong>set</strong></td>
+                        <td style="padding: 10px; border: 1px solid #ddd;">Red-black tree</td>
+                        <td style="padding: 10px; border: 1px solid #ddd;">Unique</td>
+                        <td style="padding: 10px; border: 1px solid #ddd;">Sorted</td>
+                        <td style="padding: 10px; border: 1px solid #ddd;">Need unique values, sorted iteration</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 10px; border: 1px solid #ddd;"><strong>map</strong></td>
+                        <td style="padding: 10px; border: 1px solid #ddd;">Red-black tree</td>
+                        <td style="padding: 10px; border: 1px solid #ddd;">Unique</td>
+                        <td style="padding: 10px; border: 1px solid #ddd;">Sorted by key</td>
+                        <td style="padding: 10px; border: 1px solid #ddd;">Key-value pairs, need lookup O(log n)</td>
+                    </tr>
+                    <tr style="background: #f9f9f9;">
+                        <td style="padding: 10px; border: 1px solid #ddd;"><strong>unordered_set</strong></td>
+                        <td style="padding: 10px; border: 1px solid #ddd;">Hash table</td>
+                        <td style="padding: 10px; border: 1px solid #ddd;">Unique</td>
+                        <td style="padding: 10px; border: 1px solid #ddd;">None</td>
+                        <td style="padding: 10px; border: 1px solid #ddd;">Need O(1) average lookup, order irrelevant</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 10px; border: 1px solid #ddd;"><strong>unordered_map</strong></td>
+                        <td style="padding: 10px; border: 1px solid #ddd;">Hash table</td>
+                        <td style="padding: 10px; border: 1px solid #ddd;">Unique</td>
+                        <td style="padding: 10px; border: 1px solid #ddd;">None</td>
+                        <td style="padding: 10px; border: 1px solid #ddd;">Fast key-value lookup O(1)</td>
+                    </tr>
+                    <tr style="background: #f9f9f9;">
+                        <td style="padding: 10px; border: 1px solid #ddd;"><strong>multiset/multimap</strong></td>
+                        <td style="padding: 10px; border: 1px solid #ddd;">Red-black tree</td>
+                        <td style="padding: 10px; border: 1px solid #ddd;">Duplicate allowed</td>
+                        <td style="padding: 10px; border: 1px solid #ddd;">Sorted</td>
+                        <td style="padding: 10px; border: 1px solid #ddd;">Multiple values per key allowed</td>
+                    </tr>
+                    </table>
 
-                    <h3 style="color: var(--primary); margin-top: 20px;">STL Algorithms</h3>
-                    <p>Sort, search, transform, count, find, replace operations work with ranges defined by iterators. Non-modifying algorithms: find, count, all_of. Modifying algorithms: sort, reverse, unique, random_shuffle. Numeric algorithms: accumulate, inner_product. Functional and powerful.</p>
+                    <strong>3️⃣ Container Adapters (Built on Top)</strong>
+                    <p><strong>stack&lt;T&gt;:</strong> Adapter using vector/list/deque underneath. LIFO operations: push(), pop(), top(). Default underlying: deque.</p>
+                    <p><strong>queue&lt;T&gt;:</strong> Adapter using list/deque. FIFO operations: enqueue(), dequeue(), front(). Default underlying: deque.</p>
+                    <p><strong>priority_queue&lt;T&gt;:</strong> Adapter using vector as heap. Operations respect priority. Default underlying: vector (as max-heap).</p>
 
-                    <h3 style="color: var(--primary); margin-top: 20px;">When to Use STL</h3>
-                    <p>STL is optimized, well-tested, and maintained. Use for most data structure needs instead of implementing from scratch. Exceptions: educational purpose, very specific requirements, embedded systems with strict constraints. STL provides 80% of needed functionality with minimal code.</p>
+                    <h3 style="color: var(--primary); margin-top: 20px;">Iterators - Pointers on Steroids</h3>
+                    <div style="background: #e8f4f8; padding: 15px; border-radius: 8px; margin: 10px 0;">
+                    <strong>Iterator Types (from weakest to strongest):</strong><br><br>
+                    <strong>1. Input Iterator</strong> - Read-only, forward only (like reading file)<br>
+                    Operations: ++, ==, !=, *<br><br>
+                    
+                    <strong>2. Output Iterator</strong> - Write-only, forward only (like writing file)<br>
+                    Operations: ++, *<br><br>
+                    
+                    <strong>3. Forward Iterator</strong> - Read/write, forward only (singly linked)<br>
+                    Operations: ++, ==, !=, *, -><br><br>
+                    
+                    <strong>4. Bidirectional Iterator</strong> - Read/write, forward and backward (doubly linked, set, map)<br>
+                    Operations: ++, --, ==, !=, *, -><br><br>
+                    
+                    <strong>5. Random Access Iterator</strong> - Full access like pointers (vector, array, deque)<br>
+                    Operations: ++, --, +, -, [], <, >, <=, >=
+                    </div>
+
+                    <strong>Iterator Usage Patterns:</strong>
+                    <div style="background: #f0f0f0; padding: 15px; border-radius: 8px; margin: 10px 0; font-family: 'Courier New', monospace;">
+                    vector&lt;int&gt; vec = {1, 2, 3};<br><br>
+                    // Range-based for (simplest, preferred):<br>
+                    for(int val : vec) { cout << val; }<br><br>
+                    
+                    // Traditional iterator loop:<br>
+                    for(auto it = vec.begin(); it != vec.end(); ++it) {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;cout << *it;  // Dereference iterator<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;cout << it->size();  // Arrow operator<br>
+                    }<br><br>
+                    
+                    // Reverse iteration:<br>
+                    for(auto it = vec.rbegin(); it != vec.rend(); ++it) {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;cout << *it;  // Backward!<br>
+                    }
+                    </div>
+
+                    <h3 style="color: var(--primary); margin-top: 20px;">STL Algorithms - Write Less Code</h3>
+                    <p><strong>Core Concept:</strong> Algorithms are template functions that work with any container, operating on ranges defined by iterators.</p>
+                    
+                    <strong>Common Non-Modifying Algorithms (Read-Only):</strong>
+                    <div style="background: #f0f0f0; padding: 15px; border-radius: 8px; margin: 10px 0; font-family: 'Courier New', monospace;">
+                    find(begin, end, value) → iterator to first occurrence<br>
+                    count(begin, end, value) → count of matching elements<br>
+                    all_of(begin, end, predicate) → true if all match condition<br>
+                    any_of(begin, end, predicate) → true if any match<br>
+                    none_of(begin, end, predicate) → true if none match<br>
+                    min_element(begin, end) → iterator to minimum<br>
+                    max_element(begin, end) → iterator to maximum<br>
+                    </div>
+
+                    <strong>Common Modifying Algorithms (Change Data):</strong>
+                    <div style="background: #f0f0f0; padding: 15px; border-radius: 8px; margin: 10px 0; font-family: 'Courier New', monospace;">
+                    sort(begin, end) → sort container<br>
+                    reverse(begin, end) → reverse order<br>
+                    unique(begin, end) → remove consecutive duplicates<br>
+                    transform(begin, end, dest, func) → apply function to each<br>
+                    replace(begin, end, old, new) → replace all old with new<br>
+                    copy(begin, end, dest) → copy range to destination<br>
+                    fill(begin, end, value) → fill with value<br>
+                    </div>
+
+                    <h3 style="color: var(--primary); margin-top: 20px;">STL vs Manual Implementation</h3>
+                    <table style="width: 100%; border-collapse: collapse; margin: 15px 0;">
+                    <tr style="background: var(--primary); color: white;">
+                        <th style="padding: 10px; border: 1px solid #999;">Aspect</th>
+                        <th style="padding: 10px; border: 1px solid #999;">Manual Implementation</th>
+                        <th style="padding: 10px; border: 1px solid #999;">STL</th>
+                    </tr>
+                    <tr style="background: #f9f9f9;">
+                        <td style="padding: 10px; border: 1px solid #ddd;"><strong>Code Size</strong></td>
+                        <td style="padding: 10px; border: 1px solid #ddd;">Hundreds of lines</td>
+                        <td style="padding: 10px; border: 1px solid #ddd;">Single line</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 10px; border: 1px solid #ddd;"><strong>Performance</strong></td>
+                        <td style="padding: 10px; border: 1px solid #ddd;">Often suboptimal</td>
+                        <td style="padding: 10px; border: 1px solid #ddd;">Highly optimized</td>
+                    </tr>
+                    <tr style="background: #f9f9f9;">
+                        <td style="padding: 10px; border: 1px solid #ddd;"><strong>Bugs</strong></td>
+                        <td style="padding: 10px; border: 1px solid #ddd;">Lots! (memory leaks, edge cases)</td>
+                        <td style="padding: 10px; border: 1px solid #ddd;">Well-tested, rare</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 10px; border: 1px solid #ddd;"><strong>Maintenance</strong></td>
+                        <td style="padding: 10px; border: 1px solid #ddd;">Your responsibility</td>
+                        <td style="padding: 10px; border: 1px solid #ddd;">Standard committee</td>
+                    </tr>
+                    <tr style="background: #f9f9f9;">
+                        <td style="padding: 10px; border: 1px solid #ddd;"><strong>Learning Value</strong></td>
+                        <td style="padding: 10px; border: 1px solid #ddd;">High (understand internals)</td>
+                        <td style="padding: 10px; border: 1px solid #ddd;">Different (learn interfaces)</td>
+                    </tr>
+                    </table>
+
+                    <h3 style="color: var(--primary); margin-top: 20px;">How to Choose an STL Container</h3>
+                    <div style="background: #ffe8e8; padding: 15px; border-radius: 8px; margin: 10px 0;">
+                    <strong>Decision Tree:</strong><br><br>
+                    1. Do you need to search by key? → use map/unordered_map<br>
+                    &nbsp;&nbsp;a. Need order? → map (slower, sorted)<br>
+                    &nbsp;&nbsp;b. Need speed? → unordered_map (faster, unsorted)<br><br>
+                    
+                    2. Do you need unique values? → use set/unordered_set<br>
+                    &nbsp;&nbsp;a. Need order? → set<br>
+                    &nbsp;&nbsp;b. Need speed? → unordered_set<br><br>
+                    
+                    3. Is it LIFO? → stack (adapter on deque)<br>
+                    4. Is it FIFO? → queue (adapter on deque)<br>
+                    5. Need priority? → priority_queue<br><br>
+                    
+                    6. Need random access? → vector<br>
+                    7. Frequent mid-insertions? → list (doubly linked)<br>
+                    8. Need both ends? → deque
+                    </div>
+
+                    <h3 style="color: var(--primary); margin-top: 20px;">STL Best Practices</h3>
+                    <p><strong>✅ Do This:</strong></p>
+                    <p>• Use range-based for loops: `for(auto x : container)`</p>
+                    <p>• Use auto for iterators: `auto it = container.begin()`</p>
+                    <p>• Use algorithms: `std::sort()` instead of writing quicksort</p>
+                    <p>• Use vector by default (cache-friendly, simple)</p>
+                    <p>• Check if element exists: `find() != end()`</p>
+                    
+                    <p><strong>❌ Don't Do This:</strong></p>
+                    <p>• Don't use deque for frequent random access (use vector)</p>
+                    <p>• Don't use list unless you need O(1) mid-insertion (vector push_back is usually faster!)</p>
+                    <p>• Don't dereference end() iterator (it's past-the-end, not valid!)</p>
+                    <p>• Don't modify container while iterating (unless using erase() which returns new iterator)</p>
+                    <p>• Don't use set when you just need a vector to sort/search (vector is often faster!)</p>
+
+                    <h3 style="color: var(--primary); margin-top: 20px;">Advanced STL Concepts</h3>
+                    <p><strong>Custom Comparators:</strong> Pass function/lambda to sort in custom order</p>
+                    <p><strong>Lambda Functions:</strong> `auto sorted = std::sort(v.begin(), v.end(), [](int a, int b) { return a > b; });`</p>
+                    <p><strong>Function Objects:</strong> Classes overloading operator() for comparisons</p>
+                    <p><strong>Functional:</strong> std::less, std::greater, std::equal_to templates</p>
                 </div>
             </section>
 
@@ -149,6 +370,7 @@ int main() {
                     </div>
                     <div class="code-buttons">
                         <button class="btn btn-primary" onclick="runCode(document.getElementById('code1'), document.getElementById('output1'))">▶ Run Code</button>
+                        <button class="btn btn-secondary" onclick="downloadCode(document.getElementById('code1'))">⬇ Download Code</button>
                     </div>
                     <div class="output-box" id="output1">Click "Run Code" to execute...</div>
                 </div>
@@ -223,6 +445,7 @@ int main() {
                     </div>
                     <div class="code-buttons">
                         <button class="btn btn-primary" onclick="runCode(document.getElementById('code2'), document.getElementById('output2'))">▶ Run Code</button>
+                        <button class="btn btn-secondary" onclick="downloadCode(document.getElementById('code2'))">⬇ Download Code</button>
                     </div>
                     <div class="output-box" id="output2">Click "Run Code" to execute...</div>
                 </div>
@@ -298,6 +521,7 @@ int main() {
                     </div>
                     <div class="code-buttons">
                         <button class="btn btn-primary" onclick="runCode(document.getElementById('code3'), document.getElementById('output3'))">▶ Run Code</button>
+                        <button class="btn btn-secondary" onclick="downloadCode(document.getElementById('code3'))">⬇ Download Code</button>
                     </div>
                     <div class="output-box" id="output3">Click "Run Code" to execute...</div>
                 </div>

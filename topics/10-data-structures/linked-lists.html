@@ -66,19 +66,122 @@
                 <div class="section-title">📚 Explanation</div>
                 <div class="explanation">
                     <h3 style="color: var(--primary);">What is a Linked List?</h3>
-                    <p>A linked list is a dynamic data structure consisting of nodes connected by pointers. Each node contains data and a pointer to the next node. Unlike arrays, linked lists don't require contiguous memory and can grow or shrink dynamically. The first node is called the head, and the last node points to nullptr.</p>
+                    <p>A linked list is a dynamic data structure where data elements are stored in <strong>nodes</strong> scattered throughout memory, connected via <strong>pointers</strong> rather than contiguous storage. This fundamental difference from arrays makes linked lists ideal for scenarios with frequent insertions/deletions, as they require no memory reallocation.</p>
+                    
+                    <div style="background: #f0f0f0; padding: 15px; border-radius: 8px; margin: 15px 0; font-family: 'Courier New', monospace; line-height: 1.4; color: #333;">
+                    <strong>Visual: A Singly Linked List with 3 Elements</strong><br><br>
+                    Memory Layout (Non-Contiguous):<br>
+                    head ──→ [10|0x2000] ──→ [20|0x3500] ──→ [30|nullptr]<br><br>
+                    In Memory:<br>
+                    Address 0x1000: [10|0x2000]  ← head points here<br>
+                    Address 0x2000: [20|0x3500]  ← reached via first node's pointer<br>
+                    Address 0x3500: [30|nullptr] ← reached via second node's pointer<br>
+                    <br><strong>Key Insight:</strong> Nodes don't need adjacent memory! Each node stores its value AND address of the next node.
+                    </div>
 
-                    <h3 style="color: var(--primary); margin-top: 20px;">Node Structure</h3>
-                    <p>Each node typically contains a data member and a next pointer. Syntax: struct Node { int data; Node* next; }. Nodes are usually created dynamically with new. The head pointer tracks the beginning of the list. If the list is empty, head is nullptr.</p>
+                    <h3 style="color: var(--primary); margin-top: 25px;">Core Concepts: Memory Allocation</h3>
+                    <p><strong>Dynamic Allocation:</strong> Each node is created individually with <code>new</code>, allowing the list to grow at runtime without pre-allocating space. This contrasts with arrays, which need fixed sizes or expensive reallocation. <strong>No Cache Locality:</strong> Scattered memory means worse CPU cache performance than arrays, but perfect flexibility for dynamic sizes.</p>
 
-                    <h3 style="color: var(--primary); margin-top: 20px;">Insertion Operations</h3>
-                    <p>Insert at beginning: create new node, set its next to current head, update head. Insert at end: traverse to last node, set its next to new node. Insert at position: find predecessor, insert between nodes. Each operation requires careful pointer manipulation.</p>
+                    <h3 style="color: var(--primary); margin-top: 20px;">Node Structure - The Building Block</h3>
+                    <div style="background: #f0f0f0; padding: 15px; border-radius: 8px; margin: 15px 0; font-family: 'Courier New', monospace; color: #333;">
+                    <strong>Node Anatomy:</strong><br>
+                    ┌──────────────────┐<br>
+                    │  [data] [next*]  │  ← Single node contains two fields<br>
+                    └──────────────────┘<br>
+                                ↓<br>
+                    Points to next node or nullptr if last
+                    </div>
+                    <p>Each node contains: (1) <strong>Data field</strong> - stores the actual value (int, string, object, etc.), (2) <strong>Pointer field</strong> - stores address of next node. The <strong>head pointer</strong> (external to any node) marks the list's beginning. An <strong>empty list</strong> has head = nullptr.</p>
 
-                    <h3 style="color: var(--primary); margin-top: 20px;">Deletion Operations</h3>
-                    <p>Delete from beginning: update head to head->next, delete old head. Delete from end: traverse to predecessor of last node, update its next to nullptr. Delete position: find predecessor, update its next, delete node. Must handle edge cases carefully.</p>
+                    <h3 style="color: var(--primary); margin-top: 20px;">Insertion Operations - Adding Elements</h3>
+                    
+                    <strong>Case 1: Insert at Beginning (O(1))</strong>
+                    <div style="background: #e8f4f8; padding: 15px; border-radius: 8px; margin: 10px 0; font-family: 'Courier New', monospace; color: #333;">
+                    Before: head ──→ [10|→] ──→ [20|→] ──→ [30|nullptr]<br><br>
+                    After inserting 5 at beginning:<br>
+                    head ──→ [5|→] ──→ [10|→] ──→ [20|→] ──→ [30|nullptr]<br><br>
+                    <strong>Mechanism:</strong><br>
+                    1. Create new node with value 5<br>
+                    2. Set new_node->next = head  (link new node to old head)<br>
+                    3. head = new_node  (update head to point to new node)<br>
+                    <strong>Time: O(1)</strong> - constant time, no traversal needed!
+                    </div>
 
-                    <h3 style="color: var(--primary); margin-top: 20px;">Traversal and Search</h3>
-                    <p>Traverse using a pointer that starts at head and follows next pointers until nullptr. Search compares each node's data with target. Common operations: display list, find element, count nodes, reverse list. Traversal time is O(n).</p>
+                    <strong>Case 2: Insert at End (O(n))</strong>
+                    <div style="background: #f0f0f0; padding: 15px; border-radius: 8px; margin: 10px 0; font-family: 'Courier New', monospace; color: #333;">
+                    Before: head ──→ [10|→] ──→ [20|→] ──→ [30|nullptr]<br><br>
+                    After inserting 40 at end:<br>
+                    head ──→ [10|→] ──→ [20|→] ──→ [30|→] ──→ [40|nullptr]<br><br>
+                    <strong>Mechanism:</strong><br>
+                    1. Traverse to last node (30) by following pointers<br>
+                    2. Create new node (40)<br>
+                    3. Set last_node->next = new_node<br>
+                    <strong>Time: O(n)</strong> - must find last node first!
+                    </div>
+
+                    <h3 style="color: var(--primary); margin-top: 20px;">Deletion Operations - Removing Elements</h3>
+                    
+                    <strong>Critical Challenge: Singly Linked Lists Require Predecessor</strong>
+                    <div style="background: #ffe8e8; padding: 15px; border-radius: 8px; margin: 10px 0; font-family: 'Courier New', monospace; color: #333;">
+                    <strong>Why delete is expensive:</strong> When you want to delete a node, you must update the <strong>previous node's</strong> next pointer. But in a singly linked list, you can't move backwards! So even if you have a pointer to the target node, you must traverse from head to find its predecessor.<br><br>
+                    Example: Delete node with value 20<br>
+                    Before: head ──→ [10|→] ──→ [20|→] ──→ [30|nullptr]<br><br>
+                    Steps:<br>
+                    1. Start at head, traverse until curr->next points to target (find 10)<br>
+                    2. Set curr->next = curr->next->next  (10 now points to 30)<br>
+                    3. Delete target node<br>
+                    4. Result: head ──→ [10|→] ──→ [30|nullptr]<br><br>
+                    <strong>Time: O(n)</strong> - Must traverse to find predecessor
+                    </div>
+
+                    <h3 style="color: var(--primary); margin-top: 20px;">Traversal and Search - Finding Data</h3>
+                    <div style="background: #f0f0f0; padding: 15px; border-radius: 8px; margin: 10px 0; font-family: 'Courier New', monospace; color: #333;">
+                    <strong>Traversal Pattern:</strong><br>
+                    Node* curr = head;<br>
+                    while(curr != nullptr) {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;// Process curr->data<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;curr = curr->next;  // Move to next node<br>
+                    }<br><br>
+                    <strong>Why O(n)?</strong> No random access! Must follow pointers sequentially from head. Cannot jump to middle like arrays.
+                    </div>
+
+                    <h3 style="color: var(--primary); margin-top: 20px;">Complexity Analysis Summary</h3>
+                    <table style="width: 100%; border-collapse: collapse; margin: 15px 0;">
+                    <tr style="background: var(--primary); color: white;">
+                        <th style="padding: 10px; border: 1px solid #999;">Operation</th>
+                        <th style="padding: 10px; border: 1px solid #999;">Time</th>
+                        <th style="padding: 10px; border: 1px solid #999;">Reason</th>
+                    </tr>
+                    <tr style="background: #f9f9f9;">
+                        <td style="padding: 10px; border: 1px solid #ddd;"><strong>Insert at Head</strong></td>
+                        <td style="padding: 10px; border: 1px solid #ddd;"><strong>O(1)</strong></td>
+                        <td style="padding: 10px; border: 1px solid #ddd;">Direct pointer update</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 10px; border: 1px solid #ddd;"><strong>Insert at End</strong></td>
+                        <td style="padding: 10px; border: 1px solid #ddd;"><strong>O(n)</strong></td>
+                        <td style="padding: 10px; border: 1px solid #ddd;">Must traverse to find last</td>
+                    </tr>
+                    <tr style="background: #f9f9f9;">
+                        <td style="padding: 10px; border: 1px solid #ddd;"><strong>Delete Head</strong></td>
+                        <td style="padding: 10px; border: 1px solid #ddd;"><strong>O(1)</strong></td>
+                        <td style="padding: 10px; border: 1px solid #ddd;">Update head pointer directly</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 10px; border: 1px solid #ddd;"><strong>Delete Middle/End</strong></td>
+                        <td style="padding: 10px; border: 1px solid #ddd;"><strong>O(n)</strong></td>
+                        <td style="padding: 10px; border: 1px solid #ddd;">Must find predecessor node</td>
+                    </tr>
+                    <tr style="background: #f9f9f9;">
+                        <td style="padding: 10px; border: 1px solid #ddd;"><strong>Search/Access</strong></td>
+                        <td style="padding: 10px; border: 1px solid #ddd;"><strong>O(n)</strong></td>
+                        <td style="padding: 10px; border: 1px solid #ddd;">No random access capability</td>
+                    </tr>
+                    </table>
+
+                    <h3 style="color: var(--primary); margin-top: 20px;">When to Use Linked Lists</h3>
+                    <p><strong>✓ Best for:</strong> Frequent insertions/deletions anywhere in the list, memory-constrained systems (no array reallocation), implementing stacks and queues efficiently.</p>
+                    <p><strong>✗ Avoid for:</strong> Random access patterns, read-heavy applications, cache-sensitive performance, small datasets (array overhead matters).</p>
                 </div>
             </section>
 
@@ -129,57 +232,76 @@ list.display();  // 1 -> 2 -> 3 -> NULL
                         <textarea class="code-editor" id="code1">#include <iostream>
 using namespace std;
 
+// ===== NODE STRUCTURE =====
+// Each node is a building block with data and pointer to next node
 struct Node {
-    int data;
-    Node* next;
+    int data;           // Stores the actual value
+    Node* next;         // Points to next node in chain
+    
+    // Constructor initializes the node
     Node(int val) : data(val), next(nullptr) {
         cout << "Node created: " << val << endl;
     }
 };
 
+// ===== LINKED LIST CLASS =====
 class LinkedList {
 private:
-    Node* head;
+    Node* head;         // External pointer tracking list's beginning
+    
 public:
+    // Constructor: creates empty list with head = nullptr
     LinkedList() : head(nullptr) {
         cout << "List created" << endl;
     }
     
+    // O(1) - Insert at beginning (constant time, no traversal needed!)
     void insertAtBegin(int val) {
-        Node* newNode = new Node(val);
-        newNode->next = head;
-        head = newNode;
+        Node* newNode = new Node(val);      // Step 1: Create new node dynamically
+        newNode->next = head;               // Step 2: Link new node to old head
+        head = newNode;                     // Step 3: Move head to new node
     }
     
+    // O(n) - Insert at end (must traverse to find last node)
     void insertAtEnd(int val) {
-        Node* newNode = new Node(val);
+        Node* newNode = new Node(val);      // Create new node
+        
+        // Edge case: Empty list - new node becomes head
         if(head == nullptr) {
             head = newNode;
             return;
         }
-        Node* curr = head;
-        while(curr->next != nullptr) {
-            curr = curr->next;
+        
+        // Traverse to find the last node (whose next is nullptr)
+        Node* curr = head;                  // Start at head
+        while(curr->next != nullptr) {      // Keep going until we find last node
+            curr = curr->next;              // Move to next node
         }
+        
+        // curr now points to last node - attach new node here
         curr->next = newNode;
     }
     
+    // O(n) - Display entire list by traversing from head to nullptr
     void display() {
         cout << "List: ";
-        Node* curr = head;
+        Node* curr = head;                  // Start at head
+        
+        // Traverse using a loop pointer (don't modify head!)
         while(curr != nullptr) {
-            cout << curr->data << " -> ";
-            curr = curr->next;
+            cout << curr->data << " -> ";   // Print current node's data
+            curr = curr->next;              // Move to next node
         }
-        cout << "NULL" << endl;
+        cout << "NULL" << endl;             // nullptr represented as NULL
     }
     
+    // Destructor: CRITICAL - must free all nodes to prevent memory leak
     ~LinkedList() {
-        Node* curr = head;
+        Node* curr = head;                  // Start at head
         while(curr != nullptr) {
-            Node* temp = curr;
-            curr = curr->next;
-            delete temp;
+            Node* temp = curr;              // Save current node
+            curr = curr->next;              // Move to next (before deleting curr!)
+            delete temp;                    // Free the saved node
         }
         cout << "List destroyed" << endl;
     }
@@ -188,16 +310,18 @@ public:
 int main() {
     LinkedList list;
     
+    // ===== DEMONSTRATE INSERT AT END =====
     cout << "\n=== Insert at End ===" << endl;
-    list.insertAtEnd(10);
-    list.insertAtEnd(20);
-    list.insertAtEnd(30);
-    list.display();
+    list.insertAtEnd(10);                   // 10 becomes first node
+    list.insertAtEnd(20);                   // Traverse to 10, link 20
+    list.insertAtEnd(30);                   // Traverse through 10->20, link 30
+    list.display();                         // Output: 10 -> 20 -> 30 -> NULL
     
+    // ===== DEMONSTRATE INSERT AT BEGIN =====
     cout << "\n=== Insert at Begin ===" << endl;
-    list.insertAtBegin(5);
-    list.insertAtBegin(1);
-    list.display();
+    list.insertAtBegin(5);                  // 5 becomes new head, points to old head (10)
+    list.insertAtBegin(1);                  // 1 becomes new head, points to 5
+    list.display();                         // Output: 1 -> 5 -> 10 -> 20 -> 30 -> NULL
     
     return 0;
 }
@@ -205,6 +329,7 @@ int main() {
                     </div>
                     <div class="code-buttons">
                         <button class="btn btn-primary" onclick="runCode(document.getElementById('code1'), document.getElementById('output1'))">▶ Run Code</button>
+                        <button class="btn btn-secondary" onclick="downloadCode(document.getElementById('code1'))">⬇ Download Code</button>
                     </div>
                     <div class="output-box" id="output1">Click "Run Code" to execute...</div>
                 </div>
@@ -241,62 +366,76 @@ void deleteFromEnd() {
                         <textarea class="code-editor" id="code2">#include <iostream>
 using namespace std;
 
+// ===== NODE STRUCTURE =====
 struct Node {
     int data;
     Node* next;
     Node(int val) : data(val), next(nullptr) {}
 };
 
+// ===== LINKED LIST CLASS =====
 class LinkedList {
 private:
     Node* head;
 public:
     LinkedList() : head(nullptr) {}
     
+    // O(n) - Insert at end (traverses entire list)
     void insert(int val) {
         Node* newNode = new Node(val);
-        if(head == nullptr) {
+        if(head == nullptr) {               // Empty list case
             head = newNode;
             return;
         }
         Node* curr = head;
-        while(curr->next != nullptr) {
+        while(curr->next != nullptr) {      // Find last node
             curr = curr->next;
         }
-        curr->next = newNode;
+        curr->next = newNode;               // Attach new node to end
     }
     
+    // O(1) - Delete from beginning (constant time, just update head)
     void deleteFromBegin() {
-        if(head == nullptr) {
+        if(head == nullptr) {               // Guard: empty list
             cout << "List empty" << endl;
             return;
         }
         cout << "Deleting: " << head->data << endl;
-        Node* temp = head;
-        head = head->next;
-        delete temp;
+        
+        Node* temp = head;                  // Save pointer to head node
+        head = head->next;                  // Move head to next node (or nullptr if was last)
+        delete temp;                        // Free the old head node
     }
     
+    // O(n) - Delete from end (must find second-to-last node)
     void deleteFromEnd() {
-        if(head == nullptr) {
+        if(head == nullptr) {               // Guard: empty list
             cout << "List empty" << endl;
             return;
         }
+        
+        // Edge case: Only one node in list
         if(head->next == nullptr) {
             cout << "Deleting: " << head->data << endl;
-            delete head;
-            head = nullptr;
+            delete head;                    // Delete the only node
+            head = nullptr;                 // Mark list as empty
             return;
         }
+        
+        // Find second-to-last node
         Node* curr = head;
-        while(curr->next->next != nullptr) {
-            curr = curr->next;
+        // KEY INSIGHT: while(curr->next->next != nullptr) stops when curr is second-to-last
+        // This prevents accessing curr->next after deletion
+        while(curr->next->next != nullptr) {    // Stop when curr->next is the last node
+            curr = curr->next;              // Move forward
         }
+        
         cout << "Deleting: " << curr->next->data << endl;
-        delete curr->next;
-        curr->next = nullptr;
+        delete curr->next;                  // Free the last node
+        curr->next = nullptr;               // Update second-to-last node to point to nullptr
     }
     
+    // O(n) - Display entire list
     void display() {
         cout << "List: ";
         Node* curr = head;
@@ -307,8 +446,9 @@ public:
         cout << "NULL" << endl;
     }
     
+    // Destructor: Clean up all nodes
     ~LinkedList() {
-        while(head != nullptr) {
+        while(head != nullptr) {            // Keep deleting from beginning until empty
             deleteFromBegin();
         }
     }
@@ -317,19 +457,22 @@ public:
 int main() {
     LinkedList list;
     
+    // ===== INSERT ELEMENTS =====
     cout << "=== Inserting ===" << endl;
     for(int i = 10; i <= 50; i += 10) {
-        list.insert(i);
+        list.insert(i);                     // Insert 10, 20, 30, 40, 50
     }
-    list.display();
+    list.display();                         // Output: 10 -> 20 -> 30 -> 40 -> 50 -> NULL
     
+    // ===== DELETE FROM BEGIN =====
     cout << "\n=== Delete from Begin ===" << endl;
-    list.deleteFromBegin();
-    list.display();
+    list.deleteFromBegin();                 // Delete 10, head now points to 20
+    list.display();                         // Output: 20 -> 30 -> 40 -> 50 -> NULL
     
+    // ===== DELETE FROM END =====
     cout << "\n=== Delete from End ===" << endl;
-    list.deleteFromEnd();
-    list.display();
+    list.deleteFromEnd();                   // Delete 50, last node now 40
+    list.display();                         // Output: 20 -> 30 -> 40 -> NULL
     
     return 0;
 }
@@ -337,6 +480,7 @@ int main() {
                     </div>
                     <div class="code-buttons">
                         <button class="btn btn-primary" onclick="runCode(document.getElementById('code2'), document.getElementById('output2'))">▶ Run Code</button>
+                        <button class="btn btn-secondary" onclick="downloadCode(document.getElementById('code2'))">⬇ Download Code</button>
                     </div>
                     <div class="output-box" id="output2">Click "Run Code" to execute...</div>
                 </div>
@@ -465,6 +609,7 @@ int main() {
                     </div>
                     <div class="code-buttons">
                         <button class="btn btn-primary" onclick="runCode(document.getElementById('code3'), document.getElementById('output3'))">▶ Run Code</button>
+                        <button class="btn btn-secondary" onclick="downloadCode(document.getElementById('code3'))">⬇ Download Code</button>
                     </div>
                     <div class="output-box" id="output3">Click "Run Code" to execute...</div>
                 </div>

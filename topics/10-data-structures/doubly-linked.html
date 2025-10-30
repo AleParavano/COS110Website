@@ -66,19 +66,112 @@
                 <div class="section-title">📚 Explanation</div>
                 <div class="explanation">
                     <h3 style="color: var(--primary);">Doubly Linked List Structure</h3>
-                    <p>A doubly linked list has nodes with three components: data, next pointer, and previous pointer. This allows traversal in both directions - forward through next pointers and backward through previous pointers. The first node's previous is nullptr, and the last node's next is nullptr.</p>
+                    <p>A doubly linked list extends the singly linked list concept by adding a <strong>previous pointer</strong> to each node. Each node contains three fields: data, next pointer (to following node), and previous pointer (to preceding node). This bidirectional structure enables traversal in both directions, solving the key weakness of singly linked lists.</p>
+                    
+                    <div style="background: #f0f0f0; padding: 15px; border-radius: 8px; margin: 15px 0; font-family: 'Courier New', monospace; color: #333;">
+                    <strong>Node Structure Comparison</strong><br><br>
+                    Singly Linked:<br>
+                    ┌──────────────────┐<br>
+                    │ data │ next* → ├──┐<br>
+                    └──────────────────┘   │<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;↓<br><br>
+                    Doubly Linked:<br>
+                    ┌─────────────────────────────────┐<br>
+                    │ ← prev* │ data │ next* → ├──────┤ (Both directions!)<br>
+                    └──────────────────────────────────┘<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;↓&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;↓
+                    </div>
 
-                    <h3 style="color: var(--primary); margin-top: 20px;">Bidirectional Traversal</h3>
-                    <p>Doubly linked lists enable reverse traversal without recursion. You can start from the head and move backward using prev pointers. This is useful for operations like undo/redo, bidirectional searching, and displaying lists in reverse order.</p>
+                    <h3 style="color: var(--primary); margin-top: 25px;">Doubly Linked List Layout</h3>
+                    <div style="background: #e8f4f8; padding: 15px; border-radius: 8px; margin: 10px 0; font-family: 'Courier New', monospace; color: #333;">
+                    <strong>A Doubly Linked List with Values [10, 20, 30]:</strong><br><br>
+                    nullptr ← [10|→] ↔ [20|→] ↔ [30|→] ← nullptr<br>
+                    ↑        ↑                        ↑        ↑<br>
+                    head→    head.next            tail      tail.next<br><br>
+                    
+                    Forward Traversal (like singly linked):<br>
+                    head → 10 → 20 → 30 → nullptr<br><br>
+                    
+                    Backward Traversal (singly can't do this!):<br>
+                    tail → 30 → 20 → 10 → nullptr<br><br>
+                    
+                    <strong>Key Advantage:</strong> From any node, you can access predecessor in O(1) instead of O(n)!
+                    </div>
 
-                    <h3 style="color: var(--primary); margin-top: 20px;">Insertion in Doubly Linked Lists</h3>
-                    <p>When inserting, you must update both next and previous pointers. Insert at beginning: new node's next = head, head->prev = new node. Insert in middle: update both neighbors' pointers. Proper pointer manipulation prevents data loss and maintains list integrity.</p>
+                    <h3 style="color: var(--primary); margin-top: 20px;">Bidirectional Traversal - The Game Changer</h3>
+                    <p><strong>Forward Traversal:</strong> Traditional left-to-right traversal using next pointers. Same as singly linked lists.</p>
+                    <p><strong>Backward Traversal:</strong> New capability! Start from tail (or any node), follow prev pointers. In singly linked lists, reverse traversal requires recursion or complete reversal. Doubly linked makes it simple and efficient.</p>
+                    <p><strong>Application Examples:</strong> Browser back/forward buttons (traverse browsing history both ways), LRU cache eviction (remove least recently used from tail), text editor line navigation (move up/down), playlist previous/next.</p>
 
-                    <h3 style="color: var(--primary); margin-top: 20px;">Deletion in Doubly Linked Lists</h3>
-                    <p>Deletion is safer in doubly linked lists because you can access both neighbors directly. Find the node, update previous->next and next->prev pointers, then delete. No need to track the predecessor separately, reducing code complexity.</p>
+                    <h3 style="color: var(--primary); margin-top: 20px;">Insertion Operations - Updating Two Pointers</h3>
+                    <div style="background: #f0f0f0; padding: 15px; border-radius: 8px; margin: 10px 0; font-family: 'Courier New', monospace; color: #333;">
+                    <strong>Insert 15 Between 10 and 20:</strong><br><br>
+                    Before: ... ← [10|→] ↔ [20|→] ← ...<br><br>
+                    After: ... ← [10|→] ↔ [15|→] ↔ [20|→] ← ...<br><br>
+                    <strong>Steps:</strong><br>
+                    1. Create new node(15)<br>
+                    2. new->next = 20_node  (link forward)<br>
+                    3. new->prev = 10_node  (link backward)<br>
+                    4. 10_node->next = new  (update 10's forward)<br>
+                    5. 20_node->prev = new  (update 20's backward)<br><br>
+                    <strong>Critical:</strong> Must update BOTH neighbors' pointers or chain breaks!
+                    </div>
 
-                    <h3 style="color: var(--primary); margin-top: 20px;">Memory and Complexity Trade-offs</h3>
-                    <p>Doubly linked lists use more memory (extra pointer per node) but enable faster operations. Some operations that need backward traversal are O(n) in singly linked but O(n) forward in doubly linked. Trade memory for functionality depending on use case.</p>
+                    <h3 style="color: var(--primary); margin-top: 20px;">Deletion Operations - Direct Access to Predecessor</h3>
+                    <p><strong>Key Advantage Over Singly Linked:</strong> In singly linked lists, deletion requires finding the predecessor (O(n)). In doubly linked lists, you have direct access! Delete node → update prev->next and next->prev → delete node. This is always O(1) from any node.</p>
+                    <div style="background: #ffe8e8; padding: 15px; border-radius: 8px; margin: 10px 0;">
+                    <strong>Delete node with value 20:</strong><br>
+                    Before: ← [10|→] ↔ [20|→] ↔ [30|→] ←<br>
+                    Steps: 10->next = 30, 30->prev = 10<br>
+                    After: ← [10|→] ↔ [30|→] ← (20 removed, chain intact)<br><br>
+                    <strong>Complexity: O(1)</strong> if you have node pointer (vs O(n) in singly linked!)
+                    </div>
+
+                    <h3 style="color: var(--primary); margin-top: 20px;">Performance Comparison</h3>
+                    <table style="width: 100%; border-collapse: collapse; margin: 15px 0;">
+                    <tr style="background: var(--primary); color: white;">
+                        <th style="padding: 10px; border: 1px solid #999;">Operation</th>
+                        <th style="padding: 10px; border: 1px solid #999;">Singly</th>
+                        <th style="padding: 10px; border: 1px solid #999;">Doubly</th>
+                        <th style="padding: 10px; border: 1px solid #999;">Benefit</th>
+                    </tr>
+                    <tr style="background: #f9f9f9;">
+                        <td style="padding: 10px; border: 1px solid #ddd;"><strong>Insert after node</strong></td>
+                        <td style="padding: 10px; border: 1px solid #ddd;">O(1)</td>
+                        <td style="padding: 10px; border: 1px solid #ddd;">O(1)</td>
+                        <td style="padding: 10px; border: 1px solid #ddd;">Same</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 10px; border: 1px solid #ddd;"><strong>Delete node</strong></td>
+                        <td style="padding: 10px; border: 1px solid #ddd;">O(n)</td>
+                        <td style="padding: 10px; border: 1px solid #ddd;">O(1)*</td>
+                        <td style="padding: 10px; border: 1px solid #ddd;">✓ Huge win!</td>
+                    </tr>
+                    <tr style="background: #f9f9f9;">
+                        <td style="padding: 10px; border: 1px solid #ddd;"><strong>Reverse traversal</strong></td>
+                        <td style="padding: 10px; border: 1px solid #ddd;">O(n) + O(n)</td>
+                        <td style="padding: 10px; border: 1px solid #ddd;">O(n)</td>
+                        <td style="padding: 10px; border: 1px solid #ddd;">✓ Simpler</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 10px; border: 1px solid #ddd;"><strong>Space per node</strong></td>
+                        <td style="padding: 10px; border: 1px solid #ddd;">Data + 1 ptr</td>
+                        <td style="padding: 10px; border: 1px solid #ddd;">Data + 2 ptrs</td>
+                        <td style="padding: 10px; border: 1px solid #ddd;">✗ Extra pointer</td>
+                    </tr>
+                    </table>
+                    <p style="font-size: 12px; margin-top: 10px;">*Delete is O(1) if you have direct node pointer; O(n) if searching first</p>
+
+                    <h3 style="color: var(--primary); margin-top: 20px;">Memory vs Functionality Trade-off</h3>
+                    <p><strong>Extra Space Cost:</strong> One additional pointer (8 bytes on 64-bit system) per node. For 1000 nodes, that's 8KB overhead.</p>
+                    <p><strong>Functionality Gained:</strong> Direct deletion O(1) vs O(n), efficient backward traversal, easier implementation of certain algorithms.</p>
+                    <p><strong>When Worth It:</strong> Frequent deletions, bidirectional access patterns, LRU caches, priority queues. For read-only lists, singly linked is sufficient.</p>
+
+                    <h3 style="color: var(--primary); margin-top: 20px;">Common Doubly Linked List Applications</h3>
+                    <p><strong>LRU Cache:</strong> Maintain access order with doubly linked list. Move accessed items to front in O(1), remove least recent from tail.</p>
+                    <p><strong>Text Editors:</strong> Store lines as doubly linked list. Move cursor up/down efficiently in both directions.</p>
+                    <p><strong>Music Playlists:</strong> Previous/next navigation in both directions. Skip backward without storing history.</p>
+                    <p><strong>Undo/Redo Stacks:</strong> Navigate through action history both directions efficiently.</p>
                 </div>
             </section>
 

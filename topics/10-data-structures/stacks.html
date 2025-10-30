@@ -66,19 +66,93 @@
                 <div class="section-title">📚 Explanation</div>
                 <div class="explanation">
                     <h3 style="color: var(--primary);">What is a Stack?</h3>
-                    <p>A stack is a Last-In-First-Out (LIFO) data structure where elements are added and removed from the same end called the top. Think of a stack of plates - you add/remove from the top. Applications: function call stack, undo/redo, expression evaluation, browser history.</p>
+                    <p>A stack is a <strong>Last-In-First-Out (LIFO)</strong> data structure where elements are added and removed from the same end, called the <strong>top</strong>. Imagine a stack of plates in a cafeteria - you add new plates on top and remove from the top. This simple LIFO principle powers function calls, undo/redo, expression parsing, and browser history.</p>
+                    
+                    <div style="background: #f0f0f0; padding: 15px; border-radius: 8px; margin: 15px 0; font-family: 'Courier New', monospace; color: #333;">
+                    <strong>Visual: Stack Operations Sequence</strong><br><br>
+                    Empty Stack:<br>
+                    ┌──┐<br>
+                    └──┘ top = -1<br><br>
+                    
+                    After Push(10), Push(20), Push(30):<br>
+                    ┌──┐<br>
+                    │30│ ← top (most recently added)<br>
+                    ├──┤<br>
+                    │20│<br>
+                    ├──┤<br>
+                    │10│<br>
+                    └──┘<br><br>
+                    
+                    After Pop() - removes 30:<br>
+                    ┌──┐<br>
+                    │20│ ← top (now first out!)<br>
+                    ├──┤<br>
+                    │10│<br>
+                    └──┘
+                    </div>
 
-                    <h3 style="color: var(--primary); margin-top: 20px;">Stack Operations</h3>
-                    <p>Push: add element to top. Pop: remove and return element from top. Peek/Top: view top element without removing. isEmpty: check if stack is empty. All operations are O(1) time complexity. Can implement using arrays or linked lists.</p>
+                    <h3 style="color: var(--primary); margin-top: 25px;">Core Stack Operations - All O(1)</h3>
+                    <p><strong>Push(element):</strong> Add element to top. Array-based: increment top pointer and store. Linked list: create new node, update head.</p>
+                    <p><strong>Pop():</strong> Remove and return top element. Array-based: return element at top, decrement pointer. Linked list: return head data, update head to next.</p>
+                    <p><strong>Peek()/Top():</strong> View top element without removing. Return element at top position. Useful for checking next operation before committing.</p>
+                    <p><strong>isEmpty():</strong> Check if stack is empty. Array: top == -1. Linked list: head == nullptr.</p>
+                    <p><strong>isFull():</strong> Check if stack is at capacity (array-based only). Linked lists never full unless memory exhausted.</p>
 
-                    <h3 style="color: var(--primary); margin-top: 20px;">Stack Implementation</h3>
-                    <p>Array-based: use index top to track top element. Linked list-based: use head pointer. Array method is simple and efficient for fixed size. Linked list allows dynamic resizing. Choose based on max size requirements and memory concerns.</p>
+                    <h3 style="color: var(--primary); margin-top: 20px;">Implementation Comparison</h3>
+                    <table style="width: 100%; border-collapse: collapse; margin: 15px 0;">
+                    <tr style="background: var(--primary); color: white;">
+                        <th style="padding: 10px; border: 1px solid #999;">Feature</th>
+                        <th style="padding: 10px; border: 1px solid #999;">Array-Based</th>
+                        <th style="padding: 10px; border: 1px solid #999;">Linked List-Based</th>
+                    </tr>
+                    <tr style="background: #f9f9f9;">
+                        <td style="padding: 10px; border: 1px solid #ddd;"><strong>Space</strong></td>
+                        <td style="padding: 10px; border: 1px solid #ddd;">Fixed, allocated upfront</td>
+                        <td style="padding: 10px; border: 1px solid #ddd;">Dynamic, grows as needed</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 10px; border: 1px solid #ddd;"><strong>Time O(1)</strong></td>
+                        <td style="padding: 10px; border: 1px solid #ddd;">Push, Pop, Peek all O(1)</td>
+                        <td style="padding: 10px; border: 1px solid #ddd;">Push, Pop, Peek all O(1)</td>
+                    </tr>
+                    <tr style="background: #f9f9f9;">
+                        <td style="padding: 10px; border: 1px solid #ddd;"><strong>Memory Overhead</strong></td>
+                        <td style="padding: 10px; border: 1px solid #ddd;">Minimal (just array)</td>
+                        <td style="padding: 10px; border: 1px solid #ddd;">Pointer per node</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 10px; border: 1px solid #ddd;"><strong>Cache Performance</strong></td>
+                        <td style="padding: 10px; border: 1px solid #ddd;">Excellent (contiguous)</td>
+                        <td style="padding: 10px; border: 1px solid #ddd;">Poor (scattered)</td>
+                    </tr>
+                    <tr style="background: #f9f9f9;">
+                        <td style="padding: 10px; border: 1px solid #ddd;"><strong>Max Size</strong></td>
+                        <td style="padding: 10px; border: 1px solid #ddd;">Fixed at creation</td>
+                        <td style="padding: 10px; border: 1px solid #ddd;">Limited by memory</td>
+                    </tr>
+                    </table>
 
-                    <h3 style="color: var(--primary); margin-top: 20px;">Stack Applications</h3>
-                    <p>Expression evaluation: convert infix to postfix, evaluate postfix. Parentheses matching: validate balanced brackets. Function calls: call stack in programming. Undo operations: store previous states. Maze solving: backtracking with stack.</p>
+                    <h3 style="color: var(--primary); margin-top: 20px;">Real-World Stack Applications</h3>
+                    <p><strong>Function Call Stack:</strong> When function A calls B calls C, the call stack looks like: [A → B → C]. Return reverses: C pops, B pops, back to A. This is why recursive functions can overflow the stack!</p>
+                    <p><strong>Expression Evaluation:</strong> Stacks evaluate postfix notation. Example: "3 4 + 5 *" → Push 3, Push 4, Pop 4&3, Push 7, Push 5, Pop 5&7, Push 35. Result: 35 = (3+4)*5</p>
+                    <p><strong>Parentheses Matching:</strong> Stack tracks opening brackets. When closing found, pop and match. Unmatched brackets = invalid expression.</p>
+                    <p><strong>Undo/Redo:</strong> Each action pushed onto stack. Undo pops last action. Redo maintains separate stack of undone actions.</p>
+                    <p><strong>Browser History:</strong> Back button pops from history stack. Each page visit is a push. Forward button uses separate stack.</p>
+                    <p><strong>Maze Solving:</strong> DFS (Depth-First Search) uses stack. Push current position, explore depth-first, backtrack (pop) when stuck.</p>
 
                     <h3 style="color: var(--primary); margin-top: 20px;">Stack vs Queue</h3>
-                    <p>Stack is LIFO (last element out first), Queue is FIFO (first element out first). Stack removes from same end it adds. Queue removes from different end. Different applications and properties make them complementary.</p>
+                    <div style="background: #e8f4f8; padding: 15px; border-radius: 8px; margin: 10px 0;">
+                    <strong>LIFO vs FIFO:</strong> Stack removes Last element In (First Out). Queue removes First element In (First Out).<br><br>
+                    Analogy: Stack = stack of plates (remove from top). Queue = grocery line (remove from front).<br><br>
+                    Operations: Stack uses single end (top). Queue uses two ends (front/rear).<br><br>
+                    Applications: Stack = undo/call stack. Queue = task scheduling/breadth-first search.
+                    </div>
+
+                    <h3 style="color: var(--primary); margin-top: 20px;">Common Stack Mistakes</h3>
+                    <p><strong>❌ Pop from empty stack:</strong> Must check isEmpty() before popping to avoid undefined behavior.</p>
+                    <p><strong>❌ Overflow (array-based):</strong> Check isFull() before pushing. Use linked list for unlimited size.</p>
+                    <p><strong>❌ Memory leaks (linked list):</strong> Must delete popped nodes and destructor must clean entire stack.</p>
+                    <p><strong>❌ Underflow:</strong> Popping empty stack causes crash. Always validate before pop operations.</p>
                 </div>
             </section>
 

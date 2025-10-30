@@ -66,19 +66,103 @@
                 <div class="section-title">📚 Explanation</div>
                 <div class="explanation">
                     <h3 style="color: var(--primary);">Circular Linked List Structure</h3>
-                    <p>In a circular linked list, the last node's next pointer points to the first node instead of nullptr. This creates a circular structure with no explicit end. You can start from any node and eventually return to it by following pointers. Only need to store head pointer, no separate tail needed.</p>
+                    <p>In a circular linked list, the last node's next pointer points <strong>back to the first node</strong> instead of nullptr. This creates a perpetual cycle with no explicit ending, meaning you can traverse indefinitely. From any node, following pointers eventually returns you to the starting point. This naturally models round-robin processes and cyclic data.</p>
+                    
+                    <div style="background: #f0f0f0; padding: 15px; border-radius: 8px; margin: 15px 0; font-family: 'Courier New', monospace; color: #333;">
+                    <strong>Singly Linked vs Circular Linked</strong><br><br>
+                    Singly Linked List:<br>
+                    head → [10] → [20] → [30] → nullptr (END)<br><br>
+                    
+                    Circular Linked List:<br>
+                    head → [10] → [20] → [30]<br>
+                    &nbsp;&nbsp;↑&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;↓<br>
+                    &nbsp;&nbsp;←────← ← ← ← ← ← ← (loops back!)
+                    </div>
 
-                    <h3 style="color: var(--primary); margin-top: 20px;">Traversal in Circular Lists</h3>
-                    <p>Traversal uses a different termination condition. Instead of checking curr != nullptr, check if curr has returned to head (curr->next == head). Must have an initial reference to know when to stop. Any node can serve as starting point.</p>
+                    <h3 style="color: var(--primary); margin-top: 25px;">Key Concept: The Circular Property</h3>
+                    <p><strong>No nullptr Boundary:</strong> Unlike singly linked lists, there's no final nullptr. The "end" loops back to the "beginning," creating an infinite cycle if traversal isn't controlled.</p>
+                    <p><strong>Only Head Pointer Needed:</strong> Since the last node points to the first, storing only the head gives access to all nodes. You can reach the tail in O(n) by traversing to the node before head.</p>
+                    <p><strong>Circular Access Pattern:</strong> Perfect for round-robin algorithms where you repeatedly cycle through elements. Each node has exactly one successor (unlike singly linked where the last has none).</p>
+
+                    <h3 style="color: var(--primary); margin-top: 20px;">Traversal - Managing the Infinite Loop</h3>
+                    <div style="background: #e8f4f8; padding: 15px; border-radius: 8px; margin: 10px 0; font-family: 'Courier New', monospace; color: #333;">
+                    <strong>Critical Difference:</strong> Singly linked uses `while(curr != nullptr)`. Circular lists would loop forever!<br><br>
+                    
+                    <strong>Correct Circular Traversal Pattern:</strong><br>
+                    Node* curr = head;<br>
+                    do {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;cout << curr->data;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;curr = curr->next;<br>
+                    } while(curr != head);  // Stop when returning to start!<br><br>
+                    
+                    <strong>Why do-while?</strong> Head is valid first node. Must process it before checking if returned to head.
+                    </div>
 
                     <h3 style="color: var(--primary); margin-top: 20px;">Insertion in Circular Lists</h3>
-                    <p>Insert at beginning: new node->next = head->next, head->next = new node (or update head). Insert at end: easier than singly linked - last node is one before head. Insert is straightforward with circular structure once head is maintained properly.</p>
+                    <div style="background: #f0f0f0; padding: 15px; border-radius: 8px; margin: 10px 0; font-family: 'Courier New', monospace; color: #333;">
+                    <strong>Insert at Beginning:</strong><br>
+                    Before: 10 → 20 → 30 → (back to 10)<br>
+                    Insert 5: 5 → 10 → 20 → 30 → (back to 5)<br>
+                    Steps: new->next = head; update last node to point to new; head = new<br><br>
+                    
+                    <strong>Insert at End (O(n)):</strong><br>
+                    Must traverse to find node before head<br>
+                    Then insert between that node and head<br><br>
+                    
+                    <strong>Key Insight:</strong> Finding "last" node in O(1) requires traversing until curr->next == head
+                    </div>
 
-                    <h3 style="color: var(--primary); margin-top: 20px;">Applications of Circular Lists</h3>
-                    <p>Circular lists are ideal for round-robin scheduling, buffering, and processes that loop indefinitely. Examples: CPU scheduling queues, multiplayer game turns, music playlists. The circular nature matches these use cases naturally without artificial end conditions.</p>
+                    <h3 style="color: var(--primary); margin-top: 20px;">Deletion in Circular Lists</h3>
+                    <p><strong>Delete Head:</strong> Update head to next node, then update last node's pointer to new head. Must find last node (traverse to curr->next == old head). O(n) traversal required.</p>
+                    <p><strong>Delete Middle Node:</strong> Find predecessor, update its next pointer, delete node. Same challenge: must find predecessor node.</p>
+                    <p><strong>Special Case - Single Node:</strong> If list has only one node, deleting it leaves head pointing to nullptr (must handle carefully).</p>
 
-                    <h3 style="color: var(--primary); margin-top: 20px;">Advantages and Trade-offs</h3>
-                    <p>No null pointer dereferencing after the last node. Can easily find both ends in O(1). Disadvantage: must handle infinite loops carefully in traversal. Need explicit condition to stop. Good for cyclic applications, overhead similar to singly linked.</p>
+                    <h3 style="color: var(--primary); margin-top: 20px;">Advantages vs Trade-offs</h3>
+                    <table style="width: 100%; border-collapse: collapse; margin: 15px 0;">
+                    <tr style="background: var(--primary); color: white;">
+                        <th style="padding: 10px; border: 1px solid #999;">Feature</th>
+                        <th style="padding: 10px; border: 1px solid #999;">Singly Linked</th>
+                        <th style="padding: 10px; border: 1px solid #999;">Circular Linked</th>
+                    </tr>
+                    <tr style="background: #f9f9f9;">
+                        <td style="padding: 10px; border: 1px solid #ddd;"><strong>Last Node</strong></td>
+                        <td style="padding: 10px; border: 1px solid #ddd;">Points to nullptr</td>
+                        <td style="padding: 10px; border: 1px solid #ddd;">Points to head</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 10px; border: 1px solid #ddd;"><strong>Reach Tail</strong></td>
+                        <td style="padding: 10px; border: 1px solid #ddd;">O(n) traversal needed</td>
+                        <td style="padding: 10px; border: 1px solid #ddd;">head->prev is tail (O(1) in doubly)</td>
+                    </tr>
+                    <tr style="background: #f9f9f9;">
+                        <td style="padding: 10px; border: 1px solid #ddd;"><strong>Traversal Condition</strong></td>
+                        <td style="padding: 10px; border: 1px solid #ddd;">curr != nullptr</td>
+                        <td style="padding: 10px; border: 1px solid #ddd;">curr != head (infinite loop risk!)</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 10px; border: 1px solid #ddd;"><strong>Round-Robin</strong></td>
+                        <td style="padding: 10px; border: 1px solid #ddd;">Awkward (must wrap manually)</td>
+                        <td style="padding: 10px; border: 1px solid #ddd;">Natural (follow next = cycle)</td>
+                    </tr>
+                    </table>
+
+                    <h3 style="color: var(--primary); margin-top: 20px;">Real-World Applications - The Circular Pattern Shines</h3>
+                    <p><strong>CPU Process Scheduling (Round-Robin):</strong> Each process gets time slice. After executing, goes to back of queue. List cycles: P1 → P2 → P3 → P1 → ... Perfect for circular structure!</p>
+                    <p><strong>Multiplayer Game Turns:</strong> Players take turns in sequence. After last player, cycles back to first. New players join end, maintaining cycle.</p>
+                    <p><strong>Music Playlists (Repeat Mode):</strong> Songs cycle indefinitely. Last song's next = first song. Perfect match for circular structure.</p>
+                    <p><strong>Display Buffering:</strong> Limited buffer slots. After writing to last, wrap to first. Circular buffer is fundamentally a circular linked list concept.</p>
+                    <p><strong>Josephus Problem:</strong> Eliminate every nth person in circle. Circular linked list naturally models elimination sequence.</p>
+                    <p><strong>Traffic Light Simulation:</strong> States cycle: Red → Yellow → Green → Red. Circular list tracks state transitions.</p>
+
+                    <h3 style="color: var(--primary); margin-top: 20px;">Pitfalls When Using Circular Lists</h3>
+                    <p><strong>❌ Infinite Loops:</strong> Forgetting to check `curr != head` causes infinite traversal. Always control the loop condition!</p>
+                    <p><strong>❌ Complexity Confusion:</strong> Finding tail or deleting head requires full traversal (O(n)) because you must find the node pointing to current head. Not as simple as appears!</p>
+                    <p><strong>❌ Empty List Representation:</strong> Empty list is head == nullptr, but some operations expect curr != nullptr. Must validate at every step.</p>
+                    <p><strong>❌ Deletion While Iterating:</strong> If you delete current node while traversing, the iteration pattern breaks. Safe deletion requires careful iterator management.</p>
+
+                    <h3 style="color: var(--primary); margin-top: 20px;">Circular Doubly Linked Lists</h3>
+                    <p><strong>Combination Pattern:</strong> Circular + Doubly = both directions AND cyclic! Last node points back to first, AND you can traverse backward. This is the most flexible but also most complex.</p>
+                    <p><strong>When to Use:</strong> Complex simulations, advanced data structures (trees represented as circular doubly linked lists), bidirectional cyclic processes.</p>
                 </div>
             </section>
 

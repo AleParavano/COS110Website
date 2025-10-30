@@ -66,19 +66,96 @@
                 <div class="section-title">📚 Explanation</div>
                 <div class="explanation">
                     <h3 style="color: var(--primary);">What is a Queue?</h3>
-                    <p>A queue is a First-In-First-Out (FIFO) data structure where elements are added at the rear and removed from the front. Think of waiting in line - first person in is first person served. Applications: printer queues, task scheduling, breadth-first search, traffic simulation.</p>
+                    <p>A queue is a <strong>First-In-First-Out (FIFO)</strong> data structure where elements are added at the <strong>rear</strong> (end) and removed from the <strong>front</strong> (beginning). Picture waiting in line at a store - first customer in is first customer served, maintaining fairness. Queues power printer job scheduling, network packet management, breadth-first search, and task scheduling in operating systems.</p>
+                    
+                    <div style="background: #f0f0f0; padding: 15px; border-radius: 8px; margin: 15px 0; font-family: 'Courier New', monospace; color: #333;">
+                    <strong>Visual: Queue Operations Sequence</strong><br><br>
+                    Empty Queue:<br>
+                    front = -1, rear = -1<br><br>
+                    
+                    After Enqueue(10), Enqueue(20), Enqueue(30):<br>
+                    ┌──┬──┬──┐<br>
+                    │10│20│30│<br>
+                    └──┴──┴──┘<br>
+                    ↑         ↑<br>
+                    front     rear<br><br>
+                    
+                    After Dequeue() - removes 10:<br>
+                    ┌──┬──┐<br>
+                    │20│30│<br>
+                    └──┴──┘<br>
+                    ↑     ↑<br>
+                    front rear (First in is first out!)
+                    </div>
 
-                    <h3 style="color: var(--primary); margin-top: 20px;">Queue Operations</h3>
-                    <p>Enqueue: add element to rear. Dequeue: remove and return element from front. Front/Peek: view front element. isEmpty: check if queue is empty. All operations are O(1) time. Can implement with circular array or linked list for efficiency.</p>
+                    <h3 style="color: var(--primary); margin-top: 25px;">Queue Operations - All O(1)</h3>
+                    <p><strong>Enqueue(element):</strong> Add element to rear. Array-based: insert at rear pointer position, increment rear. Linked list: create node, attach to rear.</p>
+                    <p><strong>Dequeue():</strong> Remove and return front element. Array-based: get element at front, increment front. Linked list: get head data, update head pointer.</p>
+                    <p><strong>Front()/Peek():</strong> View front element without removing. Returns element at front position. Used for priority decisions before dequeue.</p>
+                    <p><strong>isEmpty():</strong> Check if queue is empty. Array: front > rear or front == -1. Linked list: head == nullptr.</p>
+                    <p><strong>Size():</strong> Return number of elements. Array: rear - front + 1. Linked list: traverse and count (or maintain size variable).</p>
 
-                    <h3 style="color: var(--primary); margin-top: 20px;">Implementation Approaches</h3>
-                    <p>Simple array: maintains front and rear indices, but wastes space after deletions. Circular array: reuses space efficiently by wrapping indices. Linked list: naturally handles insertions/deletions without wasted space. Choose based on expected usage patterns.</p>
+                    <h3 style="color: var(--primary); margin-top: 20px;">The Circular Queue Problem & Solution</h3>
+                    <div style="background: #ffe8e8; padding: 15px; border-radius: 8px; margin: 10px 0; font-family: 'Courier New', monospace; color: #333;">
+                    <strong>Linear Queue Problem:</strong><br>
+                    After many enqueue/dequeue, front pointer moves right but space on left is wasted!<br><br>
+                    Example (capacity=5):<br>
+                    After dequeuing from positions 0,1,2:<br>
+                    [X][X][X][3][4] ← front=3, rear=4, but 3 slots unused!<br><br>
+                    <strong>Circular Queue Solution:</strong><br>
+                    Wrap indices around! When rear reaches end, wrap to beginning if space exists.<br><br>
+                    Example (capacity=5):<br>
+                    Treat as circular: [4][0][1][2][3]<br>
+                    rear wraps: rear = (rear + 1) % capacity<br><br>
+                    <strong>Problem:</strong> Can't distinguish empty (front==rear) from full (front==rear)!<br>
+                    <strong>Solutions:</strong> (1) Keep size counter, (2) Leave one slot empty, (3) Use front pointer differently
+                    </div>
 
-                    <h3 style="color: var(--primary); margin-top: 20px;">Queue Applications</h3>
-                    <p>Task scheduling in OS, printer management, breadth-first search in graphs, level-order tree traversal. Simulations: customers in bank, vehicles at traffic light. Resource allocation and load balancing commonly use queues.</p>
+                    <h3 style="color: var(--primary); margin-top: 20px;">Implementation Comparison</h3>
+                    <table style="width: 100%; border-collapse: collapse; margin: 15px 0;">
+                    <tr style="background: var(--primary); color: white;">
+                        <th style="padding: 10px; border: 1px solid #999;">Feature</th>
+                        <th style="padding: 10px; border: 1px solid #999;">Linear Array</th>
+                        <th style="padding: 10px; border: 1px solid #999;">Circular Array</th>
+                        <th style="padding: 10px; border: 1px solid #999;">Linked List</th>
+                    </tr>
+                    <tr style="background: #f9f9f9;">
+                        <td style="padding: 10px; border: 1px solid #ddd;"><strong>Space Waste</strong></td>
+                        <td style="padding: 10px; border: 1px solid #ddd;">High (left side)</td>
+                        <td style="padding: 10px; border: 1px solid #ddd;">None</td>
+                        <td style="padding: 10px; border: 1px solid #ddd;">None</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 10px; border: 1px solid #ddd;"><strong>Operation Time</strong></td>
+                        <td style="padding: 10px; border: 1px solid #ddd;">O(1)</td>
+                        <td style="padding: 10px; border: 1px solid #ddd;">O(1)</td>
+                        <td style="padding: 10px; border: 1px solid #ddd;">O(1)</td>
+                    </tr>
+                    <tr style="background: #f9f9f9;">
+                        <td style="padding: 10px; border: 1px solid #ddd;"><strong>Cache Performance</strong></td>
+                        <td style="padding: 10px; border: 1px solid #ddd;">Excellent</td>
+                        <td style="padding: 10px; border: 1px solid #ddd;">Excellent</td>
+                        <td style="padding: 10px; border: 1px solid #ddd;">Poor</td>
+                    </tr>
+                    </table>
 
-                    <h3 style="color: var(--primary); margin-top: 20px;">Deque and Priority Queue</h3>
-                    <p>Deque: double-ended queue allowing insertion/deletion at both ends. Priority queue: elements served by priority not order. These variations extend basic queue concept for specialized applications.</p>
+                    <h3 style="color: var(--primary); margin-top: 20px;">Real-World Queue Applications</h3>
+                    <p><strong>Printer Queue:</strong> Multiple computers send print jobs. Printer processes first job received, maintaining order fairness. Jobs wait their turn.</p>
+                    <p><strong>Operating System Task Scheduling:</strong> CPU executes processes in queue order (round-robin). Each process gets time slice, then goes to back of queue.</p>
+                    <p><strong>Breadth-First Search (BFS):</strong> Level-order graph/tree traversal. Enqueue start node, dequeue and process, enqueue all neighbors. Explores nearest nodes first.</p>
+                    <p><strong>Traffic Simulation:</strong> Vehicles at intersection modeled as queue. Dequeue vehicles as light turns green. New vehicles enqueue continuously.</p>
+                    <p><strong>Network Packet Routing:</strong> Routers maintain packet queues. High-traffic links cause queuing delays. Priority queues handle urgent packets.</p>
+                    <p><strong>Customer Service Systems:</strong> Bank teller queues, help desks, call centers. Multiple servers dequeue customers from shared queue for load balancing.</p>
+
+                    <h3 style="color: var(--primary); margin-top: 20px;">Deques and Priority Queues</h3>
+                    <p><strong>Deque (Double-Ended Queue):</strong> Allows insertion/deletion at both ends. More flexible than regular queue. Example: browsing history (add to end, remove from front or recent end).</p>
+                    <p><strong>Priority Queue:</strong> Elements dequeue by priority, not insertion order. Example: emergency room triage (critical patients served first regardless of arrival time). Usually implemented with heap for O(log n) operations.</p>
+
+                    <h3 style="color: var(--primary); margin-top: 20px;">Common Queue Pitfalls</h3>
+                    <p><strong>❌ Dequeue from empty queue:</strong> Must check isEmpty() before dequeue to prevent undefined behavior.</p>
+                    <p><strong>❌ Enqueue to full queue (array-based):</strong> Check isFull() before enqueue. Use circular implementation or linked list for unlimited.</p>
+                    <p><strong>❌ Empty-full confusion in circular queue:</strong> With front==rear, can't tell if empty or full. Maintain separate size counter or waste one slot.</p>
+                    <p><strong>❌ Memory leaks (linked list):</strong> Must delete dequeued nodes and destructor must clean entire queue.</p>
                 </div>
             </section>
 
