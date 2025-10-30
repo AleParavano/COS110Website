@@ -621,7 +621,7 @@ int main() {
                 <div class="activity">
                     <div class="activity-title">⚡ Intermediate Challenge: Insert at Position</div>
                     <p>Add method to insert at specific position in linked list.</p>
-                    <button class="btn btn-secondary" onclick="downloadCode(\`#include <iostream>
+                    <button class="btn btn-secondary" onclick="downloadSkeleton(`#include <iostream>
 using namespace std;
 
 struct Node {
@@ -636,11 +636,33 @@ private:
 public:
     LinkedList() : head(nullptr) {}
     
-    void insert(int val) { /* existing */ }
+    void insert(int val) { 
+        Node* newNode = new Node(val);
+        if(head == nullptr) {
+            head = newNode;
+            return;
+        }
+        Node* curr = head;
+        while(curr->next != nullptr) curr = curr->next;
+        curr->next = newNode;
+    }
     
     // TODO: void insertAt(int pos, int val)
+    // Insert element at specific position (0-based index)
+    // HINT: Traverse to position-1, then insert
+    void insertAt(int pos, int val) {
+        // YOUR CODE HERE
+    }
     
-    void display() { /* existing */ }
+    void display() { 
+        Node* curr = head;
+        cout << "List: ";
+        while(curr != nullptr) {
+            cout << curr->data << " -> ";
+            curr = curr->next;
+        }
+        cout << "nullptr" << endl;
+    }
 };
 
 int main() {
@@ -648,9 +670,17 @@ int main() {
     list.insert(10);
     list.insert(20);
     list.insert(40);
-    list.insertAt(2, 30);
+    
+    cout << "Before: ";
+    list.display();
+    
+    list.insertAt(2, 30);  // Insert 30 at index 2
+    
+    cout << "After:  ";
+    list.display();  // Should be 10 -> 20 -> 30 -> 40
+    
     return 0;
-}\`, 'linked_list_insert_pos.cpp')">⬇ Download Skeleton</button>
+}`, 'linked_list_insert_pos.cpp')">⬇ Download Skeleton</button>
                     <button class="collapsible">▼ Show Solution</button>
                     <div class="collapsible-content">
                         <div class="code-editor">
@@ -760,7 +790,7 @@ int main() {
                 <div class="activity">
                     <div class="activity-title">🔥 Advanced Challenge: Reverse Linked List</div>
                     <p>Implement method to reverse entire linked list in-place.</p>
-                    <button class="btn btn-secondary" onclick="downloadCode(\`#include <iostream>
+                    <button class="btn btn-secondary" onclick="downloadSkeleton(`#include <iostream>
 using namespace std;
 
 struct Node {
@@ -775,12 +805,48 @@ private:
 public:
     LinkedList() : head(nullptr) {}
     
-    void insert(int val) { /* existing */ }
+    void insert(int val) { 
+        Node* newNode = new Node(val);
+        if(head == nullptr) {
+            head = newNode;
+            return;
+        }
+        Node* curr = head;
+        while(curr->next != nullptr) curr = curr->next;
+        curr->next = newNode;
+    }
     
-    // TODO: void reverse()
-    // Use three pointers: prev, curr, next
+    // TODO: void reverse() - Reverse entire list in-place
+    // HINT: Use three pointers: prev, curr, next
+    // Algorithm:
+    // 1. Initialize: prev=nullptr, curr=head, next=nullptr
+    // 2. Loop through list:
+    //    - Save curr->next in next
+    //    - Reverse link: curr->next = prev
+    //    - Move prev and curr forward
+    // 3. Update head to prev (the new head)
+    void reverse() {
+        // YOUR CODE HERE
+    }
     
-    void display() { /* existing */ }
+    void display() { 
+        Node* curr = head;
+        cout << "List: ";
+        while(curr != nullptr) {
+            cout << curr->data << " -> ";
+            curr = curr->next;
+        }
+        cout << "nullptr" << endl;
+    }
+    
+    ~LinkedList() {
+        Node* curr = head;
+        while(curr != nullptr) {
+            Node* temp = curr;
+            curr = curr->next;
+            delete temp;
+        }
+    }
 };
 
 int main() {
@@ -788,11 +854,17 @@ int main() {
     list.insert(1);
     list.insert(2);
     list.insert(3);
-    list.display();
+    
+    cout << "Before reverse: ";
+    list.display();  // Should be: 1 -> 2 -> 3 -> nullptr
+    
     list.reverse();
-    list.display();
+    
+    cout << "After reverse:  ";
+    list.display();  // Should be: 3 -> 2 -> 1 -> nullptr
+    
     return 0;
-}\`, 'linked_list_reverse.cpp')">⬇ Download Skeleton</button>
+}`, 'linked_list_reverse.cpp')">⬇ Download Skeleton</button>
                     <button class="collapsible">▼ Show Solution</button>
                     <div class="collapsible-content">
                         <div class="code-editor">
