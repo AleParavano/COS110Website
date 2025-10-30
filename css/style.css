@@ -1,5 +1,5 @@
 /* ============================================================================
-   COS110 OOP STUDY WEBSITE - MAIN STYLESHEET
+   COS110 OOP STUDY WEBSITE - MAIN STYLESHEET WITH DARK THEME
    ============================================================================ */
 
 :root {
@@ -17,6 +17,14 @@
     --code-text: #d4d4d4;
 }
 
+/* Dark Theme Variables */
+body.dark-theme {
+    --text-dark: #e0e0e0;
+    --text-light: #b0b0b0;
+    --bg-light: #1a1a1a;
+    --border: #333;
+}
+
 * {
     margin: 0;
     padding: 0;
@@ -32,6 +40,7 @@ body {
     background: var(--bg-light);
     color: var(--text-dark);
     line-height: 1.6;
+    transition: background-color 0.3s, color 0.3s;
 }
 
 /* ============================================================================
@@ -49,6 +58,10 @@ body {
     top: 0;
     z-index: 1000;
     box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+}
+
+body.dark-theme .navbar {
+    background: linear-gradient(135deg, #2a2a3e 0%, #1a1a2e 100%);
 }
 
 .navbar-brand {
@@ -74,6 +87,17 @@ body {
     border-radius: 20px;
     background: rgba(255,255,255,0.95);
     font-size: 14px;
+    transition: background 0.3s;
+}
+
+body.dark-theme .navbar-search input {
+    background: rgba(0, 0, 0, 0.3);
+    color: #e0e0e0;
+    border: 1px solid #333;
+}
+
+body.dark-theme .navbar-search input::placeholder {
+    color: #888;
 }
 
 .navbar-search input:focus {
@@ -126,6 +150,13 @@ body {
     overflow-y: auto;
     position: sticky;
     top: 80px;
+    transition: background 0.3s, border 0.3s;
+}
+
+body.dark-theme .sidebar {
+    background: #1a1a1a;
+    border: 1px solid #333;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.5);
 }
 
 .sidebar-title {
@@ -156,11 +187,20 @@ body {
     padding-left: 15px;
 }
 
+body.dark-theme .sidebar-item:hover {
+    background: #222;
+}
+
 .sidebar-item.active {
     background: #e8f4f8;
     color: var(--primary);
     font-weight: bold;
     border-left-color: var(--primary);
+}
+
+body.dark-theme .sidebar-item.active {
+    background: #222;
+    color: var(--primary);
 }
 
 /* ============================================================================
@@ -172,12 +212,23 @@ body {
     padding: 40px;
     border-radius: 8px;
     box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    transition: background 0.3s, border 0.3s;
+}
+
+body.dark-theme .main-content {
+    background: #0d0d0d;
+    border: 1px solid #333;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.5);
 }
 
 .breadcrumb {
     font-size: 12px;
     color: #999;
     margin-bottom: 20px;
+}
+
+body.dark-theme .breadcrumb {
+    color: #666;
 }
 
 .breadcrumb a {
@@ -218,6 +269,12 @@ h1 {
     border-radius: 4px;
     margin-bottom: 20px;
     line-height: 1.8;
+    transition: background 0.3s;
+}
+
+body.dark-theme .explanation {
+    background: #1a1a1a;
+    border-left: 4px solid var(--primary);
 }
 
 .explanation p {
@@ -258,6 +315,12 @@ h1 {
     white-space: pre-wrap;
     word-wrap: break-word;
     line-height: 1.4;
+    transition: background 0.3s;
+}
+
+body.dark-theme .diagram {
+    background: #1a1a1a;
+    border: 2px dashed var(--primary);
 }
 
 /* ============================================================================
@@ -270,12 +333,24 @@ h1 {
     border-radius: 8px;
     margin: 20px 0;
     overflow: hidden;
+    transition: background 0.3s, border 0.3s;
+}
+
+body.dark-theme .code-example {
+    background: #0d0d0d;
+    border: 1px solid #333;
 }
 
 .code-tabs {
     display: flex;
     background: #f5f5f5;
     border-bottom: 2px solid var(--border);
+    transition: background 0.3s, border 0.3s;
+}
+
+body.dark-theme .code-tabs {
+    background: #1a1a1a;
+    border-bottom: 2px solid #333;
 }
 
 .code-tab {
@@ -342,6 +417,12 @@ h1 {
     background: #f5f5f5;
     border-top: 1px solid var(--border);
     flex-wrap: wrap;
+    transition: background 0.3s, border 0.3s;
+}
+
+body.dark-theme .code-buttons {
+    background: #1a1a1a;
+    border-top: 1px solid #333;
 }
 
 .btn {
@@ -394,9 +475,19 @@ h1 {
     color: #d32f2f;
 }
 
+body.dark-theme .output-box.error {
+    background: #4a2626;
+    color: #ff9999;
+}
+
 .output-box.success {
     background: #e6ffe6;
     color: #1b5e20;
+}
+
+body.dark-theme .output-box.success {
+    background: #264a26;
+    color: #99ff99;
 }
 
 /* ============================================================================
@@ -409,6 +500,12 @@ h1 {
     padding: 20px;
     border-radius: 4px;
     margin: 20px 0;
+    transition: background 0.3s;
+}
+
+body.dark-theme .activity {
+    background: #1a1a1a;
+    border-left: 4px solid var(--warning);
 }
 
 .activity-title {
@@ -442,8 +539,18 @@ h1 {
     font-size: 14px;
 }
 
+body.dark-theme .collapsible {
+    background: #1a1a1a;
+    color: #e0e0e0;
+    border: 1px solid #333;
+}
+
 .collapsible:hover {
     background: #e0e0e0;
+}
+
+body.dark-theme .collapsible:hover {
+    background: #222;
 }
 
 .collapsible-content {
@@ -454,6 +561,12 @@ h1 {
     margin-top: 10px;
     border-radius: 4px;
     line-height: 1.6;
+    transition: background 0.3s, border 0.3s;
+}
+
+body.dark-theme .collapsible-content {
+    background: #0d0d0d;
+    border: 1px solid #333;
 }
 
 .collapsible-content.show {
@@ -470,6 +583,12 @@ h1 {
     padding: 20px;
     border-radius: 4px;
     text-align: center;
+    transition: background 0.3s;
+}
+
+body.dark-theme .quiz-container {
+    background: #1a1a1a;
+    border-left: 4px solid var(--info);
 }
 
 .quiz-btn {
@@ -520,6 +639,11 @@ h1 {
     max-height: 90vh;
     overflow-y: auto;
     box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+    transition: background 0.3s;
+}
+
+body.dark-theme .quiz-modal-content {
+    background: #0d0d0d;
 }
 
 .quiz-header {
@@ -529,6 +653,10 @@ h1 {
     margin-bottom: 20px;
     border-bottom: 2px solid #f0f0f0;
     padding-bottom: 15px;
+}
+
+body.dark-theme .quiz-header {
+    border-bottom: 2px solid #333;
 }
 
 .quiz-progress {
@@ -544,10 +672,18 @@ h1 {
     color: #999;
 }
 
+body.dark-theme .quiz-close {
+    color: #666;
+}
+
 .quiz-question-number {
     font-size: 14px;
     color: #999;
     margin-bottom: 10px;
+}
+
+body.dark-theme .quiz-question-number {
+    color: #666;
 }
 
 .quiz-question-text {
@@ -567,8 +703,19 @@ h1 {
     transition: all 0.3s;
 }
 
+body.dark-theme .quiz-option {
+    background: #1a1a1a;
+    border: 2px solid #333;
+    color: #e0e0e0;
+}
+
 .quiz-option:hover {
     background: #f0f7ff;
+    border-color: var(--primary);
+}
+
+body.dark-theme .quiz-option:hover {
+    background: #222;
     border-color: var(--primary);
 }
 
@@ -585,6 +732,15 @@ h1 {
     width: 100%;
     font-family: 'Courier New', monospace;
     margin: 15px 0;
+    background: white;
+    color: var(--text-dark);
+    transition: background 0.3s, color 0.3s, border 0.3s;
+}
+
+body.dark-theme .fill-in-input {
+    background: #1a1a1a;
+    color: #e0e0e0;
+    border: 2px solid #333;
 }
 
 .fill-in-input:focus {
@@ -598,6 +754,10 @@ h1 {
     color: #999;
     margin-top: 5px;
     font-style: italic;
+}
+
+body.dark-theme .fill-in-hint {
+    color: #666;
 }
 
 .quiz-button-group {
@@ -638,6 +798,12 @@ footer {
     text-align: center;
     padding: 20px;
     margin-top: 40px;
+    transition: background 0.3s;
+}
+
+body.dark-theme footer {
+    background: #0d0d0d;
+    border-top: 1px solid #333;
 }
 
 footer a {

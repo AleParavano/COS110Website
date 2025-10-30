@@ -1,6 +1,31 @@
-// COS110 OOP STUDY WEBSITE - MAIN JAVASCRIPT
+// COS110 OOP STUDY WEBSITE - MAIN JAVASCRIPT WITH DARK THEME
 
 document.addEventListener('DOMContentLoaded', function() {
+    // Initialize dark theme from localStorage
+    const isDarkTheme = localStorage.getItem('darkTheme') === 'true';
+    if (isDarkTheme) {
+        document.body.classList.add('dark-theme');
+        updateThemeButton(true);
+    }
+
+    // Dark Theme Toggle
+    const themeToggle = document.querySelector('.navbar-menu .menu-toggle:first-child');
+    if (themeToggle) {
+        themeToggle.addEventListener('click', function() {
+            document.body.classList.toggle('dark-theme');
+            const isDark = document.body.classList.contains('dark-theme');
+            localStorage.setItem('darkTheme', isDark);
+            updateThemeButton(isDark);
+        });
+    }
+
+    function updateThemeButton(isDark) {
+        const themeToggle = document.querySelector('.navbar-menu .menu-toggle:first-child');
+        if (themeToggle) {
+            themeToggle.textContent = isDark ? '☀️' : '🌙';
+        }
+    }
+
     // Code Tab Switching
     document.querySelectorAll('.code-tab').forEach(tab => {
         tab.addEventListener('click', function() {
